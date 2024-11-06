@@ -1,24 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/destination_page/destination_description.dart';
 
-class DestinationPage extends StatefulWidget {
-  @override
-  State<DestinationPage> createState() {
-    return _DestinationPageState();
-  }
-}
+import '../home_page/provider/wish_list_provider.dart';
 
-class _DestinationPageState extends State<DestinationPage> {
-  bool isToggleBookMark = false;
+class DestinationPage extends StatelessWidget {
+  final int? id;
 
-  void toggleIcon() {
-    setState(() {
-      isToggleBookMark = !isToggleBookMark;
-    });
-  }
+  DestinationPage({
+    super.key,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
+    String imageLink =
+        Provider.of<WishListProvider>(context).travelList[id!]['image'];
+
+    bool? isWishList =
+        Provider.of<WishListProvider>(context).travelList[id!]['isVisible'];
+
+    String? name =
+        Provider.of<WishListProvider>(context).travelList[id!]['name'];
+
+    String? cost =
+        Provider.of<WishListProvider>(context).travelList[id!]['cost'];
+
+    String? rating =
+        Provider.of<WishListProvider>(context).travelList[id!]['rating'];
+
+    String? popularity =
+        Provider.of<WishListProvider>(context).travelList[id!]['popularity'];
+
+    String? overview =
+        Provider.of<WishListProvider>(context).travelList[id!]['overview'];
+
+    String? details =
+        Provider.of<WishListProvider>(context).travelList[id!]['details'];
+
+    String? reviews =
+        Provider.of<WishListProvider>(context).travelList[id!]['reviews'];
+
+    String? duration =
+        Provider.of<WishListProvider>(context).travelList[id!]['duration'];
+
+    String? distance =
+        Provider.of<WishListProvider>(context).travelList[id!]['distance'];
+
+    String? weather =
+        Provider.of<WishListProvider>(context).travelList[id!]['weather'];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -28,20 +59,17 @@ class _DestinationPageState extends State<DestinationPage> {
             Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(
-            icon: isToggleBookMark
-                ? Icon(
-                    Icons.favorite,
-                    color: Colors.blue,
-                  )
-                : Icon(
-                    Icons.favorite_border,
-                    color: Colors.black,
-                  ),
-            onPressed: toggleIcon,
+            icon: Icon(
+              Icons.favorite,
+              color: isWishList! ? Colors.red : Colors.white,
+            ),
+            onPressed: () {},
           ),
         ],
       ),
@@ -51,7 +79,7 @@ class _DestinationPageState extends State<DestinationPage> {
           Positioned.fill(
             bottom: 0,
             child: Image.asset(
-              'assets/images/travel_img_5.jpg',
+              imageLink,
               height: double.infinity,
               fit: BoxFit.fill,
             ),
@@ -61,7 +89,18 @@ class _DestinationPageState extends State<DestinationPage> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: DestinationDescription(),
+              child: DestinationDescription(
+                name: name,
+                cost: cost,
+                rating: rating,
+                popularity: popularity,
+                overview: overview,
+                details: details,
+                reviews: reviews,
+                duration: duration,
+                distance: distance,
+                weather: weather,
+              ),
             ),
           ),
         ],

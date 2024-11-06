@@ -18,23 +18,23 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       'caption': 'Explore the new to \n find good places',
       'subCaption':
           'Travel around the world with just a tap and enjoy your best holiday',
-      'imageUrl': 'assets/images/travel_img_1.jpg',
+      'imageUrl': 'assets/images/onboarding_img_1.jpg',
     },
     {
       'caption': 'Adventure awaits \n ✈️ ',
       'subCaption':
           "Pack your bags, book your flight, and let's explore the world together",
-      'imageUrl': 'assets/images/travel_img_2.jpg',
+      'imageUrl': 'assets/images/onboarding_img_2.jpg',
     },
     {
       'caption': 'Lost in the beauty of nature',
       'subCaption': "Let's explore the world, one destination at a time.",
-      'imageUrl': 'assets/images/travel_img_3.jpg',
+      'imageUrl': 'assets/images/onboarding_img_3.jpg',
     },
     {
       'caption': 'Making memories that last a lifetime 📸',
       'subCaption': 'Travel is the only thing you buy that makes you richer.',
-      'imageUrl': 'assets/images/travel_img_4.jpg',
+      'imageUrl': 'assets/images/onboarding_img_4.jpg',
     },
   ];
 

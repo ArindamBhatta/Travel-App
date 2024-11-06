@@ -38,7 +38,7 @@ class PrimeLocationCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
                         image: AssetImage(
-                          'assets/images/travel_img_5.jpg',
+                          'assets/images/bookmark_img_6.jpg',
                         ),
                         fit: BoxFit.cover,
                       ),

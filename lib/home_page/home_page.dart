@@ -23,13 +23,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void toggleWishList(int index) {
-    context.read<WishListProvider>().toggleWishList(index);
-  }
-
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
+
+    List<Map<String, dynamic>> allFilterData =
+        Provider.of<WishListProvider>(context).wishListCardContent(
+            Provider.of<WishListProvider>(context).travelList);
+
+    int lengthOfData = allFilterData.length;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -144,20 +146,37 @@ class _HomePageState extends State<HomePage> {
                         height: 280,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: context
-                              .watch<WishListProvider>()
-                              .travelList
-                              .length,
+                          itemCount: lengthOfData,
                           itemBuilder: (context, index) {
+                            String urlImage = allFilterData[index]['image'];
+
+                            bool isAddedToWishList =
+                                allFilterData[index]['isVisible'];
+
+                            String destination =
+                                allFilterData[index]['location'];
+
+                            String destinationState =
+                                allFilterData[index]['state'];
+
+                            String destinationCountry =
+                                allFilterData[index]['country'];
+
+                            void toggleWishList(int index) {
+                              context
+                                  .read<WishListProvider>()
+                                  .toggleWishList(index);
+                            }
+
                             return Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: BookMarkCard(
-                                image: context
-                                    .watch<WishListProvider>()
-                                    .travelList[index]['image'],
-                                bookMark: context
-                                    .watch<WishListProvider>()
-                                    .travelList[index]['isVisible'],
+                                id: index,
+                                image: urlImage,
+                                bookMark: isAddedToWishList,
+                                location: destination,
+                                state: destinationState,
+                                country: destinationCountry,
                                 toggleWishListMethod: () {
                                   toggleWishList(index);
                                 },

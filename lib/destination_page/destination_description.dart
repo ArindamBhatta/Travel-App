@@ -3,6 +3,31 @@ import 'package:flutter/material.dart';
 import '../home_page/home_page.dart';
 
 class DestinationDescription extends StatelessWidget {
+  final String? name;
+  final String? cost;
+  final String? rating;
+  final String? popularity;
+  final String? overview;
+  final String? details;
+  final String? reviews;
+  final String? duration;
+  final String? distance;
+  final String? weather;
+
+  DestinationDescription({
+    required this.name,
+    required this.cost,
+    required this.rating,
+    required this.popularity,
+    required this.overview,
+    required this.details,
+    required this.reviews,
+    required this.duration,
+    required this.distance,
+    required this.weather,
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,14 +46,14 @@ class DestinationDescription extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Nusa Penida",
+                name ?? '',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                "\$1000",
+                cost ?? '',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.teal,
@@ -45,7 +70,7 @@ class DestinationDescription extends StatelessWidget {
                   Icon(Icons.star, color: Colors.orange, size: 20),
                   SizedBox(width: 4),
                   Text(
-                    "4.9 (2.7k)",
+                    rating ?? '',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -100,7 +125,7 @@ class DestinationDescription extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              "Nusa Penida is one of the world’s new holiday destinations in Bali. Located on the southeast of the island of Bali.",
+              overview ?? '',
               style: TextStyle(color: Colors.grey[600]),
             ),
           ),
@@ -124,7 +149,7 @@ class DestinationDescription extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "6 Days",
+                        duration ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -153,7 +178,7 @@ class DestinationDescription extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "100 KM",
+                        distance ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -182,7 +207,7 @@ class DestinationDescription extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "24°C",
+                        weather ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

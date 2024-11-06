@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+
 import 'package:travel_app/destination_page/destination.dart';
 
-// ignore: must_be_immutable
 class BookMarkCard extends StatelessWidget {
+  final int id;
   final String? image;
-  bool bookMark;
-  VoidCallback toggleWishListMethod;
+  final bool bookMark;
+  final String location;
+  final String state;
+  final String country;
+  final VoidCallback toggleWishListMethod;
 
   BookMarkCard({
     super.key,
+    required this.id,
     required this.image,
     required this.bookMark,
+    required this.location,
+    required this.state,
+    required this.country,
     required this.toggleWishListMethod,
   });
 
@@ -24,7 +32,9 @@ class BookMarkCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DestinationPage(),
+                builder: (context) => DestinationPage(
+                  id: id,
+                ),
               ),
             );
           },
@@ -84,7 +94,7 @@ class BookMarkCard extends StatelessWidget {
                       children: [
                         SizedBox(width: 5),
                         Text(
-                          'Nusa Penida',
+                          location,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -101,7 +111,7 @@ class BookMarkCard extends StatelessWidget {
                           color: Colors.green,
                         ),
                         Text(
-                          'Nusa Penida, Bali',
+                          state + ', ' + country,
                         )
                       ],
                     ),
