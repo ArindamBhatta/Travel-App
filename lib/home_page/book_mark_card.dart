@@ -4,7 +4,7 @@ import 'package:travel_app/destination_page/destination_page.dart';
 
 class BookMarkCard extends StatelessWidget {
   final int id;
-  final String? image;
+  final String image;
   final bool bookMark;
   final String location;
   final String state;
@@ -36,49 +36,52 @@ class BookMarkCard extends StatelessWidget {
                   id: id,
                 ),
               ),
+              // PageRouteBuilder(
+              //   transitionDuration: Duration(milliseconds: 1000),
+              //   pageBuilder: (_, __, ___) => DestinationPage(id: id),
+              // ),
             );
           },
           child: Card(
+            shadowColor: Colors.black,
             color: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            elevation: 2,
+            elevation: 3,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Stack(
                     children: [
-                      Hero(
-                        tag: id,
-                        child: Container(
-                          margin: EdgeInsets.all(8.0),
-                          height: 180,
-                          width: 180,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                image ?? '',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Hero(
+                          tag: id,
+                          transitionOnUserGestures: true,
+                          child: Image.asset(
+                            image,
+                            height: 200,
+                            width: 200,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
+
+                      //* Heart button
                       Positioned(
                         top: 16.0,
                         right: 16.0,
                         child: Transform.scale(
                           scale: 0.8,
-                          child: FloatingActionButton.small(
-                            shape: CircleBorder(),
-                            backgroundColor: Colors.white.withAlpha(50),
-                            onPressed: () {
-                              toggleWishListMethod();
-                            },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.white.withAlpha(50),
+                            ),
                             child: Icon(
                               Icons.favorite,
                               color: bookMark ? Colors.red : Colors.white,
@@ -88,23 +91,24 @@ class BookMarkCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  //* location name
+
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 16.0,
-                    ),
+                    padding: const EdgeInsets.only(left: 5, top: 10),
                     child: Row(
                       children: [
-                        SizedBox(width: 5),
                         Text(
                           location,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
                   ),
+                  //* icon location and state
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

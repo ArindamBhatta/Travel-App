@@ -7,7 +7,7 @@ Widget destinationDescription({
   required String name,
   required String cost,
   required String rating,
-  required String popularity,
+  required int popularity,
   required String overview,
   required String details,
   required String reviews,
