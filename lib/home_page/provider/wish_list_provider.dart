@@ -18,7 +18,7 @@ class WishListProvider extends ChangeNotifier {
       'reviews': 'most reviewed places in India',
       'duration': '4 days',
       'distance': '2.5 km',
-      'weather': 'Sunny',
+      'weather': '13',
     },
     {
       'id': 2,
@@ -31,7 +31,7 @@ class WishListProvider extends ChangeNotifier {
           'Dharamshala is one of the world’s new holiday destinations in Himachal Pradesh. Located on the Himachal of the India.',
       'duration': '6 days',
       'distance': '10 km',
-      'weather': 'foggy',
+      'temperature': '18',
     },
     {
       'id': 3,
@@ -44,7 +44,7 @@ class WishListProvider extends ChangeNotifier {
           'Ranthambore is one of the world’s new holiday destinations in Rajasthan. Located on the Rajasthan of the India.',
       'duration': '4 days',
       'distance': '15 km',
-      'weather': 'clear',
+      'weather': '23',
     },
     {
       'id': 4,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:travel_app/destination_page/destination.dart';
+import 'package:travel_app/destination_page/destination_page.dart';
 
 class BookMarkCard extends StatelessWidget {
   final int id;
@@ -51,17 +51,20 @@ class BookMarkCard extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      Container(
-                        margin: EdgeInsets.all(8.0),
-                        height: 180,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              image ?? '',
+                      Hero(
+                        tag: id,
+                        child: Container(
+                          margin: EdgeInsets.all(8.0),
+                          height: 180,
+                          width: 180,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                image ?? '',
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -72,7 +75,7 @@ class BookMarkCard extends StatelessWidget {
                           scale: 0.8,
                           child: FloatingActionButton.small(
                             shape: CircleBorder(),
-                            backgroundColor: Colors.white.withAlpha(150),
+                            backgroundColor: Colors.white.withAlpha(50),
                             onPressed: () {
                               toggleWishListMethod();
                             },

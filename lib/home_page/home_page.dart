@@ -187,7 +187,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    SpecialForYouText(itemButtonList: list),
+                    SpecialForYouText(
+                      itemButtonList: list,
+                    ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -201,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 70),
+                    SizedBox(height: 110),
                   ],
                 ),
               ),

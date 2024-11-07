@@ -52,7 +52,6 @@ class _SpecialForYouTextState extends State<SpecialForYouText> {
                   )
                 ],
               ),
-              SizedBox(height: 16),
             ],
           ),
         ),

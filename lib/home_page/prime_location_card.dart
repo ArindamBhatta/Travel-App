@@ -12,8 +12,8 @@ class PrimeLocationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
+      padding: const EdgeInsets.only(
+        left: 8.0,
       ),
       child: Row(
         children: [
@@ -23,7 +23,7 @@ class PrimeLocationCard extends StatelessWidget {
               color: Colors.white,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  color: Colors.black.withAlpha(110),
+                  color: Colors.black.withAlpha(50),
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(10),
