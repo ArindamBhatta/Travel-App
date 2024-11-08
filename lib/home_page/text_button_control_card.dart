@@ -20,9 +20,8 @@ class TextButtonControlCard extends StatelessWidget {
     if (index == id) {
       buttonTextIsSelected = true;
     }
-    // * this variable use for filter out cards
-    final selectedFilter = allButtonText.values[
-        id]; //* give us the enum value by using index value which is passing from parent class
+    //* give us the enum value by using index value index is passing from parent class enum.values[0] == 'All'
+    final selectedFilter = allButtonText.values[id];
 
     return TextButton(
       style: ButtonStyle(
@@ -50,9 +49,8 @@ class TextButtonControlCard extends StatelessWidget {
       onPressed: () {
         context.read<HomePageProvider>().toggleTextVisibility(
             id); //* parameter is id which is coming in parent class
-        context
-            .read<HomePageProvider>()
-            .updateFilter(selectedFilter); //* call function with enum name
+        context.read<HomePageProvider>().updateFilter(
+            selectedFilter); //* call function with enum index 0 == 'All'
       },
       child: Text(
         buttonText,

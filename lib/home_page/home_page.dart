@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    // Retrieve the filtered list based on the selected filter
+    //* Retrieve the filtered list based on the selected filter
     List<Map<String, dynamic>> filteredData =
         context.watch<HomePageProvider>().getFilteredTravelList();
 
@@ -119,14 +119,17 @@ class HomePage extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 300.0,
+                      //* Creating the cards
                       child: ListView.builder(
-                        // ! This value is sink with enum buttons
                         scrollDirection: Axis.horizontal,
                         itemCount: lengthOfData,
                         itemBuilder: (context, index) {
-                          final cardData = filteredData[index];
+                          //* in CardData we assign filterData with specific index
+                          final cardData =
+                              filteredData[index]; //* index ->| 0 | 1 | 2 | 3 |
                           String urlImage = cardData['image'];
-                          bool isAddedToWishList = cardData['isVisible'];
+                          bool isAddedToWishList =
+                              cardData['isUserWishListedValue'];
                           String destination = cardData['location'];
                           String destinationState = cardData['state'];
                           String destinationCountry = cardData['country'];

@@ -6,7 +6,7 @@ class HomePageProvider extends ChangeNotifier {
   int? textVisibilityIndex = 1;
   allButtonText selectedFilter = allButtonText.Popular;
 
-  //* this method is used to toggle between enum buttons
+  //* this method is used to toggle between enum buttons used in TextButtonControlCard
   void toggleTextVisibility(int? index) {
     if (textVisibilityIndex == index) {
       textVisibilityIndex = null;
@@ -23,9 +23,10 @@ class HomePageProvider extends ChangeNotifier {
     }).toList();
   }
 
-  //* control by both hame page card and details page isVisible property which is a json value
+  //* control by both home page card and details page isUserWishListedValue property which is a json value
   void toggleWishList(int index) {
-    travelList[index]['isVisible'] = !travelList[index]['isVisible'];
+    travelList[index]['isUserWishListedValue'] =
+        !travelList[index]['isUserWishListedValue'];
     notifyListeners();
   }
 
@@ -36,7 +37,7 @@ class HomePageProvider extends ChangeNotifier {
       return {
         'id': dataOneByOne['id'],
         'image': dataOneByOne['image'],
-        'isVisible': dataOneByOne['isVisible'],
+        'isUserWishListedValue': dataOneByOne['isUserWishListedValue'],
         'location': dataOneByOne['location'],
         'state': dataOneByOne['state'],
         'country': dataOneByOne['country'],
@@ -44,36 +45,52 @@ class HomePageProvider extends ChangeNotifier {
     }).toList();
   }
 
-  //* Method to update the selected filter
+  //* Method to update the selected filter used in In TextButtonControlCard where enum is present.
   void updateFilter(allButtonText filter) {
     selectedFilter = filter;
     notifyListeners();
   }
 
+//* Used in HomePage.dart to build all card context
   List<Map<String, dynamic>> getFilteredTravelList() {
     switch (selectedFilter) {
-      case allButtonText.Popular:
+      case allButtonText.Popular: //* if selectedFilter is enum Popular
         return filterForPopularList();
-      case allButtonText.Recommended:
-        return travelList;
       case allButtonText.WishListed:
-        return travelList.where((item) => item['isVisible'] == true).toList();
+        return filterForWishListedItems();
       default:
         return travelList;
     }
   }
 
+  //* Filter for popular Items
   List<Map<String, dynamic>> filterForPopularList() {
     return travelList.where((allElement) {
       return allElement['popularity'] >= 10000;
     }).toList();
   }
 
+  //* Filter for WishListed Items
+  List<Map<String, dynamic>> filterForWishListedItems() {
+    return travelList.where((allElement) {
+      notifyListeners();
+      print('-------------------${allElement['isUserWishListedValue']}');
+      return allElement['isUserWishListedValue'] == true;
+    }).toList();
+  }
+
+  //* Check it's a length issue? no the issue is Keys
+  // List<Map<String, dynamic>> getFilterList() {
+  //   List<Map<String, dynamic>> filterList = filterForWishListedItems();
+  //   print('---------------------------->>>>>> ${filterList.length}');
+  //   return filterList;
+  // }
+
   List<Map<String, dynamic>> travelList = [
     {
       'id': 1,
       'image': 'assets/images/bookmark_img_6.jpg',
-      'isVisible': false,
+      'isUserWishListedValue': false,
       'location': 'Darjeeling',
       'state': 'West Bengal',
       'country': 'India',
@@ -91,7 +108,7 @@ class HomePageProvider extends ChangeNotifier {
     {
       'id': 2,
       'image': 'assets/images/bookmark_img_7.jpg',
-      'isVisible': false,
+      'isUserWishListedValue': false,
       'location': 'Dharamshala',
       'state': 'Himachal Pradesh',
       'country': 'India',
@@ -109,8 +126,8 @@ class HomePageProvider extends ChangeNotifier {
     {
       'id': 3,
       'image': 'assets/images/bookmark_img_8.jpg',
-      'isVisible': false,
-      'location': 'Ranthambore National Park',
+      'isUserWishListedValue': false,
+      'location': 'Ranthambore Park',
       'state': 'Rajasthan',
       'country': 'India',
       'cost': '6000',
@@ -127,7 +144,7 @@ class HomePageProvider extends ChangeNotifier {
     {
       'id': 4,
       'image': 'assets/images/bookmark_img_9.jpg',
-      'isVisible': false,
+      'isUserWishListedValue': false,
       'location': 'Taj Mahal',
       'state': 'Agra',
       'country': 'India',
@@ -144,6 +161,3 @@ class HomePageProvider extends ChangeNotifier {
     },
   ];
 }
-
-//Dummy json replace with real data
-

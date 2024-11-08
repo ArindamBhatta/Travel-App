@@ -18,8 +18,8 @@ class DetailsPage extends StatelessWidget {
     String imageLink =
         Provider.of<HomePageProvider>(context).travelList[id]['image'];
 
-    bool isWishList =
-        Provider.of<HomePageProvider>(context).travelList[id]['isVisible'];
+    bool isWishList = Provider.of<HomePageProvider>(context).travelList[id]
+        ['isUserWishListedValue'];
 
     String name =
         Provider.of<HomePageProvider>(context).travelList[id]['location'];

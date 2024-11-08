@@ -106,6 +106,7 @@ class BookMarkCard extends StatelessWidget {
                       ],
                     ),
                   ),
+
                   //* icon location and state
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
