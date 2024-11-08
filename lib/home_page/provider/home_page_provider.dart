@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+enum allButtonText { All, Popular, Recommended, WishListed }
+
 class HomePageProvider extends ChangeNotifier {
   int? textVisibilityIndex = 1;
+  allButtonText selectedFilter = allButtonText.Popular;
 
+  //* this method is used to toggle between enum buttons
   void toggleTextVisibility(int? index) {
     if (textVisibilityIndex == index) {
       textVisibilityIndex = null;
@@ -12,7 +16,59 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //for Card Content
+  //* this method is used for details page specification if user tap a card it go to that card details page
+  List<Map<String, dynamic>> filterForDetailsPage(int id) {
+    return travelList.where((allElement) {
+      return allElement['id'] == id;
+    }).toList();
+  }
+
+  //* control by both hame page card and details page isVisible property which is a json value
+  void toggleWishList(int index) {
+    travelList[index]['isVisible'] = !travelList[index]['isVisible'];
+    notifyListeners();
+  }
+
+  //* this method is used for rendering Homepage card context to select specific data which is needs for rendering.
+  List<Map<String, dynamic>> homePageFilteredData(
+      List<Map<String, dynamic>> travelList) {
+    return travelList.map((dataOneByOne) {
+      return {
+        'id': dataOneByOne['id'],
+        'image': dataOneByOne['image'],
+        'isVisible': dataOneByOne['isVisible'],
+        'location': dataOneByOne['location'],
+        'state': dataOneByOne['state'],
+        'country': dataOneByOne['country'],
+      };
+    }).toList();
+  }
+
+  //* Method to update the selected filter
+  void updateFilter(allButtonText filter) {
+    selectedFilter = filter;
+    notifyListeners();
+  }
+
+  List<Map<String, dynamic>> getFilteredTravelList() {
+    switch (selectedFilter) {
+      case allButtonText.Popular:
+        return filterForPopularList();
+      case allButtonText.Recommended:
+        return travelList;
+      case allButtonText.WishListed:
+        return travelList.where((item) => item['isVisible'] == true).toList();
+      default:
+        return travelList;
+    }
+  }
+
+  List<Map<String, dynamic>> filterForPopularList() {
+    return travelList.where((allElement) {
+      return allElement['popularity'] >= 10000;
+    }).toList();
+  }
+
   List<Map<String, dynamic>> travelList = [
     {
       'id': 1,
@@ -87,37 +143,7 @@ class HomePageProvider extends ChangeNotifier {
       'weather': 'Rainy',
     },
   ];
-
-  List<Map<String, dynamic>> wishListCardContent(
-      List<Map<String, dynamic>> travelList) {
-    //list in argument
-    return travelList.map((item) {
-      return {
-        'id': item['id'],
-        'image': item['image'],
-        'isVisible': item['isVisible'],
-        'location': item['location'],
-        'state': item['state'],
-        'country': item['country'],
-      };
-    }).toList(); //iterables to list
-  }
-
-  List<Map<String, dynamic>> filterForDetailsPage(int id) {
-    return travelList.where((allElement) => allElement['id'] == id).toList();
-  }
-
-  List<Map<String, dynamic>> filterForPopularList() {
-    return travelList.where((allElement) {
-      return allElement['popularity'] >= 10000;
-    }).toList();
-  }
-
-  void toggleWishList(int index) {
-    travelList[index]['isVisible'] = !travelList[index]['isVisible'];
-    notifyListeners();
-  }
 }
 
-//Recommended card text
+//Dummy json replace with real data
 

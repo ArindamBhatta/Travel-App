@@ -9,7 +9,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => HomePageProvider()),
+        ChangeNotifierProvider(
+          create: (context) => HomePageProvider(),
+        ),
       ],
       child: TravelApp(),
     ),

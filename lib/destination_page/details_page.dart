@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/destination_page/destination_description.dart';
+import 'package:travel_app/destination_page/details_page_extension.dart';
 import '../home_page/provider/home_page_provider.dart';
 
-class DestinationPage extends StatelessWidget {
+class DetailsPage extends StatelessWidget {
   final int id;
 
-  DestinationPage({
+  DetailsPage({
     super.key,
     required this.id,
   });
@@ -99,7 +99,9 @@ class DestinationPage extends StatelessWidget {
                         color: isWishList ? Colors.red : Colors.grey,
                       ),
                       onPressed: () {
-                        context.read<HomePageProvider>().toggleWishList(id);
+                        context
+                            .read<HomePageProvider>()
+                            .toggleWishList(id); //* toggle wish list
                       },
                     ),
                   ),
@@ -108,7 +110,7 @@ class DestinationPage extends StatelessWidget {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: destinationDescription(
+                  child: detailsPageExtension(
                     context: context,
                     name: name,
                     cost: cost,

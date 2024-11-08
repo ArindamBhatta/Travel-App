@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:travel_app/destination_page/destination_page.dart';
+import 'package:travel_app/destination_page/details_page.dart';
 
 class BookMarkCard extends StatelessWidget {
   final int id;
@@ -27,19 +27,17 @@ class BookMarkCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        //* GestureDetector or inkwell is used to make the card clickable.
         GestureDetector(
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DestinationPage(
+                builder: (context) => DetailsPage(
+                  //* passing those id coming from home pag, send to details page, check in json data for that id which map it render
                   id: id,
                 ),
               ),
-              // PageRouteBuilder(
-              //   transitionDuration: Duration(milliseconds: 1000),
-              //   pageBuilder: (_, __, ___) => DestinationPage(id: id),
-              // ),
             );
           },
           child: Card(
@@ -60,7 +58,6 @@ class BookMarkCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                         child: Hero(
                           tag: id,
-                          transitionOnUserGestures: true,
                           child: Image.asset(
                             image,
                             height: 200,
@@ -79,20 +76,23 @@ class BookMarkCard extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
+                              shape: BoxShape.circle,
                               color: Colors.white.withAlpha(50),
                             ),
-                            child: Icon(
-                              Icons.favorite,
-                              color: bookMark ? Colors.red : Colors.white,
+                            child: TextButton(
+                              onPressed: toggleWishListMethod,
+                              child: Icon(
+                                Icons.favorite,
+                                color: bookMark ? Colors.red : Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  //* location name
 
+                  //* location name
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 10),
                     child: Row(
@@ -132,3 +132,10 @@ class BookMarkCard extends StatelessWidget {
     );
   }
 }
+
+/* 
+  PageRouteBuilder(
+    transitionDuration: Duration(milliseconds: 1000),
+      pageBuilder: (_, __, ___) => DestinationPage(id: id),
+  ),
+*/

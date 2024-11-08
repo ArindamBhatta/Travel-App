@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../home_page/home_page.dart';
 
-Widget destinationDescription({
+Widget detailsPageExtension({
   required context,
   required String name,
   required String cost,

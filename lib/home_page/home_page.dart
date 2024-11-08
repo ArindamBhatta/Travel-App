@@ -3,23 +3,19 @@ import 'package:provider/provider.dart';
 import '../home_Page/special_for_you_text.dart';
 import './book_mark_card.dart';
 import '../home_Page/prime_location_card.dart';
-import '../home_Page/booking_button.dart';
 import 'provider/home_page_provider.dart';
+import 'text_button_control_card.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    List<Map<String, dynamic>> allFilterData =
-        Provider.of<HomePageProvider>(context).wishListCardContent(
-            Provider.of<HomePageProvider>(context).travelList);
+    // Retrieve the filtered list based on the selected filter
+    List<Map<String, dynamic>> filteredData =
+        context.watch<HomePageProvider>().getFilteredTravelList();
 
-    int lengthOfData = allFilterData.length;
-
-    List<Map<String, dynamic>> popularityFilter =
-        Provider.of<HomePageProvider>(context).filterForPopularList();
-    print('popularityFilter --------------------->>>>>>>>: $popularityFilter');
+    int lengthOfData = filteredData.length;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -33,8 +29,9 @@ class HomePage extends StatelessWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/images/profile_picture.jpg'),
+                    backgroundImage: AssetImage(
+                      'assets/images/profile_picture.jpg',
+                    ),
                   ),
                   SizedBox(width: 10),
                   Column(
@@ -99,25 +96,17 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16.0),
                 child: Row(
                   children: [
-                    BookingButton(
-                      id: 0,
-                      buttonText: "All",
-                    ),
+                    TextButtonControlCard(
+                        id: 0, buttonText: allButtonText.All.name),
                     SizedBox(width: 8),
-                    BookingButton(
-                      id: 1,
-                      buttonText: "Popular",
-                    ),
+                    TextButtonControlCard(
+                        id: 1, buttonText: allButtonText.Popular.name),
                     SizedBox(width: 8),
-                    BookingButton(
-                      id: 2,
-                      buttonText: "Recommended",
-                    ),
+                    TextButtonControlCard(
+                        id: 2, buttonText: allButtonText.Recommended.name),
                     SizedBox(width: 8),
-                    BookingButton(
-                      id: 3,
-                      buttonText: "Wish listed",
-                    ),
+                    TextButtonControlCard(
+                        id: 3, buttonText: allButtonText.WishListed.name),
                   ],
                 ),
               ),
@@ -131,26 +120,20 @@ class HomePage extends StatelessWidget {
                     SizedBox(
                       height: 300.0,
                       child: ListView.builder(
+                        // ! This value is sink with enum buttons
                         scrollDirection: Axis.horizontal,
                         itemCount: lengthOfData,
                         itemBuilder: (context, index) {
-                          String urlImage = allFilterData[index]['image'];
-
-                          bool isAddedToWishList =
-                              allFilterData[index]['isVisible'];
-
-                          String destination = allFilterData[index]['location'];
-
-                          String destinationState =
-                              allFilterData[index]['state'];
-
-                          String destinationCountry =
-                              allFilterData[index]['country'];
+                          final cardData = filteredData[index];
+                          String urlImage = cardData['image'];
+                          bool isAddedToWishList = cardData['isVisible'];
+                          String destination = cardData['location'];
+                          String destinationState = cardData['state'];
+                          String destinationCountry = cardData['country'];
 
                           void toggleWishList(int index) {
-                            context
-                                .read<HomePageProvider>()
-                                .toggleWishList(index);
+                            context.read<HomePageProvider>().toggleWishList(
+                                index); //* toggle wish list also done from details page pass to child card container
                           }
 
                           return Padding(
@@ -164,6 +147,7 @@ class HomePage extends StatelessWidget {
                               state: destinationState,
                               country: destinationCountry,
                               toggleWishListMethod: () {
+                                //* passing whole method to a key so we pass separate index value with instantiate
                                 toggleWishList(index);
                               },
                             ),
@@ -199,7 +183,7 @@ class HomePage extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
         child: FloatingActionButton.extended(
-          heroTag: 'unique_fab_tag',
+          heroTag: 'unique_fab_id_2',
           elevation: 1,
           backgroundColor: Colors.white,
           onPressed: () {},

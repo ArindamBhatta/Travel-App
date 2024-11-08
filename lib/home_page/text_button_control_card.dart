@@ -2,22 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/home_page/provider/home_page_provider.dart';
 
-class BookingButton extends StatelessWidget {
+class TextButtonControlCard extends StatelessWidget {
   final int id;
-  final String? buttonText;
+  final String buttonText;
 
-  BookingButton({
+  TextButtonControlCard({
     required this.id,
     required this.buttonText,
   });
 
   @override
   Widget build(BuildContext context) {
+    //* this method is used for toggle between buttons
     bool buttonTextIsSelected = false;
+
     int? index = context.watch<HomePageProvider>().textVisibilityIndex;
     if (index == id) {
       buttonTextIsSelected = true;
     }
+    // * this variable use for filter out cards
+    final selectedFilter = allButtonText.values[
+        id]; //* give us the enum value by using index value which is passing from parent class
 
     return TextButton(
       style: ButtonStyle(
@@ -43,10 +48,14 @@ class BookingButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        context.read<HomePageProvider>().toggleTextVisibility(id);
+        context.read<HomePageProvider>().toggleTextVisibility(
+            id); //* parameter is id which is coming in parent class
+        context
+            .read<HomePageProvider>()
+            .updateFilter(selectedFilter); //* call function with enum name
       },
       child: Text(
-        buttonText!,
+        buttonText,
         style: TextStyle(
           color: buttonTextIsSelected ? Colors.white : Colors.black,
           fontWeight: FontWeight.bold,
