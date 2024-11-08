@@ -143,6 +143,7 @@ class HomePage extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 left: 16.0), //for single card shifting
                             child: BookMarkCard(
+                              key: ValueKey(index),
                               id: index,
                               image: urlImage,
                               bookMark: isAddedToWishList,

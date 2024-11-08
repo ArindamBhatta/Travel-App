@@ -72,19 +72,12 @@ class HomePageProvider extends ChangeNotifier {
 
   //* Filter for WishListed Items
   List<Map<String, dynamic>> filterForWishListedItems() {
-    return travelList.where((allElement) {
-      notifyListeners();
-      print('-------------------${allElement['isUserWishListedValue']}');
-      return allElement['isUserWishListedValue'] == true;
-    }).toList();
+    return travelList
+        .where(
+          (allElement) => allElement['isUserWishListedValue'] == true,
+        )
+        .toList();
   }
-
-  //* Check it's a length issue? no the issue is Keys
-  // List<Map<String, dynamic>> getFilterList() {
-  //   List<Map<String, dynamic>> filterList = filterForWishListedItems();
-  //   print('---------------------------->>>>>> ${filterList.length}');
-  //   return filterList;
-  // }
 
   List<Map<String, dynamic>> travelList = [
     {
