@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/destination_page/details_page_extension.dart';
-import '../home_page/provider/home_page_provider.dart';
+import 'package:travel_app/details_page/details_page_extension.dart';
+import '../provider/home_page_provider.dart';
 
 class DetailsPage extends StatelessWidget {
   final int id;
@@ -15,40 +15,36 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    String imageLink =
-        Provider.of<HomePageProvider>(context).travelList[id]['image'];
+    Map<String, dynamic> specificCardData =
+        context.read<HomePageProvider>().filterForDetailsPage(id);
 
-    bool isWishList = Provider.of<HomePageProvider>(context).travelList[id]
-        ['isUserWishListedValue'];
+    String imageLink = specificCardData['image'];
 
-    String name =
-        Provider.of<HomePageProvider>(context).travelList[id]['location'];
+    bool isWishList = specificCardData['isUserWishListedValue'];
 
-    String cost = Provider.of<HomePageProvider>(context).travelList[id]['cost'];
+    String location = specificCardData['location'];
 
-    String rating =
-        Provider.of<HomePageProvider>(context).travelList[id]['rating'];
+    String cost = specificCardData['cost'];
 
-    int popularity =
-        Provider.of<HomePageProvider>(context).travelList[id]['popularity'];
+    String rating = specificCardData['rating'];
 
-    String overview =
-        Provider.of<HomePageProvider>(context).travelList[id]['overview'];
+    int popularity = specificCardData['popularity'];
 
-    String details =
-        Provider.of<HomePageProvider>(context).travelList[id]['details'];
+    String overview = specificCardData['overview'];
 
-    String reviews =
-        Provider.of<HomePageProvider>(context).travelList[id]['reviews'];
+    String details = specificCardData['details'];
 
-    String duration =
-        Provider.of<HomePageProvider>(context).travelList[id]['duration'];
+    String reviews = specificCardData['reviews'];
 
-    String distance =
-        Provider.of<HomePageProvider>(context).travelList[id]['distance'];
+    String duration = specificCardData['duration'];
 
-    String weather =
-        Provider.of<HomePageProvider>(context).travelList[id]['weather'];
+    String distance = specificCardData['distance'];
+
+    String weather = specificCardData['weather'];
+
+    void toggleWishList(int dataId) {
+      context.read<HomePageProvider>().toggleWishList(dataId);
+    }
 
     return Scaffold(
       body: Column(
@@ -99,9 +95,7 @@ class DetailsPage extends StatelessWidget {
                         color: isWishList ? Colors.red : Colors.grey,
                       ),
                       onPressed: () {
-                        context
-                            .read<HomePageProvider>()
-                            .toggleWishList(id); //* toggle wish list
+                        toggleWishList(id);
                       },
                     ),
                   ),
@@ -112,7 +106,7 @@ class DetailsPage extends StatelessWidget {
                   right: 0,
                   child: detailsPageExtension(
                     context: context,
-                    name: name,
+                    name: location,
                     cost: cost,
                     rating: rating,
                     popularity: popularity,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/home_page/provider/home_page_provider.dart';
+import 'package:travel_app/provider/home_page_provider.dart';
+import '../provider/model.dart';
 
 class TextButtonControlCard extends StatelessWidget {
   final int id;

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:travel_app/destination_page/details_page.dart';
+import 'package:travel_app/details_page/details_page.dart';
+
+import '../provider/home_page_provider.dart';
 
 class BookMarkCard extends StatelessWidget {
   final int id;
@@ -9,7 +12,6 @@ class BookMarkCard extends StatelessWidget {
   final String location;
   final String state;
   final String country;
-  final VoidCallback toggleWishListMethod;
 
   BookMarkCard({
     super.key,
@@ -19,11 +21,15 @@ class BookMarkCard extends StatelessWidget {
     required this.location,
     required this.state,
     required this.country,
-    required this.toggleWishListMethod,
   });
 
   @override
   Widget build(BuildContext context) {
+    //* toggle wish list also done from details page pass to child card container
+    void toggleWishList(int dataId) {
+      context.read<HomePageProvider>().toggleWishList(dataId);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -34,7 +40,7 @@ class BookMarkCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => DetailsPage(
-                  //* passing those id coming from home pag, send to details page, check in json data for that id which map it render
+                  //* passing those id coming from home pag, send to details page
                   id: id,
                 ),
               ),
@@ -69,8 +75,8 @@ class BookMarkCard extends StatelessWidget {
 
                       //* Heart button
                       Positioned(
-                        top: 16.0,
-                        right: 16.0,
+                        top: 8.0,
+                        right: 8.0,
                         child: Transform.scale(
                           scale: 0.8,
                           child: Container(
@@ -80,7 +86,9 @@ class BookMarkCard extends StatelessWidget {
                               color: Colors.white.withAlpha(50),
                             ),
                             child: TextButton(
-                              onPressed: toggleWishListMethod,
+                              onPressed: () {
+                                toggleWishList(id);
+                              },
                               child: Icon(
                                 Icons.favorite,
                                 color: bookMark ? Colors.red : Colors.white,

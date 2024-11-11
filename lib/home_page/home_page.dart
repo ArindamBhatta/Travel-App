@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/provider/home_page_provider.dart';
+import 'package:travel_app/provider/model.dart';
 import '../home_Page/special_for_you_text.dart';
 import './book_mark_card.dart';
 import '../home_Page/prime_location_card.dart';
-import 'provider/home_page_provider.dart';
+
 import 'text_button_control_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -24,8 +26,10 @@ class HomePage extends StatelessWidget {
           children: [
             //* User info
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 16.0,
+              ),
               child: Row(
                 children: [
                   CircleAvatar(
@@ -97,16 +101,24 @@ class HomePage extends StatelessWidget {
                 child: Row(
                   children: [
                     TextButtonControlCard(
-                        id: 0, buttonText: allButtonText.All.name),
+                      id: 0,
+                      buttonText: allButtonText.All.name,
+                    ),
                     SizedBox(width: 8),
                     TextButtonControlCard(
-                        id: 1, buttonText: allButtonText.Popular.name),
+                      id: 1,
+                      buttonText: allButtonText.Popular.name,
+                    ),
                     SizedBox(width: 8),
                     TextButtonControlCard(
-                        id: 2, buttonText: allButtonText.Recommended.name),
+                      id: 2,
+                      buttonText: allButtonText.Recommended.name,
+                    ),
                     SizedBox(width: 8),
                     TextButtonControlCard(
-                        id: 3, buttonText: allButtonText.WishListed.name),
+                      id: 3,
+                      buttonText: allButtonText.WishListed.name,
+                    ),
                   ],
                 ),
               ),
@@ -127,6 +139,7 @@ class HomePage extends StatelessWidget {
                           //* in CardData we assign filterData with specific index
                           final cardData =
                               filteredData[index]; //* index ->| 0 | 1 | 2 | 3 |
+                          int id = cardData['id'];
                           String urlImage = cardData['image'];
                           bool isAddedToWishList =
                               cardData['isUserWishListedValue'];
@@ -134,26 +147,16 @@ class HomePage extends StatelessWidget {
                           String destinationState = cardData['state'];
                           String destinationCountry = cardData['country'];
 
-                          void toggleWishList(int index) {
-                            context.read<HomePageProvider>().toggleWishList(
-                                index); //* toggle wish list also done from details page pass to child card container
-                          }
-
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 16.0), //for single card shifting
                             child: BookMarkCard(
-                              key: ValueKey(index),
-                              id: index,
+                              id: id,
                               image: urlImage,
                               bookMark: isAddedToWishList,
                               location: destination,
                               state: destinationState,
                               country: destinationCountry,
-                              toggleWishListMethod: () {
-                                //* passing whole method to a key so we pass separate index value with instantiate
-                                toggleWishList(index);
-                              },
                             ),
                           );
                         },
@@ -176,6 +179,13 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    SizedBox(height: 100),
+                    SizedBox(height: 100),
+                    SizedBox(height: 100),
+                    SizedBox(height: 100),
+                    SizedBox(height: 100),
+                    SizedBox(height: 100),
+                    SizedBox(height: 100),
                     SizedBox(height: 100),
                   ],
                 ),
