@@ -21,178 +21,176 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            //* User info
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: AssetImage(
+                    'assets/images/profile_picture.jpg',
+                  ),
+                ),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Jihan Audy,',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Where do you want to go?',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Icon(
+                  Icons.notification_add_outlined,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          )),
+      body: Column(
+        children: [
+          //* Search bar
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                filled: true,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                fillColor: Colors.white,
+                hintText: 'Search',
+                prefixIcon: Icon(Icons.search),
+                suffixIcon: Icon(Icons.tune_outlined),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
+            ),
+          ),
+          SizedBox(height: 20),
+          //*  4 button to navigation cards
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage(
-                      'assets/images/profile_picture.jpg',
-                    ),
+                  TextButtonControlCard(
+                    id: 0,
+                    buttonText: allButtonText.All.name,
                   ),
-                  SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Jihan Audy,',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Where do you want to go?',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                  SizedBox(width: 8),
+                  TextButtonControlCard(
+                    id: 1,
+                    buttonText: allButtonText.Popular.name,
                   ),
-                  Spacer(),
-                  Icon(
-                    Icons.notification_add_outlined,
-                    color: Colors.black,
+                  SizedBox(width: 8),
+                  TextButtonControlCard(
+                    id: 2,
+                    buttonText: allButtonText.Recommended.name,
+                  ),
+                  SizedBox(width: 8),
+                  TextButtonControlCard(
+                    id: 3,
+                    buttonText: allButtonText.WishListed.name,
                   ),
                 ],
               ),
             ),
-            //* Search bar
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  fillColor: Colors.white,
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search),
-                  suffixIcon: Icon(Icons.tune_outlined),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            //*  4 button to navigation cards
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Row(
-                  children: [
-                    TextButtonControlCard(
-                      id: 0,
-                      buttonText: allButtonText.All.name,
-                    ),
-                    SizedBox(width: 8),
-                    TextButtonControlCard(
-                      id: 1,
-                      buttonText: allButtonText.Popular.name,
-                    ),
-                    SizedBox(width: 8),
-                    TextButtonControlCard(
-                      id: 2,
-                      buttonText: allButtonText.Recommended.name,
-                    ),
-                    SizedBox(width: 8),
-                    TextButtonControlCard(
-                      id: 3,
-                      buttonText: allButtonText.WishListed.name,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 300.0,
-                      //* Creating the cards
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: lengthOfData,
-                        itemBuilder: (context, index) {
-                          //* in CardData we assign filterData with specific index
-                          final cardData =
-                              filteredData[index]; //* index ->| 0 | 1 | 2 | 3 |
-                          int id = cardData['id'];
-                          String urlImage = cardData['image'];
-                          bool isAddedToWishList =
-                              cardData['isUserWishListedValue'];
-                          String destination = cardData['location'];
-                          String destinationState = cardData['state'];
-                          String destinationCountry = cardData['country'];
-
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16.0), //for single card shifting
-                            child: BookMarkCard(
-                              id: id,
-                              image: urlImage,
-                              bookMark: isAddedToWishList,
-                              location: destination,
-                              state: destinationState,
-                              country: destinationCountry,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    SpecialForYouText(),
-                    SingleChildScrollView(
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 300.0,
+                    //* Creating the cards
+                    child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: PrimeLocationCard(),
+                      itemCount: lengthOfData,
+                      itemBuilder: (context, index) {
+                        //* in CardData we assign filterData with specific index
+                        final cardData =
+                            filteredData[index]; //* index ->| 0 | 1 | 2 | 3 |
+                        int id = cardData['id'];
+                        String urlImage = cardData['image'];
+                        bool isAddedToWishList =
+                            cardData['isUserWishListedValue'];
+                        String destination = cardData['location'];
+                        String destinationState = cardData['state'];
+                        String destinationCountry = cardData['country'];
+
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0), //for single card shifting
+                          child: BookMarkCard(
+                            id: id,
+                            image: urlImage,
+                            bookMark: isAddedToWishList,
+                            location: destination,
+                            state: destinationState,
+                            country: destinationCountry,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: PrimeLocationCard(),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                    SizedBox(height: 100),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 20),
+                  SpecialForYouText(),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: PrimeLocationCard(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: PrimeLocationCard(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                  SizedBox(height: 100),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
