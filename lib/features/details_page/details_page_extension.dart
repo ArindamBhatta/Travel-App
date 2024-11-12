@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../home_page/home_page.dart';
+import '../home_page/interface/home_page.dart';
 
 Widget detailsPageExtension({
   required context,
@@ -46,7 +46,7 @@ Widget detailsPageExtension({
   }
 
   return Container(
-    padding: EdgeInsets.all(20),
+    padding: EdgeInsets.symmetric(horizontal: 20),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.vertical(

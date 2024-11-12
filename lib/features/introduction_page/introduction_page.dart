@@ -1,18 +1,18 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 
-import 'package:travel_app/on_boarding_page/button_widget.dart';
+import 'package:travel_app/features/introduction_page/Interface/sign_in_button.dart';
 import 'dart:async';
-import 'package:travel_app/on_boarding_page/scrollable_screen.dart';
+import 'package:travel_app/features/introduction_page/Interface/scrollable_screen.dart';
 
-class OnBoardingPage extends StatefulWidget {
-  OnBoardingPage({super.key});
+class IntroductionPage extends StatefulWidget {
+  IntroductionPage({super.key});
 
   @override
-  State<OnBoardingPage> createState() => _OnBoardingPageState();
+  State<IntroductionPage> createState() => _IntroductionPageState();
 }
 
-class _OnBoardingPageState extends State<OnBoardingPage> {
+class _IntroductionPageState extends State<IntroductionPage> {
   List<Map<String, String>> list = [
     {
       'caption': 'Explore the new to \n find good places',
@@ -40,17 +40,19 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   late PageController _pageController;
   late Timer _timer;
-  int currentPage = 0;
-  int? nextPage;
+  int currentPage = 0; //* Update the dot indicator
+  int nextPage = 0; //* Update the page Image
+  late int _actualListLength;
 
   @override
   void initState() {
     super.initState();
+    _actualListLength = list.length;
     _pageController = PageController();
 
     _pageController.addListener(() {
       setState(() {
-        currentPage = _pageController.page!.round(); // Update the current page
+        currentPage = _pageController.page!.toInt(); //* Update the current page
       });
     });
 
@@ -62,27 +64,28 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         // Check if we reached the last page
         if (nextPage == list.length) {
           setState(() {
-            list.add(list[0]); // Temporarily add the first item at the end
-          }); // Update the UI with the new list
+            list.add(list[0]); //* Temporarily add the first item at the end
+          }); //* Update the UI with the new list
 
-          // Animate to the temporary page smoothly
+          //* Animate to the temporary page smoothly
           await _pageController.animateToPage(
-            nextPage!,
+            nextPage,
             duration: const Duration(seconds: 1),
             curve: Curves.easeInOut,
           );
-          // Reset to the actual first page without animation
+
+          //* Reset to the actual first page without animation
           _pageController.jumpToPage(0);
 
-          //reset the page controller animation page
+          //* reset the page controller animation page
           nextPage = 0;
 
-          // Remove the temporary item
+          //* Remove the temporary item
           list.removeLast();
         } else {
-          // Continue with normal page transition
+          //* Continue with normal page transition
           _pageController.animateToPage(
-            nextPage!,
+            nextPage,
             duration: const Duration(seconds: 1),
             curve: Curves.easeInOut,
           );
@@ -97,6 +100,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     _pageController.dispose();
     super.dispose();
   }
+
+  int get dotsLength => _actualListLength;
+  int get currentDot => _actualListLength == currentPage ? 0 : currentPage;
 
   @override
   Widget build(BuildContext context) {
@@ -119,14 +125,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   }).toList(),
                 ),
                 Positioned(
-                  bottom: height * 0.2, // Position 20 pixels above the bottom
+                  bottom: height * 0.2,
                   left: 0,
                   right: 0,
                   child: Center(
                     child: DotsIndicator(
-                      dotsCount: list.length,
-                      // Limit to original items
-                      position: currentPage.toInt(),
+                      dotsCount: dotsLength,
+                      position: currentDot,
+                      //* Limit to original items
                       decorator: DotsDecorator(
                         shape: CircleBorder(
                           side: BorderSide(
@@ -152,7 +158,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               ],
             ),
           ),
-          ButtonWidget(),
+          SizedBox(height: 50),
+          SignInButton(),
         ],
       ),
     );

@@ -73,6 +73,7 @@ flutter:
     - assets/images/bookmark_img_8.jpg
     - assets/images/bookmark_img_9.jpg
     - assets/images/profile_picture.jpg
+    - 'assets/images/google_logo.png'
   
 
   # An image asset can refer to one or more resolution-specific "variants", see

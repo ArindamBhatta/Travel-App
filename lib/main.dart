@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/on_boarding_page/on_boarding_page.dart';
+import 'package:travel_app/features/introduction_page/introduction_page.dart';
 
-import 'provider/home_page_provider.dart';
+import 'features/home_page/module/data/home_page_provider.dart';
 
 void main() {
   runApp(
@@ -27,7 +27,7 @@ class TravelApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: OnBoardingPage(),
+      home: IntroductionPage(),
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:travel_app/details_page/details_page.dart';
+import 'package:travel_app/features/details_page/details_page.dart';
 
-import '../provider/home_page_provider.dart';
+import '../../module/data/home_page_provider.dart';
 
-class BookMarkCard extends StatelessWidget {
+class CardContainer extends StatelessWidget {
   final int id;
   final String image;
   final bool bookMark;
@@ -13,7 +13,7 @@ class BookMarkCard extends StatelessWidget {
   final String state;
   final String country;
 
-  BookMarkCard({
+  CardContainer({
     super.key,
     required this.id,
     required this.image,
@@ -62,13 +62,17 @@ class BookMarkCard extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Hero(
-                          tag: id,
-                          child: Image.asset(
-                            image,
-                            height: 200,
-                            width: 200,
-                            fit: BoxFit.cover,
+                        child: SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: Hero(
+                            tag: id,
+                            child: Image.asset(
+                              image,
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -141,10 +145,3 @@ class BookMarkCard extends StatelessWidget {
     );
   }
 }
-
-/* 
-  PageRouteBuilder(
-    transitionDuration: Duration(milliseconds: 1000),
-      pageBuilder: (_, __, ___) => DestinationPage(id: id),
-  ),
-*/

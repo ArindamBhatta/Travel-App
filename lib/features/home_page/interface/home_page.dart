@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/provider/home_page_provider.dart';
+import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import 'package:travel_app/provider/model.dart';
-import '../home_Page/special_for_you_text.dart';
-import './book_mark_card.dart';
-import '../home_Page/prime_location_card.dart';
-import 'text_button_control_card.dart';
+import '../interface/widgets/prime_location_card.dart';
+import 'widgets/search_bar.dart';
+import 'widgets/special_for_you.dart';
+import 'widgets/card_container.dart';
+
+import 'widgets/home_page_text_button.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -82,7 +84,7 @@ class _HomePageState extends State<HomePage> {
             ///////////////
             SliverPersistentHeader(
               pinned: true,
-              delegate: _SearchBarDelegate(),
+              delegate: SearchBarDelegate(),
             ),
             //////////////////
 
@@ -95,22 +97,22 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 16.0),
                     child: Row(
                       children: [
-                        TextButtonControlCard(
+                        HomePageTextButton(
                           id: 0,
                           buttonText: allButtonText.All.name,
                         ),
                         SizedBox(width: 8),
-                        TextButtonControlCard(
+                        HomePageTextButton(
                           id: 1,
                           buttonText: allButtonText.Popular.name,
                         ),
                         SizedBox(width: 8),
-                        TextButtonControlCard(
+                        HomePageTextButton(
                           id: 2,
                           buttonText: allButtonText.Recommended.name,
                         ),
                         SizedBox(width: 8),
-                        TextButtonControlCard(
+                        HomePageTextButton(
                           id: 3,
                           buttonText: allButtonText.WishListed.name,
                         ),
@@ -137,7 +139,7 @@ class _HomePageState extends State<HomePage> {
 
                       return Padding(
                         padding: const EdgeInsets.only(left: 16.0),
-                        child: BookMarkCard(
+                        child: CardContainer(
                           id: id,
                           image: urlImage,
                           bookMark: isAddedToWishList,
@@ -150,7 +152,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                SpecialForYouText(),
+                specialForYou(
+                  name: 'Special for you',
+                ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -221,44 +225,4 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-}
-
-class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: TextField(
-        decoration: InputDecoration(
-          filled: true,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          fillColor: Colors.white,
-          hintText: 'Search',
-          prefixIcon: Icon(Icons.search),
-          suffixIcon: Icon(Icons.tune_outlined),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => 60.0;
-  @override
-  double get minExtent => 60.0;
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/provider/home_page_provider.dart';
-import '../provider/model.dart';
+import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
+import '../../../../provider/model.dart';
 
-class TextButtonControlCard extends StatelessWidget {
+class HomePageTextButton extends StatelessWidget {
   final int id;
   final String buttonText;
 
-  TextButtonControlCard({
+  HomePageTextButton({
     required this.id,
     required this.buttonText,
   });
