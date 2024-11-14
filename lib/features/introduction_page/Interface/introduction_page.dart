@@ -1,9 +1,9 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-
-import 'package:travel_app/features/introduction_page/Interface/sign_in_button.dart';
 import 'dart:async';
-import 'package:travel_app/features/introduction_page/Interface/scrollable_screen.dart';
+
+import 'package:travel_app/features/introduction_page/Interface/widgets/google_sign_in_button.dart';
+import 'package:travel_app/features/introduction_page/Interface/widgets/scrollable_screen.dart';
 
 class IntroductionPage extends StatefulWidget {
   IntroductionPage({super.key});
@@ -61,7 +61,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       (timer) async {
         nextPage = currentPage + 1;
 
-        // Check if we reached the last page
+        //* Check if we reached the last page
         if (nextPage == list.length) {
           setState(() {
             list.add(list[0]); //* Temporarily add the first item at the end
@@ -159,7 +159,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
             ),
           ),
           SizedBox(height: 50),
-          SignInButton(),
+          GoogleSignInButton(),
         ],
       ),
     );

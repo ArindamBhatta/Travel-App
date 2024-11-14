@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/introduction_page/Interface/gradient_image.dart';
+import 'package:travel_app/features/introduction_page/Interface/widgets/gradient_image.dart';
 
 // ignore: must_be_immutable
 class ScrollableScreen extends StatelessWidget {

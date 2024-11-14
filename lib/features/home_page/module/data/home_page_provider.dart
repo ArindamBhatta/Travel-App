@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../provider/model.dart';
+import '../../../../common/utils/remote_data.dart';
 
 class HomePageProvider extends ChangeNotifier {
   int? textVisibilityIndex = 1;

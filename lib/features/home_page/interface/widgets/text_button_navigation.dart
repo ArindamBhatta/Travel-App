@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
-import '../../../../provider/model.dart';
+import '../../../../common/utils/remote_data.dart';
 
-class HomePageTextButton extends StatelessWidget {
+class TextButtonNavigation extends StatelessWidget {
   final int id;
   final String buttonText;
 
-  HomePageTextButton({
+  TextButtonNavigation({
     required this.id,
     required this.buttonText,
   });
@@ -43,7 +43,7 @@ class HomePageTextButton extends StatelessWidget {
               color: buttonTextIsSelected ? Colors.teal : Colors.white,
               width: 2,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(6),
           ),
         ),
       ),

@@ -1,68 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
-import 'package:travel_app/provider/model.dart';
-import '../interface/widgets/prime_location_card.dart';
+
+import '../../../common/utils/google_login_provider.dart';
+import '../module/data/home_page_provider.dart';
+import '../../../common/utils/remote_data.dart';
 import 'widgets/search_bar.dart';
 import 'widgets/special_for_you.dart';
 import 'widgets/card_container.dart';
-
-import 'widgets/home_page_text_button.dart';
+import 'widgets/app_bar_Content.dart';
+import 'widgets/text_button_navigation.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    checkLoginStatus();
+    super.initState();
+  }
+
+  void checkLoginStatus() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signInSilently();
+    if (googleUser != null) {
+      context.read<GoogleLoginProvider>().setUserData({
+        'name': googleUser.displayName,
+        'photoUrl': googleUser.photoUrl,
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     List<Map<String, dynamic>> filteredData =
         context.watch<HomePageProvider>().getFilteredTravelList();
     int lengthOfData = filteredData.length;
-
-    Widget appBarContent() {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(
-                'assets/images/profile_picture.jpg',
-              ),
-            ),
-            SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Jihan Audy,',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Where do you want to go?',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-            Spacer(),
-            Icon(
-              Icons.notification_add_outlined,
-              color: Colors.black,
-            ),
-          ],
-        ),
-      );
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,19 +50,18 @@ class _HomePageState extends State<HomePage> {
               automaticallyImplyLeading: false,
               elevation: 0,
               //* pinned: true,  to make the app bar pinned
-              expandedHeight: 120.0,
+              expandedHeight: 65.0,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
-                background: appBarContent(),
+                background: AppBarContent(),
               ),
             ),
 
-            ///////////////
+            //* SliverPersistentHeader for sticky search bar
             SliverPersistentHeader(
-              pinned: true,
+              pinned: true, //* to make the search bar sticky
               delegate: SearchBarDelegate(),
             ),
-            //////////////////
 
             SliverList(
               delegate: SliverChildListDelegate([
@@ -97,22 +72,22 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 16.0),
                     child: Row(
                       children: [
-                        HomePageTextButton(
+                        TextButtonNavigation(
                           id: 0,
                           buttonText: allButtonText.All.name,
                         ),
                         SizedBox(width: 8),
-                        HomePageTextButton(
+                        TextButtonNavigation(
                           id: 1,
                           buttonText: allButtonText.Popular.name,
                         ),
                         SizedBox(width: 8),
-                        HomePageTextButton(
+                        TextButtonNavigation(
                           id: 2,
                           buttonText: allButtonText.Recommended.name,
                         ),
                         SizedBox(width: 8),
-                        HomePageTextButton(
+                        TextButtonNavigation(
                           id: 3,
                           buttonText: allButtonText.WishListed.name,
                         ),
@@ -155,21 +130,7 @@ class _HomePageState extends State<HomePage> {
                 specialForYou(
                   name: 'Special for you',
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: PrimeLocationCard(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: PrimeLocationCard(),
-                      ),
-                    ],
-                  ),
-                ),
+
                 SizedBox(height: 800), // to allow scrolling
               ]),
             ),
