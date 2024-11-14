@@ -5,6 +5,8 @@ class HomePageProvider extends ChangeNotifier {
   int? textVisibilityIndex = 1;
   allButtonText selectedFilter = allButtonText.Popular;
 
+  bool toggleData = false;
+
   //* this method is used to toggle between enum buttons used in TextButtonControlCard
   void toggleTextVisibility(int? index) {
     if (textVisibilityIndex == index) {
@@ -24,12 +26,10 @@ class HomePageProvider extends ChangeNotifier {
 
   //* control by both home page card and details page isUserWishListedValue property which is a json value
   void toggleWishList(int idOfSpecificMap) {
-    print(idOfSpecificMap);
     travelList.firstWhere((allElement) {
       if (allElement['id'] == idOfSpecificMap) {
         allElement['isUserWishListedValue'] =
             !allElement['isUserWishListedValue'];
-        print(allElement['isUserWishListedValue']);
         return true;
       } else {
         return false;

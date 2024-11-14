@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../common/utils/google_login_provider.dart';
 import '../module/data/home_page_provider.dart';
 import '../../../common/utils/remote_data.dart';
+import 'widgets/chat_page.dart';
 import 'widgets/search_bar.dart';
 import 'widgets/special_for_you.dart';
 import 'widgets/card_container.dart';
@@ -161,7 +162,14 @@ class _HomePageState extends State<HomePage> {
                   Icons.messenger_outline,
                   color: Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatPage(),
+                    ),
+                  );
+                },
               ),
               SizedBox(width: width * 0.08),
               TextButton(
