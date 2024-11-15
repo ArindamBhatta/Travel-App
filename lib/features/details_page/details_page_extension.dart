@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../home_page/interface/home_page.dart';
-
 Widget detailsPageExtension({
   required context,
   required String name,
@@ -182,14 +180,7 @@ Widget detailsPageExtension({
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ),
-                    );
-                  },
+                  onPressed: () {},
                   child: Text(
                     "Book Now",
                     style: TextStyle(

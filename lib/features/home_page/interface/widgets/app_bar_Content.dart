@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/home_page/interface/widgets/log_out.dart';
+import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
 
 import '../../../../common/utils/google_login_provider.dart';
 

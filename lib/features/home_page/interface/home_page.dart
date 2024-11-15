@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../common/utils/google_login_provider.dart';
 import '../module/data/home_page_provider.dart';
 import '../../../common/utils/remote_data.dart';
-import 'widgets/chat_page.dart';
 import 'widgets/search_bar.dart';
 import 'widgets/special_for_you.dart';
 import 'widgets/card_container.dart';
@@ -43,6 +42,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             //* SliverPersistentHeader for sticky search bar
             SliverPersistentHeader(
               pinned: true, //* to make the search bar sticky
-              delegate: SearchBarDelegate(),
+              delegate: SearchBarContainer(),
             ),
 
             SliverList(
@@ -146,7 +146,9 @@ class _HomePageState extends State<HomePage> {
           heroTag: 'unique_fab_id_2',
           elevation: 1,
           backgroundColor: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            print('Hello world');
+          },
           label: Row(
             children: [
               TextButton(
@@ -162,14 +164,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.messenger_outline,
                   color: Colors.black,
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(),
-                    ),
-                  );
-                },
+                onPressed: () {},
               ),
               SizedBox(width: width * 0.08),
               TextButton(

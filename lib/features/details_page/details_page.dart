@@ -45,82 +45,70 @@ class DetailsPage extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
-            child: SizedBox(
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Hero(
-                    tag: id,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: Image.asset(
-                              imageLink, //* Destination Image
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: Container(
-                              height: 20,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(50),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    imageLink, //* Destination Image
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                //* Arrow Icon
+                Positioned(
+                  top: 60,
+                  left: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ),
+                //* Heart Icon
+                Positioned(
+                  top: 60,
+                  right: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.favorite,
+                        color: isWishList ? Colors.red : Colors.grey,
+                      ),
+                      onPressed: () {
+                        toggleWishList(id);
+                      },
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    height: 20,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(50),
                       ),
                     ),
                   ),
-                  //* Arrow Icon
-                  Positioned(
-                    top: 60,
-                    left: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  ),
-                  //* Heart Icon
-                  Positioned(
-                    top: 60,
-                    right: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.favorite,
-                          color: isWishList ? Colors.red : Colors.grey,
-                        ),
-                        onPressed: () {
-                          toggleWishList(id);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           detailsPageExtension(

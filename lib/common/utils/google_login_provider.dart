@@ -33,4 +33,10 @@ class GoogleLoginProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  void removeUserAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('userAccessToken');
+    notifyListeners();
+  }
 }
