@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/google_login_provider.dart';
-import 'package:travel_app/features/home_page/interface/home_page.dart';
+import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation.dart';
 
 class GoogleSignInButton extends StatefulWidget {
   const GoogleSignInButton({super.key});
@@ -79,7 +79,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => HomePageNavigation()),
       );
     } catch (error) {
       print('Error during sign-in: $error');

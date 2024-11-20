@@ -57,6 +57,7 @@ class CardContainer extends StatelessWidget {
                         ),
                         child: Image.asset(
                           image,
+                          alignment: Alignment.center,
                           fit: BoxFit.cover,
                           width: 400,
                           height: 400,
@@ -138,7 +139,7 @@ class CardContainer extends StatelessWidget {
         );
       },
       transitionDuration: const Duration(
-        milliseconds: 500,
+        milliseconds: 300,
       ),
     );
   }

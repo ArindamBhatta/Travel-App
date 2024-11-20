@@ -8,9 +8,9 @@ class SearchBarContainer extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 90.0;
+  double get maxExtent => 120.0;
   @override
-  double get minExtent => 60.0;
+  double get minExtent => 90.0;
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       false;
@@ -34,8 +34,8 @@ class _SearchBarState extends State<_SearchBar> {
           ScaleTransition(scale: animation, child: child),
       child: Container(
         alignment: Alignment.center,
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        color: Colors.white30,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: GestureDetector(
           onTap: () {
             setState(() {
