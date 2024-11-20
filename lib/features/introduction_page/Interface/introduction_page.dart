@@ -158,7 +158,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
               ],
             ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 30),
           GoogleSignInButton(),
         ],
       ),

@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"travel-app-818fa","appId":"1:1055462270992:android:bef3e1c84909132bc60295","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"travel-app-818fa","configurations":{"android":"1:1055462270992:android:bef3e1c84909132bc60295","web":"1:1055462270992:web:0ec5809c5a1ea178c60295"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "travel-app-818fa",
+          "appId": "1:1055462270992:android:bef3e1c84909132bc60295",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "travel-app-818fa",
+          "configurations": {
+            "android": "1:1055462270992:android:bef3e1c84909132bc60295",
+            "web": "1:1055462270992:web:0ec5809c5a1ea178c60295"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

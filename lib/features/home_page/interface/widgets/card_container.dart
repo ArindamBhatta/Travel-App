@@ -14,7 +14,7 @@ class CardContainer extends StatelessWidget {
   final String state;
   final String country;
 
-  CardContainer({
+  const CardContainer({
     super.key,
     required this.id,
     required this.image,
@@ -35,101 +35,101 @@ class CardContainer extends StatelessWidget {
       closedElevation: 0.0,
       openElevation: 0.0,
       closedBuilder: (context, action) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Card(
-              shadowColor: Colors.black,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: SizedBox(
-                            height: 200,
-                            width: 200,
-                            child: Image.asset(
-                              image,
-                              height: 200,
-                              width: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+        return Card(
+          shadowColor: Colors.black,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 1,
+          child: SizedBox(
+            width: 210,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
                         ),
+                        child: Image.asset(
+                          image,
+                          fit: BoxFit.cover,
+                          width: 400,
+                          height: 400,
+                        ),
+                      ),
 
-                        //* Heart button
-                        Positioned(
-                          top: 8.0,
-                          right: 8.0,
-                          child: Transform.scale(
-                            scale: 0.8,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withAlpha(50),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  toggleWishList(id);
-                                },
-                                child: Icon(
-                                  Icons.favorite,
-                                  color: bookMark ? Colors.red : Colors.white,
-                                ),
+                      //* Heart button
+                      Positioned(
+                        top: 8.0,
+                        right: 8.0,
+                        child: Transform.scale(
+                          scale: 0.8,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withAlpha(50),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                toggleWishList(id);
+                              },
+                              child: Icon(
+                                Icons.favorite,
+                                color: bookMark ? Colors.red : Colors.white,
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-
-                    //* location name
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5, top: 10),
-                      child: Row(
-                        children: [
-                          Text(
-                            location,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-
-                    //* icon location and state
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            size: 20,
-                            color: Colors.green,
-                          ),
-                          Text(
-                            state + ', ' + country,
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+
+                //* location name
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 10),
+                  child: Text(
+                    location,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                //* icon location and state
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 5, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
+                          '$state  , $country',
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
       openBuilder: (context, action) {
@@ -137,12 +137,9 @@ class CardContainer extends StatelessWidget {
           id: id,
         );
       },
-      //transitionDuration: Duration(milliseconds: 1500),
+      transitionDuration: const Duration(
+        milliseconds: 500,
+      ),
     );
   }
 }
-
-/* 
-animated icon 
-animated list
- */
