@@ -6,6 +6,12 @@ import 'package:travel_app/features/home_page/interface/widgets/google_log_out.d
 import '../../../../common/utils/google_login_provider.dart';
 
 class AppBarContent extends StatelessWidget {
+  final String? headingText;
+  AppBarContent({
+    super.key,
+    required this.headingText,
+  });
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic>? userData =
@@ -18,8 +24,12 @@ class AppBarContent extends StatelessWidget {
     }
 
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 8.0,
+        bottom: 8.0,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -46,7 +56,7 @@ class AppBarContent extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Where do you want to go?',
+                  headingText.toString(),
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,

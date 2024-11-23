@@ -13,8 +13,13 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //* this value is used for toggle the wishlist value that why it's read
+    void toggleWishList(int dataId) {
+      context.read<HomePageProvider>().toggleWishList(dataId);
+    }
+
     Map<String, dynamic> specificCardData =
-        context.read<HomePageProvider>().filterForDetailsPage(id);
+        context.watch<HomePageProvider>().filterForDetailsPage(id);
 
     String imageLink = specificCardData['image'];
 
@@ -40,9 +45,7 @@ class DetailsPage extends StatelessWidget {
 
     String weather = specificCardData['weather'];
 
-    void toggleWishList(int dataId) {
-      context.read<HomePageProvider>().toggleWishList(dataId);
-    }
+    //* hear data is change
 
     return Scaffold(
       backgroundColor: Colors.white,

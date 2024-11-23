@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/details_page/details_page.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
+import '../../../contribution_page/contribution_page.dart';
 
 class HomePageNavigation extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
         index: currentPageIndex,
         children: [
           HomePage(),
-          DetailsPage(id: 101),
+          UserUploadedData(),
           DetailsPage(id: 102),
           DetailsPage(id: 103),
         ],
@@ -83,7 +84,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
       },
       child: Icon(
         icon,
-        color: currentPageIndex == pageIndex ? Colors.blue : color,
+        color: (currentPageIndex == pageIndex) ? Colors.blue : color,
       ),
     );
   }

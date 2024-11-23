@@ -28,7 +28,9 @@ class CardContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     //* toggle wish list also done from details page pass to child card container
     void toggleWishList(int dataId) {
-      context.read<HomePageProvider>().toggleWishList(dataId);
+      context.read<HomePageProvider>().toggleWishList(
+            dataId,
+          );
     }
 
     return OpenContainer(
@@ -60,30 +62,28 @@ class CardContainer extends StatelessWidget {
                           alignment: Alignment.center,
                           fit: BoxFit.cover,
                           width: 400,
-                          height: 400,
+                          height: 300,
                         ),
                       ),
 
                       //* Heart button
+
                       Positioned(
-                        top: 8.0,
-                        right: 8.0,
-                        child: Transform.scale(
-                          scale: 0.8,
+                        top: 10,
+                        right: 10,
+                        child: InkWell(
+                          onTap: () => toggleWishList(id),
                           child: Container(
-                            padding: const EdgeInsets.all(8),
+                            width: 35,
+                            height: 35,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white.withAlpha(50),
                             ),
-                            child: TextButton(
-                              onPressed: () {
-                                toggleWishList(id);
-                              },
-                              child: Icon(
-                                Icons.favorite,
-                                color: bookMark ? Colors.red : Colors.white,
-                              ),
+                            child: Icon(
+                              Icons.favorite,
+                              size: 20,
+                              color: bookMark ? Colors.red : Colors.white,
                             ),
                           ),
                         ),
@@ -94,7 +94,10 @@ class CardContainer extends StatelessWidget {
 
                 //* location name
                 Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 10),
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    top: 10,
+                  ),
                   child: Text(
                     location,
                     style: const TextStyle(

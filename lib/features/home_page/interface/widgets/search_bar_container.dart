@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/common/custom_text_form_field.dart';
 
 class SearchBarContainer extends SliverPersistentHeaderDelegate {
   @override
@@ -10,7 +11,7 @@ class SearchBarContainer extends SliverPersistentHeaderDelegate {
   @override
   double get maxExtent => 120.0;
   @override
-  double get minExtent => 90.0;
+  double get minExtent => 85.0;
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       false;
@@ -28,46 +29,18 @@ class _SearchBarState extends State<_SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: Duration(milliseconds: 1000),
-      transitionBuilder: (Widget child, Animation<double> animation) =>
-          ScaleTransition(scale: animation, child: child),
-      child: Container(
-        alignment: Alignment.center,
-        color: Colors.white30,
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              isExpanded = !isExpanded;
-            });
-          },
-          child: AbsorbPointer(
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.teal[400]!),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    fillColor: Colors.white,
-                    hintText: 'Search',
-                    prefixIcon: Icon(Icons.search, size: 30),
-                    suffixIcon: Icon(Icons.tune_outlined, size: 20),
-                  ),
-                )
-              ],
-            ),
-          ),
+    return Container(
+      height: 120,
+      color: Colors.white30,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomTextFormField(
+          labelText: 'Search',
+          prefixIcon: Icons.search,
+          suffixIcon: Icons.tune_outlined,
+          textBoxHeight: 20.0,
         ),
       ),
-      key: ValueKey('SearchBar'),
     );
   }
 }

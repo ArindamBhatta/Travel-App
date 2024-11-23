@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/features/home_page/interface/widgets/from_community.dart';
 import 'package:travel_app/features/home_page/interface/widgets/search_bar_container.dart';
 
 import '../../../common/utils/google_login_provider.dart';
@@ -34,6 +35,20 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  final List<String> meals = [
+    'Ice Cream',
+    'Rice',
+    'Fish',
+    'Chicken',
+  ];
+
+  final List<String> mealImages = [
+    "https://images.pexels.com/photos/1294943/pexels-photo-1294943.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/11789292/pexels-photo-11789292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/229789/pexels-photo-229789.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/1769279/pexels-photo-1769279.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  ];
+
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> filteredData =
@@ -50,11 +65,13 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               elevation: 0,
-              //* pinned: true,  to make the app bar pinned
-              expandedHeight: 65.0,
+              // pinned: true, //* to make the app bar pinned
+              expandedHeight: 75.0,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
-                background: AppBarContent(),
+                background: AppBarContent(
+                  headingText: 'Where do you Wish to go',
+                ),
               ),
             ),
             //* SliverPersistentHeader for sticky search bar
@@ -98,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
-                    height: 210,
+                    height: 270,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: lengthOfData,
@@ -128,10 +145,29 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 20),
                   specialForYou(
-                    name: 'Special for you',
+                    name: 'From Community',
                   ),
-                  SizedBox(height: 800),
+                  SizedBox(height: 20),
                 ],
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.all(16),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return FromCommunity(
+                      mealImage: mealImages[index],
+                    );
+                  },
+                  childCount: meals.length,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 8.0,
+                  childAspectRatio: 0.85,
+                ),
               ),
             ),
           ],
