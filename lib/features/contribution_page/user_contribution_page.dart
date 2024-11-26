@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:travel_app/features/contribution_page/contribution_card.dart';
 import 'package:travel_app/features/home_page/interface/widgets/app_bar_Content.dart';
+import 'details_form.dart';
 
-import 'upload_data_for_details_page.dart';
-
-class UserUploadedData extends StatefulWidget {
+class UserContributionPage extends StatefulWidget {
   @override
-  State<UserUploadedData> createState() => _UserUploadedDataState();
+  State<UserContributionPage> createState() => _UserContributionPageState();
 }
 
-class _UserUploadedDataState extends State<UserUploadedData> {
+class _UserContributionPageState extends State<UserContributionPage> {
   //* properties
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? location;
@@ -114,7 +113,7 @@ class _UserUploadedDataState extends State<UserUploadedData> {
           maxChildSize: 0.60,
           minChildSize: 0.60,
           builder: (context, scrollController) {
-            return UploadDataForDetailsPage(
+            return DetailsForm(
               globalKey: formKey,
               onSaved: (String? newLocation, String? newState,
                   String? newCountry, String? newImageUrl) {
@@ -143,19 +142,68 @@ class _UserUploadedDataState extends State<UserUploadedData> {
             AppBarContent(
               headingText: 'Upload Your View',
             ),
-            Container(
-              height: 200,
-              color: Colors.white30,
-              child: Text('Read Data from fireStore'),
-            )
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore
+                    .instance //* return an instance a default firebase app
+                    .collection('destinations')
+                    .orderBy(
+                      'timestamp',
+                      descending: true,
+                    )
+                    .snapshots(), //* notify the result
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data!.docs.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No destinations found.',
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('An error occurred: ${snapshot.error}'),
+                    );
+                  }
+                  final destination = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: destination.length,
+                    itemBuilder: (context, index) {
+                      final data =
+                          destination[index].data() as Map<String, dynamic>;
+                      print('whole data is -> -> -> ${data}');
+                      return SpecificUserDetailsFromCommunity(
+                          imageUri: data['image'],
+                          country: data['country'],
+                          location: data['location'],
+                          state: data['state']);
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue[800],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        elevation: 20.0,
         onPressed: addPlaceInfoOnTap,
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add_rounded,
+          color: Colors.white,
+          size: 30,
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

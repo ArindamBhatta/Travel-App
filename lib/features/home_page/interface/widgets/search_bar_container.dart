@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/common/custom_text_form_field.dart';
+import 'package:travel_app/common/widgets/custom_text_form_field.dart';
 
 class SearchBarContainer extends SliverPersistentHeaderDelegate {
   @override

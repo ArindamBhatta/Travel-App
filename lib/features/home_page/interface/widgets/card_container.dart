@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/common/widgets/custom_card_widget.dart';
 
 import 'package:travel_app/features/details_page/details_page.dart';
 
@@ -32,108 +33,20 @@ class CardContainer extends StatelessWidget {
             dataId,
           );
     }
+    //no tap able container is needed open container do this staff for us
 
     return OpenContainer(
       closedElevation: 0.0,
       openElevation: 0.0,
       closedBuilder: (context, action) {
-        return Card(
-          shadowColor: Colors.black,
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 1,
-          child: SizedBox(
-            width: 210,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                        child: Image.asset(
-                          image,
-                          alignment: Alignment.center,
-                          fit: BoxFit.cover,
-                          width: 400,
-                          height: 300,
-                        ),
-                      ),
-
-                      //* Heart button
-
-                      Positioned(
-                        top: 10,
-                        right: 10,
-                        child: InkWell(
-                          onTap: () => toggleWishList(id),
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withAlpha(50),
-                            ),
-                            child: Icon(
-                              Icons.favorite,
-                              size: 20,
-                              color: bookMark ? Colors.red : Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                //* location name
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    top: 10,
-                  ),
-                  child: Text(
-                    location,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-
-                //* icon location and state
-                Padding(
-                  padding: const EdgeInsets.only(left: 5, top: 5, bottom: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        size: 20,
-                        color: Colors.green,
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          softWrap: false,
-                          overflow: TextOverflow.fade,
-                          '$state  , $country',
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return CustomCardWidget(
+          id: id,
+          image: image,
+          bookMark: bookMark,
+          location: location,
+          state: state,
+          country: country,
+          toggleWishList: toggleWishList,
         );
       },
       openBuilder: (context, action) {

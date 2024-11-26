@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../common/custom_text_form_field.dart';
+import '../../common/widgets/custom_text_form_field.dart';
 
-class UploadDataForDetailsPage extends StatelessWidget {
+class DetailsForm extends StatelessWidget {
   final GlobalKey<FormState> globalKey;
   final Function(
     String? location,
@@ -11,7 +11,7 @@ class UploadDataForDetailsPage extends StatelessWidget {
     String? imageUrl,
   ) onSaved;
 
-  UploadDataForDetailsPage({
+  DetailsForm({
     super.key,
     required this.globalKey,
     required this.onSaved,

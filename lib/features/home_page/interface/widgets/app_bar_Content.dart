@@ -12,6 +12,8 @@ class AppBarContent extends StatelessWidget {
     required this.headingText,
   });
 
+  void UploadUserInfoInFireStore() async {}
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic>? userData =

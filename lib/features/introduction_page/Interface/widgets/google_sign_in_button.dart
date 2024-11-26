@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -46,36 +47,76 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   Future<void> signInWithGoogle() async {
     try {
       _showLoadingDialog();
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+      //* Step 1: Trigger the Google Sign-In flow. If the user signs in successfully, it returns a GoogleSignInAccount object. If the user cancels, it returns null.
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        Navigator.pop(context); //* Close dialog if sign-in was cancelled
+        print('No google user is found');
+        Navigator.pop(context);
         return;
       }
-
+      //*Step 2: Retrieve authentication details for the signed-in Google user The `authentication` method fetches the user's access token and ID token.
       final googleAuth = await googleUser.authentication;
+      //* These tokens will be used to authenticate the user with Firebase.
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
+      //* Step 6: Sign in to Firebase using the generated credential. Firebase validates the tokens with Google and creates or links the user in Firebase.
       await FirebaseAuth.instance.signInWithCredential(credential);
 
-      //* Update Provider data after successful sign-in
-      context.read<GoogleLoginProvider>().setUserData(
-        {
-          'name': googleUser.displayName,
-          'photoUrl': googleUser.photoUrl,
-        },
-      );
-      // print('access token of the user ---- ------ ----- -------: ${googleAuth.accessToken}');
-      // print('id token of the user ---- ------ ----- -------: ${googleUser.id}');
+      //* How to Get Firebase UID? After a successful Firebase authentication (signInWithCredential), you can get the Firebase user object from FirebaseAuth. Here's how:
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        print('Firebase UID: ${user.uid}');
+      }
 
-      context.read<GoogleLoginProvider>().setAccessToken(googleUser.id);
+      //* Get the user Details upload in provider also in fireStore users document.
+      if (user != null) {
+        //* Update Provider data after successful sign-in
+        context.read<GoogleLoginProvider>().setUserData(
+          {
+            'email': user.email,
+            'name': googleUser.displayName,
+            'avatar': googleUser.photoUrl,
+            'uid': user.uid,
+          },
+        );
+      }
+
+      //* upload data in firestore
+      try {
+        if (user != null) {
+          final Map<String, dynamic> fireStoreDoc = {
+            'email': user.email,
+            'name': googleUser.displayName,
+            'avatar': googleUser.photoUrl,
+            'uid': user.uid,
+          };
+          print('User Details: $fireStoreDoc');
+
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid) //* Use UID as document ID
+              .set(
+                fireStoreDoc,
+                SetOptions(
+                  merge: true, //* Merge to avoid overwriting existing data
+                ),
+              );
+          print('User data successfully uploaded to Firestore!');
+        }
+      } catch (error) {
+        print('Error during Google Sign-In: $error');
+      }
+
+      if (user != null) {
+        context.read<GoogleLoginProvider>().setAccessToken(user.uid);
+      }
 
       context.read<GoogleLoginProvider>().getUserAccessToken();
 
-      Navigator.pop(context); // Close dialog
+      Navigator.pop(context);
 
       Navigator.pushReplacement(
         context,
@@ -124,4 +165,20 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       ),
     );
   }
+
+  /*
+  * Differences Between Google User ID and Firebase User UID
+      1. Google User ID (googleUser.id)
+      The googleUser.id represents the unique ID provided by Google for the user.
+      It is specific to Google's services and identifies the user within Google's ecosystem.
+      This ID is not managed by Firebase and may not be suitable if you plan to use Firebase services (e.g., Firestore, Realtime Database) for authentication and user management.
+      2. Firebase User UID (user.uid)
+      Firebase User UID is a unique identifier for a user managed by Firebase.
+      It is generated after the user successfully signs in via Firebase Authentication (e.g., with Google, Email/Password, etc.).
+      This UID is consistent across all sign-in methods for the same user (e.g., if the same Google account is linked with email/password, both sign-ins will result in the same Firebase UID).
+* Why Use Firebase UID Instead of Google User ID?
+      Firebase UID is tied to Firebase's authentication system, ensuring consistent identification across Firebase services.
+      Firebase allows you to manage user data and perform operations (e.g., linking accounts, managing user sessions) based on the UID.
+      Using the Google User ID (googleUser.id) can cause inconsistencies if you later switch to other authentication providers or need Firebase-specific operations.
+*/
 }
