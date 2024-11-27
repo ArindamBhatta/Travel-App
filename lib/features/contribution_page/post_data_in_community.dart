@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../common/widgets/custom_text_form_field.dart';
 
-class DetailsForm extends StatelessWidget {
+class PostDataToCommunity extends StatelessWidget {
   final GlobalKey<FormState> globalKey;
+
   final Function(
     String? location,
     String? state,
     String? country,
     String? imageUrl,
-  ) onSaved;
+  ) onTapToSaveFormData;
 
-  DetailsForm({
+  PostDataToCommunity({
     super.key,
     required this.globalKey,
-    required this.onSaved,
+    required this.onTapToSaveFormData,
   });
 
   @override
@@ -87,11 +88,16 @@ class DetailsForm extends StatelessWidget {
                 onPressed: () {
                   if (globalKey.currentState!.validate()) {
                     globalKey.currentState!.save();
-                    onSaved(location, state, country, imageUrl);
+                    onTapToSaveFormData(
+                      location,
+                      state,
+                      country,
+                      imageUrl,
+                    );
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Submit'),
+                child: Text('Post'),
               ),
             ],
           ),

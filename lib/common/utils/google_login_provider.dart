@@ -20,7 +20,6 @@ class GoogleLoginProvider extends ChangeNotifier {
   void setAccessToken(String? accessToken) async {
     userAccessToken = accessToken;
     if (userAccessToken != null) {
-      print("set user Access Token is: $userAccessToken");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userAccessToken', userAccessToken!);
     }

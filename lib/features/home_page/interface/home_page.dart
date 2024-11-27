@@ -35,20 +35,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  final List<String> meals = [
-    'Ice Cream',
-    'Rice',
-    'Fish',
-    'Chicken',
-  ];
-
-  final List<String> mealImages = [
-    "https://images.pexels.com/photos/1294943/pexels-photo-1294943.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/11789292/pexels-photo-11789292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/229789/pexels-photo-229789.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/1769279/pexels-photo-1769279.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  ];
-
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> filteredData =
@@ -114,9 +100,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  //* Card Container
+
                   SizedBox(
                     height: 270,
                     child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       scrollDirection: Axis.horizontal,
                       itemCount: lengthOfData,
                       itemBuilder: (context, index) {
@@ -129,20 +118,19 @@ class _HomePageState extends State<HomePage> {
                         String destinationState = cardData['state'];
                         String destinationCountry = cardData['country'];
 
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CardContainer(
-                            id: id,
-                            image: urlImage,
-                            bookMark: isAddedToWishList,
-                            location: destination,
-                            state: destinationState,
-                            country: destinationCountry,
-                          ),
+                        return CardContainer(
+                          id: id,
+                          image: urlImage,
+                          bookMark: isAddedToWishList,
+                          location: destination,
+                          state: destinationState,
+                          country: destinationCountry,
                         );
                       },
                     ),
                   ),
+
+                  /////////////////
                   SizedBox(height: 20),
                   specialForYou(
                     name: 'From Community',
@@ -157,15 +145,14 @@ class _HomePageState extends State<HomePage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return FromCommunity(
-                      mealImage: mealImages[index],
+                      allContributorsImage:
+                          'https://images.pexels.com/photos/4482677/pexels-photo-4482677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                     );
                   },
-                  childCount: meals.length,
+                  childCount: 4,
                 ),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 8.0,
                   childAspectRatio: 0.85,
                 ),
               ),

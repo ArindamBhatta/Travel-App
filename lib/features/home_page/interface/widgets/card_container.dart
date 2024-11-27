@@ -27,21 +27,23 @@ class CardContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = (MediaQuery.of(context).size.width / 1.5) - 32;
     //* toggle wish list also done from details page pass to child card container
     void toggleWishList(int dataId) {
       context.read<HomePageProvider>().toggleWishList(
             dataId,
           );
     }
-    //no tap able container is needed open container do this staff for us
+    //no inkwell is needed open container do this staff for us
 
     return OpenContainer(
       closedElevation: 0.0,
       openElevation: 0.0,
       closedBuilder: (context, action) {
         return CustomCardWidget(
+          width: width,
           id: id,
-          image: image,
+          imageUri: image,
           bookMark: bookMark,
           location: location,
           state: state,

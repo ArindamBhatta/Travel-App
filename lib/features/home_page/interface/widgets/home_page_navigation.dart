@@ -9,23 +9,47 @@ class HomePageNavigation extends StatefulWidget {
 }
 
 class _HomePageNavigationState extends State<HomePageNavigation> {
-  int currentPageIndex = 0;
+  int currentPageIndex = 0; //* index Stack needs this current page
+  List<int> loadingPages = [0]; //* push the content on tap a navigation.
+
+  //* when user press the icon.
+  void showCurrentPage(int onTapPageIndex) {
+    // *if this condition is false
+    if (!loadingPages.contains(onTapPageIndex)) {
+      loadingPages.add(onTapPageIndex);
+    }
+    setState(
+      () {
+        currentPageIndex = onTapPageIndex;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
+    List<Widget> screens = [
+      HomePage(),
+      loadingPages.contains(1) ? UserContributionPage() : Container(),
+      loadingPages.contains(2) ? DetailsPage(id: 102) : Container(),
+      loadingPages.contains(3) ? DetailsPage(id: 103) : Container(),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
+      //* check  widget is rerender not the property
+      // appBar: AppBar(
+      //   actions: [
+      //     Text('$loadingPages'),
+      //   ],
+      // ),
       body: IndexedStack(
         index: currentPageIndex,
-        children: [
-          HomePage(),
-          UserContributionPage(),
-          DetailsPage(id: 102),
-          DetailsPage(id: 103),
-        ],
+        children: screens,
       ),
+
+      ///////
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FloatingActionButton.extended(
@@ -78,9 +102,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
   ) {
     return TextButton(
       onPressed: () {
-        setState(() {
-          currentPageIndex = pageIndex;
-        });
+        showCurrentPage(pageIndex);
       },
       child: Icon(
         icon,

@@ -1,25 +1,30 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomCardWidget extends StatelessWidget {
   final int id;
-  final String image;
+  final String imageUri;
   final bool bookMark;
   final String location;
   final String state;
   final String country;
   final Function toggleWishList;
+  final double? width;
+
   CustomCardWidget({
     super.key,
     required this.id,
-    required this.image,
+    required this.imageUri,
     required this.bookMark,
     required this.location,
     required this.state,
     required this.country,
     required this.toggleWishList,
+    this.width,
   });
   @override
   Widget build(BuildContext context) {
+    print("width from both card $width");
     return Card(
       shadowColor: Colors.black,
       color: Colors.white,
@@ -28,25 +33,50 @@ class CustomCardWidget extends StatelessWidget {
       ),
       elevation: 1,
       child: SizedBox(
-        width: 210,
+        width: width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                  CachedNetworkImage(
+                    imageUrl: imageUri,
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            8.0,
+                          ),
+                          topRight: Radius.circular(
+                            8.0,
+                          ),
+                        ),
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          colorFilter: const ColorFilter.mode(
+                            Color.fromARGB(255, 254, 189, 184),
+                            BlendMode.colorBurn,
+                          ),
+                        ),
+                      ),
                     ),
-                    child: Image.asset(
-                      image,
-                      alignment: Alignment.center,
-                      fit: BoxFit.cover,
-                      width: 400,
-                      height: 300,
+                    //
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: Colors.black,
+                      //
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.green,
+                      ),
                     ),
+                    //
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
 
                   //* Heart button

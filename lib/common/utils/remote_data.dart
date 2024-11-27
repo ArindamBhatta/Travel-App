@@ -3,7 +3,8 @@ enum allButtonText { All, Popular, Recommended, WishListed }
 List<Map<String, dynamic>> travelList = [
   {
     'id': 101,
-    'image': 'assets/images/bookmark_img_6.jpg',
+    'image':
+        'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'isUserWishListedValue': false,
     'location': 'Darjeeling',
     'state': 'West Bengal',
@@ -21,7 +22,8 @@ List<Map<String, dynamic>> travelList = [
   },
   {
     'id': 102,
-    'image': 'assets/images/bookmark_img_7.jpg',
+    'image':
+        'https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'isUserWishListedValue': false,
     'location': 'Dharamshala',
     'state': 'Himachal Pradesh',
@@ -39,7 +41,8 @@ List<Map<String, dynamic>> travelList = [
   },
   {
     'id': 103,
-    'image': 'assets/images/bookmark_img_8.jpg',
+    'image':
+        'https://images.pexels.com/photos/4482677/pexels-photo-4482677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'isUserWishListedValue': false,
     'location': 'Ranthambore Park',
     'state': 'Rajasthan',
@@ -57,7 +60,8 @@ List<Map<String, dynamic>> travelList = [
   },
   {
     'id': 104,
-    'image': 'assets/images/bookmark_img_9.jpg',
+    'image':
+        'https://images.pexels.com/photos/4482677/pexels-photo-4482677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'isUserWishListedValue': false,
     'location': 'Taj Mahal',
     'state': 'Agra',

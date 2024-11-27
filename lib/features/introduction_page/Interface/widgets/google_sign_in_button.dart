@@ -84,7 +84,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
         );
       }
 
-      //* upload data in firestore
+      //* document map upload in firestore
       try {
         if (user != null) {
           final Map<String, dynamic> fireStoreDoc = {
@@ -94,7 +94,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             'uid': user.uid,
           };
           print('User Details: $fireStoreDoc');
-
+          //! write Data in fire store
           await FirebaseFirestore.instance
               .collection('users')
               .doc(user.uid) //* Use UID as document ID
