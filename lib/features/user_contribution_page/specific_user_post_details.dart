@@ -3,49 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SpecificUserPostDetails extends StatelessWidget {
-  final String imageUri;
-  final String country;
-  final String location;
-  final String state;
-  final DocumentReference userReferenceToCard;
+  final DocumentReference userSpecificPost;
 
   SpecificUserPostDetails({
     super.key,
-    required this.imageUri,
-    required this.country,
-    required this.location,
-    required this.state,
-    required this.userReferenceToCard,
+    required this.userSpecificPost,
   });
 
-  /* 
-  * To read data from Firestore, you'll typically need a reference to the specific document or collection
-  * you want to access, and then use the get() method on that reference.
-
-  * Assuming you have a reference to a document
-   const docRef = db.collection('users').doc('user1');
-
-    docRef.get()
-  .then(docSnapshot => {
-    if (docSnapshot.exists) {
-      const userData = docSnapshot.data();
-      console.log(userData);
-    } else {
-      console.log('No such document!');
-    }
-  })
-  .catch(error => {
-    console.error('Error getting document:', error);
-  });
-   */
-
-  Future<Map<String, dynamic>?> accessUsersData() async {
+  Future<Map<String, dynamic>?> accessUsersPost() async {
     try {
-      //* Fetch the document referenced by userReferenceToCard
-      DocumentSnapshot docSnapshot = await userReferenceToCard.get();
+      DocumentSnapshot docSnapshot = await userSpecificPost.get();
 
       if (docSnapshot.exists) {
-        return docSnapshot.data() as Map<String, dynamic>?;
+        final check = docSnapshot.data() as Map<String, dynamic>?;
+        print("check the whole data is $check");
+        return check;
       }
     } catch (error) {
       print(
@@ -60,92 +32,117 @@ class SpecificUserPostDetails extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 16.0,
-      ),
-      child: Card(
-        color: Colors.white,
-        elevation: 1,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              width: width * 0.25,
-              height: height * 0.1,
-              child: CachedNetworkImage(
-                imageUrl: imageUri,
-                fit: BoxFit.cover,
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      colorFilter: const ColorFilter.mode(
-                        Color.fromARGB(255, 254, 189, 184),
-                        BlendMode.colorBurn,
-                      ),
-                    ),
-                  ),
-                ),
-                //
-                placeholder: (context, url) => const CircularProgressIndicator(
-                  strokeWidth: 2.0,
-                  color: Colors.black,
-                  //
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.green,
-                  ),
-                ),
-                //
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: accessUsersPost(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Error loading username',
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(
-              width: 16,
+          );
+        } else if (snapshot.hasData) {
+          final data = snapshot.data;
+          print('data is found 👍👍👍👍 $data');
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 16.0,
             ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Card(
+              color: Colors.white,
+              elevation: 1,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      top: 10,
-                    ),
-                    child: Text(
-                      location,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                  Container(
+                    width: width * 0.25,
+                    height: height * 0.1,
+                    child: CachedNetworkImage(
+                      imageUrl: '${data?['image']}',
+                      fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            colorFilter: const ColorFilter.mode(
+                              Color.fromARGB(255, 254, 189, 184),
+                              BlendMode.colorBurn,
+                            ),
+                          ),
+                        ),
                       ),
+                      //
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        color: Colors.black,
+                        //
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.green,
+                        ),
+                      ),
+                      //
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5, top: 5, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
-                          Icons.location_on,
-                          size: 20,
-                          color: Colors.green,
-                        ),
-                        const SizedBox(width: 5),
-                        Expanded(
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            top: 10,
+                          ),
                           child: Text(
-                            softWrap: false,
-                            overflow: TextOverflow.fade,
-                            '$state  , $country',
+                            '${data?['location']}',
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 5, top: 5, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
+                                  '${data?['state']}'
+                                  '${data?['country']}',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -154,49 +151,17 @@ class SpecificUserPostDetails extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return Text(
+            'Some error are occur',
+            style: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+            ),
+          );
+        }
+      },
     );
   }
 }
-
-/* 
-FutureBuilder<Map<String, dynamic>?>(
-                    future: accessUsersData(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text(
-                          'Error loading username',
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        );
-                      } else if (snapshot.hasData) {
-                        final data = snapshot.data;
-                        final name = data?['name'] ?? 'Unknown User';
-                        return Text(
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                          'username: $name',
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        );
-                      } else {
-                        return Text(
-                          'No user data available',
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-
- */
