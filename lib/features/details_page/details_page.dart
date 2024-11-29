@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/details_page/details_page_extension.dart';
@@ -21,7 +22,7 @@ class DetailsPage extends StatelessWidget {
     Map<String, dynamic> specificCardData =
         context.watch<HomePageProvider>().filterForDetailsPage(id);
 
-    String imageLink = specificCardData['image'];
+    String imageUri = specificCardData['image'];
 
     bool isWishList = specificCardData['isUserWishListedValue'];
 
@@ -55,10 +56,43 @@ class DetailsPage extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: Image.asset(
-                    imageLink, //* Destination Image
-                    height: double.infinity,
+                  child: CachedNetworkImage(
+                    imageUrl: imageUri,
                     fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            8.0,
+                          ),
+                          topRight: Radius.circular(
+                            8.0,
+                          ),
+                        ),
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          colorFilter: const ColorFilter.mode(
+                            Color.fromARGB(255, 254, 189, 184),
+                            BlendMode.colorBurn,
+                          ),
+                        ),
+                      ),
+                    ),
+                    //
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: Colors.black,
+                      //
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.green,
+                      ),
+                    ),
+                    //
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 //* Arrow Icon

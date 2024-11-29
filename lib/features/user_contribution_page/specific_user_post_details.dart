@@ -107,7 +107,9 @@ class SpecificUserPostDetails extends StatelessWidget {
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(
+              width: 16,
+            ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.max,

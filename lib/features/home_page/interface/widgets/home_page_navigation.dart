@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/details_page/details_page.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
-import '../../../contribution_page/user_contribution_page.dart';
+import '../../../user_contribution_page/user_contribution_page.dart';
 
 class HomePageNavigation extends StatefulWidget {
   @override
@@ -38,12 +38,6 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      //* check  widget is rerender not the property
-      // appBar: AppBar(
-      //   actions: [
-      //     Text('$loadingPages'),
-      //   ],
-      // ),
       body: IndexedStack(
         index: currentPageIndex,
         children: screens,

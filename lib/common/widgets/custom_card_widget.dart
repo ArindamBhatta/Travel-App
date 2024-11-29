@@ -24,7 +24,6 @@ class CustomCardWidget extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    print("width from both card $width");
     return Card(
       shadowColor: Colors.black,
       color: Colors.white,

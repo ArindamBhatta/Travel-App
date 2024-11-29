@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/home_page/interface/widgets/from_community.dart';
 import 'package:travel_app/features/home_page/interface/widgets/search_bar_container.dart';
+import 'package:travel_app/features/home_page/interface/widgets/whole_community_post.dart';
 
 import '../../../common/utils/google_login_provider.dart';
 import '../module/data/home_page_provider.dart';
@@ -135,27 +136,84 @@ class _HomePageState extends State<HomePage> {
                   specialForYou(
                     name: 'From Community',
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
-            SliverPadding(
-              padding: EdgeInsets.all(16),
-              sliver: SliverGrid(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return FromCommunity(
-                      allContributorsImage:
-                          'https://images.pexels.com/photos/4482677/pexels-photo-4482677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                    );
-                  },
-                  childCount: 4,
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.85,
-                ),
-              ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('/destinations/contributor/data')
+                  .orderBy(
+                    'timestamp',
+                    descending: true,
+                  )
+                  .snapshots(),
+              builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (snapshot.data!.docs.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 100,
+                      child: Center(
+                        child: Text(
+                          'No user  upload their views',
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Text(
+                        'unable to fetch data right now, try again later .',
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasData) {
+                  final List<QueryDocumentSnapshot> destinations =
+                      snapshot.data!.docs;
+
+                  return SliverPadding(
+                    padding: EdgeInsets.all(16),
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          final allContributorData = destinations[index].data();
+                          if (allContributorData == null) {
+                            return SliverToBoxAdapter(
+                              child: Center(
+                                child: Text(
+                                  'No data available for this document.',
+                                ),
+                              ),
+                            );
+                          }
+                          final data =
+                              allContributorData as Map<String, dynamic>;
+                          return DataCard(data);
+                        },
+                        childCount: destinations.length,
+                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.85,
+                      ),
+                    ),
+                  );
+                } else {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Text('Something happen'),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -163,3 +221,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+
+///akta partucular at a time doc ai situation name dbo. kintu ja khana loop chabo 

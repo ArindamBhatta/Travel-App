@@ -23,7 +23,7 @@ List<Map<String, dynamic>> travelList = [
   {
     'id': 102,
     'image':
-        'https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://media.istockphoto.com/id/956970152/photo/sunset-at-triund-hill-top-at-mcleodganj-dharamsala-himachal-pradesh-india.jpg?s=1024x1024&w=is&k=20&c=0LP-X5YygXE45sOZWfvEf7FoKSdGnTVbEIXNMyDz3TQ=',
     'isUserWishListedValue': false,
     'location': 'Dharamshala',
     'state': 'Himachal Pradesh',
@@ -42,7 +42,7 @@ List<Map<String, dynamic>> travelList = [
   {
     'id': 103,
     'image':
-        'https://images.pexels.com/photos/4482677/pexels-photo-4482677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://media.istockphoto.com/id/154894958/photo/amber-fort-jaipur-india.jpg?s=1024x1024&w=is&k=20&c=NVf-pSZdDARA84blpH-P0M-q_kTKDqTApL6_4hiNkp8=',
     'isUserWishListedValue': false,
     'location': 'Ranthambore Park',
     'state': 'Rajasthan',
@@ -61,7 +61,7 @@ List<Map<String, dynamic>> travelList = [
   {
     'id': 104,
     'image':
-        'https://images.pexels.com/photos/4482677/pexels-photo-4482677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://cdn.pixabay.com/photo/2020/01/08/07/53/architecture-4749511_1280.jpg',
     'isUserWishListedValue': false,
     'location': 'Taj Mahal',
     'state': 'Agra',
