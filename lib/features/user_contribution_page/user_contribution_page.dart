@@ -165,6 +165,54 @@ class _UserContributionPageState extends State<UserContributionPage> {
             AppBarContent(
               headingText: 'Upload Your View',
             ),
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('')
+                    .orderBy(
+                      'timestamp',
+                      descending: true,
+                    )
+                    .snapshots(),
+                builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else if (snapshot.data!.docs.isEmpty) {
+                    return SizedBox(
+                      height: 100,
+                      child: Center(
+                        child: Text(
+                          'No user  upload their views',
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'unable to fetch data right now, try again later .',
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final List<QueryDocumentSnapshot> particularUserPost =
+                        snapshot.data!.docs;
+                    return ListView.builder(
+                      itemCount: particularUserPost.length,
+                      itemBuilder: (context, index) {
+                        final individualUserPost =
+                            particularUserPost[index].data();
+                        print('all individual data is $individualUserPost');
+                        return Text('hello');
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Text("something Happen"),
+                    );
+                  }
+                }),
           ],
         ),
       ),
@@ -186,29 +234,3 @@ class _UserContributionPageState extends State<UserContributionPage> {
     );
   }
 }
-
-/* 
-DocumentSnapshot oneTimeData = await docReference.get();
-        if (oneTimeData.exists) {
-          Map<String, dynamic> contributorDataRef =
-              oneTimeData.data() as Map<String, dynamic>;
-          print('whole document is 👍👍👍👍 ${contributorDataRef['country']}');
-        }
-        print('reference is  --------->  $docReference');
-
-        
-          * Upload data to Firestore, when we needs to generate unique id by our self
-            await FirebaseFirestore.instance
-                .collection('destinations')
-                .doc('randomId')
-                .set(
-              {
-                'location': location,
-                'state': state,
-                'country': country,
-                'image': imageUrl,
-                'timestamp': FieldValue.serverTimestamp(),
-              },
-            ); 
-        
- */
