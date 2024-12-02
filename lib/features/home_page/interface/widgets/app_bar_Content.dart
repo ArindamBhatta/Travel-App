@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
 
@@ -12,15 +11,13 @@ class AppBarContent extends StatelessWidget {
     required this.headingText,
   });
 
-  void UploadUserInfoInFireStore() async {}
-
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic>? userData =
         context.watch<GoogleLoginProvider>().userData;
 
     if (userData == null) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -41,7 +38,7 @@ class AppBarContent extends StatelessWidget {
               '${userData['photoUrl']}',
             ),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

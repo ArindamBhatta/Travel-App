@@ -16,13 +16,13 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   //* if user tap a card it jump to details page
-  Map<String, dynamic> filterForDetailsPage(int id) {
+  Map<String, dynamic> filterForDetailsPage(String id) {
     return travelList.firstWhere(
       (data) => data['id'] == id,
     );
   }
 
-  void toggleWishList(int idOfSpecificMap) {
+  void toggleWishList(String idOfSpecificMap) {
     for (Map<String, dynamic> allElement in travelList) {
       if (allElement['id'] == idOfSpecificMap) {
         allElement['isUserWishListedValue'] =

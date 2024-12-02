@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/widgets/custom_text_form_field.dart';
 
-class PostDataToCommunity extends StatelessWidget {
+class FormUICollectTravelInfo extends StatelessWidget {
   final GlobalKey<FormState> globalKey;
 
   final Function(
@@ -12,7 +12,7 @@ class PostDataToCommunity extends StatelessWidget {
     String? imageUrl,
   ) onTapToSaveFormData;
 
-  PostDataToCommunity({
+  FormUICollectTravelInfo({
     super.key,
     required this.globalKey,
     required this.onTapToSaveFormData,

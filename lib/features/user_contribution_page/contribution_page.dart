@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/google_login_provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/app_bar_Content.dart';
-import 'package:travel_app/features/user_contribution_page/specific_user_post_details.dart';
-import 'post_data_in_community.dart';
+import 'package:travel_app/features/user_contribution_page/specific_user_read_contribution.dart';
+import 'form_ui_collect_travel_info.dart';
 
 class UserContributionPage extends StatefulWidget {
   @override
@@ -70,10 +70,15 @@ class _UserContributionPageState extends State<UserContributionPage> {
             .collection('/destinations/contributor/data')
             .doc();
 
-        referenceOfContributor?.set(
+        await referenceOfContributor?.set(
           {
+            'id': referenceOfContributor?.id,
+            'isUserWishListedValue': false,
             'location': location,
             'state': state,
+            'overview':
+                'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
+            'details': 'Dharamshala, Darjeeling, India',
             'country': country,
             'image': imageUrl,
             'userRef': referenceOfaParticularUser,
@@ -134,7 +139,7 @@ class _UserContributionPageState extends State<UserContributionPage> {
           minChildSize: 0.60,
           builder: (context, scrollController) {
             //* User Post method is trigger from hear
-            return PostDataToCommunity(
+            return FormUICollectTravelInfo(
               globalKey: formKey,
               onTapToSaveFormData: (
                 String? location,
@@ -201,7 +206,7 @@ class _UserContributionPageState extends State<UserContributionPage> {
                             var path = reference as DocumentReference;
                             print('reference path is ${path.runtimeType}');
 
-                            return SpecificUserPostDetails(
+                            return SpecificUserReadContribution(
                               userSpecificPost: path,
                             );
                           }

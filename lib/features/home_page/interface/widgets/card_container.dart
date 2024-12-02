@@ -8,7 +8,7 @@ import 'package:travel_app/features/details_page/details_page.dart';
 import '../../module/data/home_page_provider.dart';
 
 class CardContainer extends StatelessWidget {
-  final int id;
+  final String id;
   final String image;
   final bool bookMark;
   final String location;
@@ -27,9 +27,8 @@ class CardContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = (MediaQuery.of(context).size.width / 1.5) - 32;
     //* toggle wish list also done from details page pass to child card container
-    void toggleWishList(int dataId) {
+    void toggleWishList(String dataId) {
       context.read<HomePageProvider>().toggleWishList(
             dataId,
           );
@@ -41,7 +40,6 @@ class CardContainer extends StatelessWidget {
       openElevation: 0.0,
       closedBuilder: (context, action) {
         return CustomCardWidget(
-          width: width,
           id: id,
           imageUri: image,
           bookMark: bookMark,

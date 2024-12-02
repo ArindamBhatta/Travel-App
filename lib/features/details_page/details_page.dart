@@ -5,7 +5,7 @@ import 'package:travel_app/features/details_page/details_page_extension.dart';
 import '../home_page/module/data/home_page_provider.dart';
 
 class DetailsPage extends StatelessWidget {
-  final int id;
+  final String id;
 
   DetailsPage({
     super.key,
@@ -15,7 +15,7 @@ class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //* this value is used for toggle the wishlist value that why it's read
-    void toggleWishList(int dataId) {
+    void toggleWishList(String dataId) {
       context.read<HomePageProvider>().toggleWishList(dataId);
     }
 
