@@ -90,8 +90,8 @@ class _UserContributionPageState extends State<UserContributionPage> {
           },
         );
 
-        print(
-            "particular user reference ${referenceOfaParticularUser.runtimeType}");
+        // print(
+        //     "particular user reference ${referenceOfaParticularUser}");
         // print(
         //     "particular user post reference $createReferenceOfaParticularUserPost");
         // print(

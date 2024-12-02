@@ -49,7 +49,6 @@ class SpecificUserPostDetails extends StatelessWidget {
           );
         } else if (snapshot.hasData) {
           final data = snapshot.data;
-          print('data is found 👍👍👍👍 $data');
           return Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 8.0,
