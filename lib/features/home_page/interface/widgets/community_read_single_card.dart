@@ -16,7 +16,7 @@ class CommunityReadSingleCard extends StatelessWidget {
     String fetchCountry = data['country'];
     String fetchState = data['state'];
 
-    void changeToWishList(String fetchId) async {
+    void pushToWishlistArray(String fetchId) async {
       final specificCommunityPost = FirebaseFirestore.instance
           .collection('/destinations/contributor/data')
           .doc(fetchId);
@@ -54,7 +54,7 @@ class CommunityReadSingleCard extends StatelessWidget {
       state: fetchState,
       country: fetchCountry,
       toggleWishList: () {
-        changeToWishList(fetchId);
+        pushToWishlistArray(fetchId);
       },
     );
   }

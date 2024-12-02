@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleLoginProvider extends ChangeNotifier {
   Map<String, dynamic>? _userData;
   String? userAccessToken;
+
+  List<DocumentReference>? allWishListReference = [];
 
   void setUserData(Map<String, dynamic>? data) {
     if (data != null) {

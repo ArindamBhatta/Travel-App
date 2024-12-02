@@ -93,6 +93,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            //! merge two string in stream property.
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('/destinations/contributor/data')

@@ -92,6 +92,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             'name': googleUser.displayName,
             'avatar': googleUser.photoUrl,
             'uid': user.uid,
+            'wishlistLocations':
+                context.read<GoogleLoginProvider>().allWishListReference
           };
           print('User Details: $fireStoreDoc');
           //! write Data in fire store
@@ -130,6 +132,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
   @override
   Widget build(BuildContext context) {
+    var data = context.read<GoogleLoginProvider>().allWishListReference;
+    print("Empty list is 👍👍👍 $data");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: SizedBox(

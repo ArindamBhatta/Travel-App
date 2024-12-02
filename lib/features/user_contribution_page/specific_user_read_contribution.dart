@@ -15,9 +15,8 @@ class SpecificUserReadContribution extends StatelessWidget {
       DocumentSnapshot docSnapshot = await userSpecificPost.get();
 
       if (docSnapshot.exists) {
-        final check = docSnapshot.data() as Map<String, dynamic>?;
-        print("check the whole data is $check");
-        return check;
+        final fireStoreData = docSnapshot.data() as Map<String, dynamic>?;
+        return fireStoreData;
       }
     } catch (error) {
       print(
