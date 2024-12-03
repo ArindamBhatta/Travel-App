@@ -70,7 +70,9 @@ class CustomCardWidget extends StatelessWidget {
                     ),
                   ),
                   //
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                  ),
                 ),
 
                 //* Heart button

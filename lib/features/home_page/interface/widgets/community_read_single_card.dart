@@ -5,34 +5,33 @@ import 'package:travel_app/common/utils/google_login_provider.dart';
 import 'package:travel_app/common/widgets/custom_card_widget.dart';
 
 class CommunityReadSingleCard extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final Map<String, dynamic> allContributorData;
+  final Map<String, dynamic> userData;
+
   CommunityReadSingleCard(
-    this.data,
+    this.allContributorData,
+    this.userData,
   );
   @override
   Widget build(BuildContext context) {
-    String? userUid = context.watch<GoogleLoginProvider>().userAccessToken;
-    String fetchId = data['id'];
-    String fetchImageUri = data['image'];
-    bool fetchBookmarkedData = data['isUserWishListedValue'];
-    String fetchLocation = data['location'];
-    String fetchCountry = data['country'];
-    String fetchState = data['state'];
+    String? userUid = context.read<GoogleLoginProvider>().userAccessToken;
+    String fetchId = allContributorData['id'];
+    String fetchImageUri = allContributorData['image'];
+    bool fetchBookmarkedData = allContributorData['isUserWishListedValue'];
+    String fetchLocation = allContributorData['location'];
+    String fetchCountry = allContributorData['country'];
+    String fetchState = allContributorData['state'];
     final DocumentReference getCurrentUserDocRef =
         FirebaseFirestore.instance.collection('users').doc(userUid);
 
-    void getCurrentUserRef() async {
-      try {
-        DocumentSnapshot docSnapshot = await getCurrentUserDocRef.get();
-
-        if (docSnapshot.exists) {
-          final userData = docSnapshot.data() as Map<String, dynamic>?;
-        }
-      } catch (error) {
-        print(
-          'Error fetching user data: $error',
-        );
-      }
+    void pushToUserWishListArray() async {
+      fetchBookmarkedData != fetchBookmarkedData;
+      print(fetchBookmarkedData);
+      getCurrentUserDocRef.update(
+        {
+          "isUserWishListedValue": true,
+        },
+      );
     }
 
     return CustomCardWidget(
@@ -42,7 +41,7 @@ class CommunityReadSingleCard extends StatelessWidget {
       location: fetchLocation,
       state: fetchState,
       country: fetchCountry,
-      toggleWishList: () {},
+      toggleWishList: pushToUserWishListArray,
     );
   }
 }

@@ -76,12 +76,10 @@ class _UserContributionPageState extends State<UserContributionPage> {
             'isUserWishListedValue': false,
             'location': location,
             'state': state,
-            'overview':
-                'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
-            'details': 'Dharamshala, Darjeeling, India',
             'country': country,
             'image': imageUrl,
-            'userRef': referenceOfaParticularUser,
+            'userRef':
+                referenceOfaParticularUser, //* show user data in details page
             'timestamp': FieldValue.serverTimestamp(),
           },
         );
