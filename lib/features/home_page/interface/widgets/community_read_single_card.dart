@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/common/utils/google_login_provider.dart';
 import 'package:travel_app/common/widgets/custom_card_widget.dart';
 
 class CommunityReadSingleCard extends StatelessWidget {
@@ -9,40 +11,27 @@ class CommunityReadSingleCard extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    String? userUid = context.watch<GoogleLoginProvider>().userAccessToken;
     String fetchId = data['id'];
     String fetchImageUri = data['image'];
     bool fetchBookmarkedData = data['isUserWishListedValue'];
     String fetchLocation = data['location'];
     String fetchCountry = data['country'];
     String fetchState = data['state'];
+    final DocumentReference getCurrentUserDocRef =
+        FirebaseFirestore.instance.collection('users').doc(userUid);
 
-    void pushToWishlistArray(String fetchId) async {
-      final specificCommunityPost = FirebaseFirestore.instance
-          .collection('/destinations/contributor/data')
-          .doc(fetchId);
-
+    void getCurrentUserRef() async {
       try {
-        //* Fetch the current document
-        DocumentSnapshot snapshot = await specificCommunityPost.get();
-        if (snapshot.exists) {
-          //* Get the current value of 'isUserWishListedValue'
-          bool currentValue = snapshot['isUserWishListedValue'] ?? false;
+        DocumentSnapshot docSnapshot = await getCurrentUserDocRef.get();
 
-          //* Toggle the value
-          bool newValue = !currentValue;
-
-          //* firebase update method
-          await specificCommunityPost.update(
-            {
-              'isUserWishListedValue': newValue,
-            },
-          );
-
-          //* bottom message this card is wishlist
-          print('Wishlist value toggled successfully');
+        if (docSnapshot.exists) {
+          final userData = docSnapshot.data() as Map<String, dynamic>?;
         }
       } catch (error) {
-        print('Error toggling wishlist value: $error');
+        print(
+          'Error fetching user data: $error',
+        );
       }
     }
 
@@ -53,9 +42,7 @@ class CommunityReadSingleCard extends StatelessWidget {
       location: fetchLocation,
       state: fetchState,
       country: fetchCountry,
-      toggleWishList: () {
-        pushToWishlistArray(fetchId);
-      },
+      toggleWishList: () {},
     );
   }
 }
