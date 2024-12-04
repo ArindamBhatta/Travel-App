@@ -73,7 +73,6 @@ class _UserContributionPageState extends State<UserContributionPage> {
         await referenceOfDestination_Contributor?.set(
           {
             'id': referenceOfDestination_Contributor?.id,
-            'isUserWishListedValue': false,
             'location': location,
             'state': state,
             'country': country,

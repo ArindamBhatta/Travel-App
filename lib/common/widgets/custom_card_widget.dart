@@ -81,7 +81,10 @@ class CustomCardWidget extends StatelessWidget {
                   top: 10,
                   right: 10,
                   child: InkWell(
-                    onTap: () => toggleWishList(id),
+                    onTap: () {
+                      print('Tap is done');
+                      toggleWishList();
+                    },
                     child: Container(
                       width: 35,
                       height: 35,

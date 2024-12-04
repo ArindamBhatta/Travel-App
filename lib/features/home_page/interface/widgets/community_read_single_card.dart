@@ -15,7 +15,7 @@ class CommunityReadSingleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? userUid = context.read<GoogleLoginProvider>().userAccessToken;
-    String fetchId = allContributorData['id'];
+    String fetchDocumentId = allContributorData['id'];
     String fetchImageUri = allContributorData['image'];
     bool fetchBookmarkedData = allContributorData['isUserWishListedValue'];
     String fetchLocation = allContributorData['location'];
@@ -25,17 +25,13 @@ class CommunityReadSingleCard extends StatelessWidget {
         FirebaseFirestore.instance.collection('users').doc(userUid);
 
     void pushToUserWishListArray() async {
-      fetchBookmarkedData != fetchBookmarkedData;
-      print(fetchBookmarkedData);
-      getCurrentUserDocRef.update(
-        {
-          "isUserWishListedValue": true,
-        },
-      );
+      await getCurrentUserDocRef.update({
+        "wishlistLocation": [fetchDocumentId]
+      });
     }
 
     return CustomCardWidget(
-      id: fetchId,
+      id: fetchDocumentId,
       imageUri: fetchImageUri,
       bookMark: fetchBookmarkedData,
       location: fetchLocation,

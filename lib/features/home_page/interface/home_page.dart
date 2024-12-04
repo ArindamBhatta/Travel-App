@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    initStream();
     silentLoginWithAccessToken();
-    //* Initialize the combined stream
   }
 
   @override
@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  Map<String, dynamic> data = {};
   final StreamController<Map<String, dynamic>> streamController =
       StreamController<Map<String, dynamic>>();
 
@@ -43,21 +44,21 @@ class _HomePageState extends State<HomePage> {
     GoogleSignInAccount? googleUser = await googleSignIn.signInSilently();
     try {
       if (googleUser != null) {
-        GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        print('SignIn Silently: ${googleAuth.idToken}');
-
-        //* Set user data in provider
-        context.read<GoogleLoginProvider>().setUserData({
-          'name': googleUser.displayName,
-          'photoUrl': googleUser.photoUrl,
-        });
+        context.read<GoogleLoginProvider>().setUserData(
+          {
+            'name': googleUser.displayName,
+            'photoUrl': googleUser.photoUrl,
+          },
+        );
       }
     } catch (error) {
-      print(error);
+      print(
+        "error in silent login $error",
+      );
     }
   }
 
-  //* want a single document then collection.doc()
+  //* want a single document then use DocumentReference
   Future<Map<String, dynamic>?> getUser(String userUid) async {
     final DocumentReference getUserDocRef =
         FirebaseFirestore.instance.collection('users').doc(userUid);
@@ -73,9 +74,9 @@ class _HomePageState extends State<HomePage> {
     return null;
   }
 
+  //* if multiple document is their use query snapshot collection.get
   Future<List<Map<String, dynamic>>> getContributions() async {
     try {
-      //* if multiple document is their use query snapshot collection.get
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('/destinations/contributor/data')
           .get();
@@ -90,8 +91,6 @@ class _HomePageState extends State<HomePage> {
       return [];
     }
   }
-
-  Map<String, dynamic> data = {};
 
   Future<void> setStream(BuildContext context) async {
     String? userUid = context.read<GoogleLoginProvider>().userAccessToken;
@@ -109,7 +108,7 @@ class _HomePageState extends State<HomePage> {
       if (userData != null) {
         data['user'] = userData;
         data['contributions'] = contributions;
-
+        //* we add the data variable their
         streamController.add(data);
       } else {
         print('User data not found.');
@@ -119,14 +118,67 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  bool init = false;
+//* async* function allows you to create a Stream by using yield to emit data as it becomes available.
+  Stream<List<Map<String, dynamic>>>
+      contributionsSnapshotsForContributions() async* {
+    try {
+      //* Listen to Firestore snapshots
+      await for (QuerySnapshot<Map<String, dynamic>> snapshot
+          in FirebaseFirestore.instance
+              .collection('/destinations/contributor/data')
+              .snapshots()) {
+        List<Map<String, dynamic>> contributions =
+            snapshot.docs.map((doc) => doc.data()).toList();
+        yield contributions;
+      }
+    } catch (error) {
+      print('Error fetching contributions data: $error');
+      yield []; // Yield an empty list or handle the error as appropriate
+    }
+  }
 
+  Stream<Map<String, dynamic>?> contributionsSnapshotsForUser(
+      String userUid) async* {
+    try {
+      // Listen to Firestore single document using document snapshot
+      await for (DocumentSnapshot<Map<String, dynamic>> snapshot
+          in FirebaseFirestore.instance
+              .collection('users')
+              .doc(userUid)
+              .snapshots()) {
+        yield snapshot.data();
+      }
+    } catch (error) {
+      print('Error fetching contributions data for user: $error');
+      yield null; // Yield null or handle the error as appropriate
+    }
+  }
+
+  //bool init = false;
+
+  void initStream() {
+    FirebaseFirestore.instance
+        .collection('/destinations/contributor/data')
+        .snapshots()
+        .listen((querySnapshot) {
+      // Access all documents in the snapshot
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> alContributionData =
+          querySnapshot.docs;
+
+      alContributionData.forEach((individualDoc) {
+        data['contribution'] = individualDoc as Map<String, dynamic>;
+        streamController.add(data);
+      });
+    });
+  }
+
+//list tori . Map a add  . stream a add.
   @override
   Widget build(BuildContext context) {
-    if (!init) {
-      setStream(context);
-      init = true;
-    }
+    // if (!init) {
+    //   setStream(context);
+    //   init = true;
+    // }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -204,27 +256,29 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 } else if (snapshot.hasData) {
-                  final Map<String, dynamic> comboData = data;
+                  final Map<String, dynamic> comboData = snapshot.data!;
+                  List<Map<String, dynamic>> allContributorData =
+                      comboData['contributions'];
+                  if (allContributorData.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: Text(
+                          'No data available for this document.',
+                        ),
+                      ),
+                    );
+                  }
+
                   return SliverPadding(
                     padding: EdgeInsets.all(16),
                     sliver: SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          List<Map<String, dynamic>> allContributorData =
-                              comboData['contributions'];
                           Map<String, dynamic> singleContributorData =
                               allContributorData[index];
 
                           final userData = comboData['user'];
-                          if (userData == null) {
-                            return SliverToBoxAdapter(
-                              child: Center(
-                                child: Text(
-                                  'No data available for this document.',
-                                ),
-                              ),
-                            );
-                          }
+
                           //!Send to child
                           return CommunityReadSingleCard(
                             singleContributorData,
