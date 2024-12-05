@@ -45,7 +45,7 @@ class TravelApp extends StatelessWidget {
           String? userAccessToken =
               context.watch<GoogleLoginProvider>().userAccessToken;
           return userAccessToken != null
-              ? HomePageNavigation()
+              ? HomePageNavigation(userAccessToken)
               : IntroductionPage();
         },
       ),

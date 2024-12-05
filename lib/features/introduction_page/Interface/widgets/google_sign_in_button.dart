@@ -122,7 +122,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePageNavigation()),
+        MaterialPageRoute(builder: (context) => HomePageNavigation(user!.uid)),
       );
     } catch (error) {
       print('Error during sign-in: $error');

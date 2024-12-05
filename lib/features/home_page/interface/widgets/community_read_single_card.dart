@@ -1,8 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:travel_app/common/utils/google_login_provider.dart';
+
 import 'package:travel_app/common/widgets/custom_card_widget.dart';
+
+import '../../../details_page/details_page.dart';
 
 class CommunityReadSingleCard extends StatelessWidget {
   final Map<String, dynamic> allContributorData;
@@ -14,30 +16,58 @@ class CommunityReadSingleCard extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    String? userUid = context.read<GoogleLoginProvider>().userAccessToken;
-    String fetchDocumentId = allContributorData['id'];
+    String fetchCardId = allContributorData['id'];
     String fetchImageUri = allContributorData['image'];
-    bool fetchBookmarkedData = allContributorData['isUserWishListedValue'];
+    List fetchUserWishList = userData['wishlistLocation'];
+    bool isInWishlist = fetchUserWishList.contains(fetchCardId);
     String fetchLocation = allContributorData['location'];
     String fetchCountry = allContributorData['country'];
     String fetchState = allContributorData['state'];
-    final DocumentReference getCurrentUserDocRef =
-        FirebaseFirestore.instance.collection('users').doc(userUid);
 
-    void pushToUserWishListArray() async {
-      await getCurrentUserDocRef.update({
-        "wishlistLocation": [fetchDocumentId]
-      });
+    final userDocRef =
+        FirebaseFirestore.instance.collection('users').doc(userData['uid']);
+
+    void toggleWishList() async {
+      try {
+        if (isInWishlist) {
+          await userDocRef.update({
+            'wishlistLocation': FieldValue.arrayRemove(
+                [fetchCardId]), //* remove any specific index
+          });
+        } else {
+          await userDocRef.update({
+            'wishlistLocation': FieldValue.arrayUnion(
+                [fetchCardId]), //* add any specific data in array.
+          });
+        }
+        print('Wishlist updated successfully.');
+      } catch (error) {
+        print('Error updating wishlist: $error');
+      }
     }
 
-    return CustomCardWidget(
-      id: fetchDocumentId,
-      imageUri: fetchImageUri,
-      bookMark: fetchBookmarkedData,
-      location: fetchLocation,
-      state: fetchState,
-      country: fetchCountry,
-      toggleWishList: pushToUserWishListArray,
+    return OpenContainer(
+      closedElevation: 0.0,
+      openElevation: 0.0,
+      closedBuilder: (context, action) {
+        return ContributionSingleCard(
+          id: fetchCardId,
+          imageUri: fetchImageUri,
+          bookMark: isInWishlist,
+          location: fetchLocation,
+          state: fetchState,
+          country: fetchCountry,
+          toggleWishList: toggleWishList,
+        );
+      },
+      openBuilder: (context, action) {
+        return DetailsPage(
+          fetchCardId,
+        );
+      },
+      transitionDuration: const Duration(
+        milliseconds: 300,
+      ),
     );
   }
 }

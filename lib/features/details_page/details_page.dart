@@ -5,12 +5,11 @@ import 'package:travel_app/features/details_page/details_page_extension.dart';
 import '../home_page/module/data/home_page_provider.dart';
 
 class DetailsPage extends StatelessWidget {
-  final String id;
+  final String fetchCardId;
 
-  DetailsPage({
-    super.key,
-    required this.id,
-  });
+  DetailsPage(
+    this.fetchCardId,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class DetailsPage extends StatelessWidget {
     }
 
     Map<String, dynamic> specificCardData =
-        context.watch<HomePageProvider>().filterForDetailsPage(id);
+        context.watch<HomePageProvider>().filterForDetailsPage(fetchCardId);
 
     String imageUri = specificCardData['image'];
 
@@ -127,7 +126,7 @@ class DetailsPage extends StatelessWidget {
                         color: isWishList ? Colors.red : Colors.grey,
                       ),
                       onPressed: () {
-                        toggleWishList(id);
+                        toggleWishList(fetchCardId);
                       },
                     ),
                   ),

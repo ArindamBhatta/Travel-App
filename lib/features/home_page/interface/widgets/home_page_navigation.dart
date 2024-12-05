@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/details_page/details_page.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
 import '../../../user_contribution_page/contribution_page.dart';
 
 class HomePageNavigation extends StatefulWidget {
+  final String? userAccessToken;
+  HomePageNavigation(this.userAccessToken);
   @override
   State<HomePageNavigation> createState() => _HomePageNavigationState();
 }
@@ -30,10 +31,10 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     double width = MediaQuery.of(context).size.width;
 
     List<Widget> screens = [
-      HomePage(),
+      HomePage(widget.userAccessToken),
       loadingPages.contains(1) ? UserContributionPage() : Container(),
-      loadingPages.contains(2) ? DetailsPage(id: '102') : Container(),
-      loadingPages.contains(3) ? DetailsPage(id: '103') : Container(),
+      loadingPages.contains(2) ? Container() : Container(),
+      loadingPages.contains(3) ? Container() : Container(),
     ];
 
     return Scaffold(

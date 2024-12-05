@@ -39,7 +39,7 @@ class CardContainer extends StatelessWidget {
       closedElevation: 0.0,
       openElevation: 0.0,
       closedBuilder: (context, action) {
-        return CustomCardWidget(
+        return ContributionSingleCard(
           id: id,
           imageUri: image,
           bookMark: bookMark,
@@ -51,7 +51,7 @@ class CardContainer extends StatelessWidget {
       },
       openBuilder: (context, action) {
         return DetailsPage(
-          id: id,
+          id,
         );
       },
       transitionDuration: const Duration(

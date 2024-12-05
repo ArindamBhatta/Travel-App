@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class CustomCardWidget extends StatelessWidget {
+class ContributionSingleCard extends StatelessWidget {
   final String id;
   final String imageUri;
   final bool bookMark;
@@ -10,7 +10,7 @@ class CustomCardWidget extends StatelessWidget {
   final String country;
   final Function toggleWishList;
 
-  CustomCardWidget({
+  ContributionSingleCard({
     super.key,
     required this.id,
     required this.imageUri,
@@ -82,7 +82,6 @@ class CustomCardWidget extends StatelessWidget {
                   right: 10,
                   child: InkWell(
                     onTap: () {
-                      print('Tap is done');
                       toggleWishList();
                     },
                     child: Container(
