@@ -30,10 +30,12 @@ class CommunityReadSingleCard extends StatelessWidget {
     void toggleWishList() async {
       try {
         if (isInWishlist) {
-          await userDocRef.update({
-            'wishlistLocation': FieldValue.arrayRemove(
-                [fetchCardId]), //* remove any specific index
-          });
+          await userDocRef.update(
+            {
+              'wishlistLocation': FieldValue.arrayRemove(
+                  [fetchCardId]), //* remove any specific index
+            },
+          );
         } else {
           await userDocRef.update({
             'wishlistLocation': FieldValue.arrayUnion(
@@ -61,8 +63,12 @@ class CommunityReadSingleCard extends StatelessWidget {
         );
       },
       openBuilder: (context, action) {
+        //* after tap passing the id to the details page.
         return DetailsPage(
-          fetchCardId,
+          cardUniqueId: fetchCardId,
+          imageUri: fetchImageUri,
+          checkWishList: isInWishlist,
+          toggleWishList: toggleWishList,
         );
       },
       transitionDuration: const Duration(
