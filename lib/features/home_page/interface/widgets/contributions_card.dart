@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ContributionSingleCard extends StatelessWidget {
-  final String id;
+class ContributionsCard extends StatelessWidget {
+  final String cardUniqueId;
   final String imageUri;
   final bool bookMark;
   final String location;
@@ -10,9 +10,9 @@ class ContributionSingleCard extends StatelessWidget {
   final String country;
   final Function toggleWishList;
 
-  ContributionSingleCard({
+  ContributionsCard({
     super.key,
-    required this.id,
+    required this.cardUniqueId,
     required this.imageUri,
     required this.bookMark,
     required this.location,
@@ -20,6 +20,7 @@ class ContributionSingleCard extends StatelessWidget {
     required this.country,
     required this.toggleWishList,
   });
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -59,7 +60,6 @@ class ContributionSingleCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  //
                   placeholder: (context, url) =>
                       const CircularProgressIndicator(
                     strokeWidth: 2.0,
@@ -69,7 +69,6 @@ class ContributionSingleCard extends StatelessWidget {
                       Colors.green,
                     ),
                   ),
-                  //
                   errorWidget: (context, url, error) => const Icon(
                     Icons.error,
                   ),

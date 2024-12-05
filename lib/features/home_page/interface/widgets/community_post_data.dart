@@ -6,11 +6,11 @@ import 'package:travel_app/features/home_page/interface/widgets/contributions_ca
 
 import '../../../details_page/details_page.dart';
 
-class CommunityReadSingleCard extends StatelessWidget {
+class CommunityPostData extends StatelessWidget {
   final Map<String, dynamic> allContributorData;
   final Map<String, dynamic> userData;
 
-  CommunityReadSingleCard(
+  CommunityPostData(
     this.allContributorData,
     this.userData,
   );
@@ -63,6 +63,7 @@ class CommunityReadSingleCard extends StatelessWidget {
         );
       },
       openBuilder: (context, action) {
+        //* after tap passing the id to the details page.
         return DetailsPage(
           cardUniqueId: fetchCardId,
           imageUri: fetchImageUri,

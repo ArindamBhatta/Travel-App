@@ -9,7 +9,7 @@ import '../../../common/utils/google_login_provider.dart';
 import '../../../common/utils/remote_data.dart';
 
 import 'widgets/search_bar_container.dart';
-import 'widgets/community_read_single_card.dart';
+import 'widgets/community_post_data.dart';
 import 'widgets/app_bar_Content.dart';
 import 'widgets/text_button_navigation.dart';
 
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                         (BuildContext context, int index) {
                           Map<String, dynamic> singleContributorData =
                               contributionsData[index];
-                          return CommunityReadSingleCard(
+                          return CommunityPostData(
                             singleContributorData,
                             userData,
                           );
