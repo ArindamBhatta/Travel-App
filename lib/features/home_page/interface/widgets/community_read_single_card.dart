@@ -23,9 +23,12 @@ class CommunityReadSingleCard extends StatelessWidget {
     String fetchLocation = allContributorData['location'];
     String fetchCountry = allContributorData['country'];
     String fetchState = allContributorData['state'];
-
-    final userDocRef =
+    DocumentReference userDocRef =
         FirebaseFirestore.instance.collection('users').doc(userData['uid']);
+
+    DocumentReference fetchContributor = FirebaseFirestore.instance
+        .collection('destinations/contributor/data')
+        .doc(fetchCardId);
 
     void toggleWishList() async {
       try {
@@ -63,12 +66,14 @@ class CommunityReadSingleCard extends StatelessWidget {
         );
       },
       openBuilder: (context, action) {
-        return DetailsPage(
-          cardUniqueId: fetchCardId,
-          imageUri: fetchImageUri,
-          bookMark: isInWishlist,
-          toggleWishList: toggleWishList,
-        );
+        return Builder(builder: (context) {
+          return DetailsPage(
+              cardUniqueId: fetchCardId,
+              imageUri: fetchImageUri,
+              bookMark: isInWishlist,
+              toggleWishList: toggleWishList,
+              uploadedUser: fetchContributor);
+        });
       },
       transitionDuration: const Duration(
         milliseconds: 300,

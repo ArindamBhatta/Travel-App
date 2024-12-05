@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/details_page/details_page_extension.dart';
 
@@ -8,6 +9,7 @@ class DetailsPage extends StatefulWidget {
   final bool bookMark;
   final Function toggleWishList;
   final String imageUri;
+  final DocumentReference uploadedUser;
 
   DetailsPage({
     super.key,
@@ -15,6 +17,7 @@ class DetailsPage extends StatefulWidget {
     required this.cardUniqueId,
     required this.bookMark,
     required this.toggleWishList,
+    required this.uploadedUser,
   });
 
   @override
@@ -22,21 +25,13 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  Future<Map<String, dynamic>?> fetchDetailsPageData() async {
-    try {
-      DocumentReference collectionDocSnapshot = FirebaseFirestore.instance
-          .collection('/destinations/contributor/data')
-          .doc(widget.cardUniqueId);
-
-      DocumentSnapshot docSnapshot = await collectionDocSnapshot.get();
-      if (docSnapshot.exists) {
-        return docSnapshot.data() as Map<String, dynamic>?;
-      }
-    } catch (error) {
-      print('Error fetching data: $error');
-    }
-    return null;
+  @override
+  void initState() {
+    bookmark = widget.bookMark;
+    super.initState();
   }
+
+  late bool bookmark;
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +97,12 @@ class _DetailsPageState extends State<DetailsPage> {
                   right: 20,
                   child: InkWell(
                     onTap: () {
-                      setState(() {
-                        widget.bookMark;
-                        widget.toggleWishList();
-                      });
+                      widget.toggleWishList();
+                      setState(
+                        () {
+                          bookmark = !bookmark;
+                        },
+                      );
                     },
                     child: Container(
                       width: 35,
@@ -117,12 +114,12 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: Icon(
                         Icons.favorite,
                         size: 20,
-                        color: widget.bookMark ? Colors.red : Colors.white,
+                        color: bookmark ? Colors.red : Colors.white,
                       ),
                     ),
                   ),
                 ),
-                // Bottom Container
+
                 Positioned(
                   bottom: 0,
                   child: Container(
@@ -139,33 +136,9 @@ class _DetailsPageState extends State<DetailsPage> {
               ],
             ),
           ),
-          detailsPageExtension(
-            context: context,
-            name: 'N/A',
-            cost: 'N/A',
-            rating: 'N/A',
-            popularity: 0,
-            overview: 'N/A',
-            details: 'N/A',
-            reviews: 'N/A',
-            duration: 'N/A',
-            distance: 'N/A',
-            weather: 'N/A',
-          ),
+          DetailsPageExtension(widget.uploadedUser),
         ],
       ),
     );
   }
-  /* 
-* i use this in futureBuilder that why i can call like this way but if i want to get data from this method i needs to call another method 
-Future<void> fetchData() async {
-  var a = await collectionDocSnapshot();
-  if (a != null) {
-    print(' Data: $a');
-  } else {
-    print(' No data found or error occurred.');
-  }
-}
-fetchData(); 
-*/
 }

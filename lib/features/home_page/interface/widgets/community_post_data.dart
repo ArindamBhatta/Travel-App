@@ -18,11 +18,12 @@ class CommunityPostData extends StatelessWidget {
   Widget build(BuildContext context) {
     String fetchCardId = allContributorData['id'];
     String fetchImageUri = allContributorData['image'];
-    List fetchUserWishList = userData['wishlistLocation'];
-    bool isInWishlist = fetchUserWishList.contains(fetchCardId);
     String fetchLocation = allContributorData['location'];
     String fetchCountry = allContributorData['country'];
     String fetchState = allContributorData['state'];
+    List fetchUserWishList = userData['wishlistLocation'];
+    bool isInWishlist = fetchUserWishList.contains(fetchCardId);
+    DocumentReference fetchUserDetails = allContributorData['userRef'];
 
     final userDocRef =
         FirebaseFirestore.instance.collection('users').doc(userData['uid']);
@@ -69,6 +70,7 @@ class CommunityPostData extends StatelessWidget {
           imageUri: fetchImageUri,
           bookMark: isInWishlist,
           toggleWishList: toggleWishList,
+          uploadedUser: fetchUserDetails,
         );
       },
       transitionDuration: const Duration(
