@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/widgets/custom_text_form_field.dart';
 
-class FormUI extends StatelessWidget {
+class ContributionForm extends StatelessWidget {
   final GlobalKey<FormState> globalKey;
 
   final Function(
@@ -10,9 +10,10 @@ class FormUI extends StatelessWidget {
     String? state,
     String? country,
     String? imageUrl,
+    String? description,
   ) onTapToSaveFormData;
 
-  FormUI({
+  ContributionForm({
     super.key,
     required this.globalKey,
     required this.onTapToSaveFormData,
@@ -24,6 +25,7 @@ class FormUI extends StatelessWidget {
     String? state;
     String? country;
     String? imageUrl;
+    String? description;
 
     return SingleChildScrollView(
       child: Padding(
@@ -90,7 +92,7 @@ class FormUI extends StatelessWidget {
                   }
                   return null;
                 },
-                onSaved: (value) => imageUrl = value,
+                onSaved: (value) => description = value,
               ),
               SizedBox(height: 16),
               ElevatedButton(
@@ -105,6 +107,7 @@ class FormUI extends StatelessWidget {
                       state,
                       country,
                       imageUrl,
+                      description,
                     );
                     Navigator.pop(context);
                   }

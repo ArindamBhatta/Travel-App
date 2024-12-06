@@ -5,8 +5,11 @@ import 'package:travel_app/features/details_page/specification_list.dart';
 
 class DetailsPageExtension extends StatefulWidget {
   final DocumentReference uploadedUser;
-
-  DetailsPageExtension(this.uploadedUser);
+  final String location;
+  DetailsPageExtension(
+    this.uploadedUser,
+    this.location,
+  );
 
   @override
   State<DetailsPageExtension> createState() => _DetailsPageExtensionState();
@@ -57,6 +60,9 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
     );
   }
 
+  int selectedButtonId = 0;
+  PageController ctrl = PageController();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -67,14 +73,11 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
       'User Info',
     ];
 
-    int visibleButton = 0;
-    PageController ctrl = PageController();
-
     void changeVisibility(int index) {
-      if (visibleButton != index) {
-        // setState(() {
-        visibleButton = index;
-        // });
+      if (selectedButtonId != index) {
+        //* setState(() {
+        selectedButtonId = index;
+        //* });
       }
     }
 
@@ -91,7 +94,11 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
             ),
           ));
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error loading data'));
+          return Center(
+            child: Text(
+              'Error loading data',
+            ),
+          );
         } else if (snapshot.hasData) {
           Map<String, dynamic> data = snapshot.data!;
 
@@ -111,7 +118,7 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      data['name'],
+                      widget.location,
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -154,12 +161,16 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                         index < navigationButtons.length;
                         index++)
                       NavigationButton(
-                        visibleButton: visibleButton,
-                        index: index,
+                        selectedButtonId: selectedButtonId,
+                        buttonId: index,
                         containerText: navigationButtons[index],
-                        onButtonPressed: () {
+                        onButtonPressed: (int tappedButtonId) {
+                          print(tappedButtonId);
+                          setState(() {
+                            selectedButtonId = tappedButtonId;
+                          });
                           ctrl.animateToPage(
-                            index, //* after tap what page i want to go
+                            index,
                             duration: const Duration(
                               milliseconds: 100,
                             ),
@@ -174,50 +185,54 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                   height: 100,
                   child: PageView(
                     onPageChanged: (index) {
-                      changeVisibility(index);
+                      // changeVisibility(index);
                     },
                     controller: ctrl,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              infoAboutTrip(
+                                Icons.watch_later,
+                                Colors.red,
+                                '2 Days',
+                                "Duration",
+                              ),
+                              infoAboutTrip(
+                                Icons.location_on,
+                                Colors.green,
+                                '100 KM',
+                                "Distance",
+                              ),
+                              infoAboutTrip(
+                                Icons.wb_sunny_rounded,
+                                Colors.yellow,
+                                "13 °C",
+                                "Weather",
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                          'Welcome to Details page',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                       ),
                       SpecificationList(data),
                     ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    infoAboutTrip(
-                      Icons.watch_later,
-                      Colors.red,
-                      '2 Days',
-                      "Duration",
-                    ),
-                    infoAboutTrip(
-                      Icons.location_on,
-                      Colors.green,
-                      '100 KM',
-                      "Distance",
-                    ),
-                    infoAboutTrip(
-                      Icons.wb_sunny_rounded,
-                      Colors.yellow,
-                      "13 °C",
-                      "Weather",
-                    ),
-                  ],
                 ),
                 SizedBox(height: 20),
                 SizedBox(

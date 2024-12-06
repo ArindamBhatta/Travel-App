@@ -67,6 +67,7 @@ class CommunityReadSingleCard extends StatelessWidget {
       },
       openBuilder: (context, action) {
         return DetailsPage(
+          location: fetchLocation,
           cardUniqueId: fetchCardId,
           imageUri: fetchImageUri,
           bookMark: isInWishlist,

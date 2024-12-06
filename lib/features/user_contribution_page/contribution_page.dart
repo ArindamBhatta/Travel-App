@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/google_login_provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/app_bar_Content.dart';
 import 'package:travel_app/features/user_contribution_page/specific_user_read_contribution.dart';
-import 'form_ui.dart';
+import 'contribution_from.dart';
 
 class UserContributionPage extends StatefulWidget {
   @override
@@ -18,6 +18,7 @@ class _UserContributionPageState extends State<UserContributionPage> {
   String? state;
   String? country;
   String? imageUrl;
+  String? description;
   String? userUid;
   DocumentReference? referenceOfDestination_Contributor;
   DocumentReference? createReferenceOfaParticularUserPost;
@@ -77,6 +78,7 @@ class _UserContributionPageState extends State<UserContributionPage> {
             'state': state,
             'country': country,
             'image': imageUrl,
+            'description': description,
             'userRef':
                 referenceOfaParticularUser, //* show user data in details page
             'timestamp': FieldValue.serverTimestamp(),
@@ -136,18 +138,20 @@ class _UserContributionPageState extends State<UserContributionPage> {
           minChildSize: 0.60,
           builder: (context, scrollController) {
             //* User Post method is trigger from hear
-            return FormUI(
+            return ContributionForm(
               globalKey: formKey,
               onTapToSaveFormData: (
                 String? location,
                 String? state,
                 String? country,
                 String? imageUrl,
+                String? description,
               ) {
                 this.location = location;
                 this.state = state;
                 this.country = country;
                 this.imageUrl = imageUrl;
+                this.description = this.description;
                 submitFormAndUploadDataInFireStore();
               },
             );

@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 class NavigationButton extends StatelessWidget {
   final String containerText;
-  final int index;
-  final int visibleButton;
-  final VoidCallback onButtonPressed;
+  final int buttonId;
+  final int selectedButtonId;
+  final ValueChanged<int> onButtonPressed;
 
   const NavigationButton({
     super.key,
-    required this.visibleButton,
-    required this.index,
+    required this.selectedButtonId,
+    required this.buttonId,
     required this.containerText,
     required this.onButtonPressed,
   });
 
   bool checkToggleValue() {
-    if (visibleButton == index) {
+    if (selectedButtonId == buttonId) {
       return true;
     } else {
       return false;
@@ -24,10 +24,11 @@ class NavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('$buttonId ... $selectedButtonId');
     return TextButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(
-          checkToggleValue() ? Colors.teal[500] : null,
+          selectedButtonId == buttonId ? Colors.teal[500] : null,
         ),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
@@ -36,14 +37,13 @@ class NavigationButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        onButtonPressed();
-        checkToggleValue();
-        print(checkToggleValue());
+        onButtonPressed(buttonId);
+        // checkToggleValue();
       },
       child: Text(
         containerText,
         style: TextStyle(
-          color: checkToggleValue() ? Colors.white : Colors.black,
+          color: selectedButtonId == buttonId ? Colors.white : Colors.black,
           fontWeight: FontWeight.bold,
         ),
       ),

@@ -9,10 +9,12 @@ class DetailsPage extends StatefulWidget {
   final bool bookMark;
   final Function toggleWishList;
   final String imageUri;
+  final String location;
   final DocumentReference uploadedUser;
 
   DetailsPage({
     super.key,
+    required this.location,
     required this.imageUri,
     required this.cardUniqueId,
     required this.bookMark,
@@ -136,7 +138,7 @@ class _DetailsPageState extends State<DetailsPage> {
               ],
             ),
           ),
-          DetailsPageExtension(widget.uploadedUser),
+          DetailsPageExtension(widget.uploadedUser, widget.location),
         ],
       ),
     );

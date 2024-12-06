@@ -66,6 +66,7 @@ class CommunityPostData extends StatelessWidget {
       openBuilder: (context, action) {
         //* after tap passing the id to the details page.
         return DetailsPage(
+          location: fetchLocation,
           cardUniqueId: fetchCardId,
           imageUri: fetchImageUri,
           bookMark: isInWishlist,
