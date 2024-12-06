@@ -43,8 +43,6 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
         index: currentPageIndex,
         children: screens,
       ),
-
-      ///////
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FloatingActionButton.extended(

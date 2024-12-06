@@ -1,14 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/details_page/navigation_button.dart';
+import 'package:travel_app/features/details_page/specification_list.dart';
 
-class DetailsPageExtension extends StatelessWidget {
+class DetailsPageExtension extends StatefulWidget {
   final DocumentReference uploadedUser;
 
   DetailsPageExtension(this.uploadedUser);
 
+  @override
+  State<DetailsPageExtension> createState() => _DetailsPageExtensionState();
+}
+
+class _DetailsPageExtensionState extends State<DetailsPageExtension> {
   Future<Map<String, dynamic>?> fetchContributor() async {
     try {
-      DocumentReference user = uploadedUser;
+      DocumentReference user = widget.uploadedUser;
 
       DocumentSnapshot docSnapshot = await user.get();
       if (docSnapshot.exists) {
@@ -20,43 +27,69 @@ class DetailsPageExtension extends StatelessWidget {
     return null;
   }
 
+  Widget infoAboutTrip(
+    IconData icon,
+    Color color,
+    String textOfInfo,
+    String infoText,
+  ) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 20,
+            ),
+            SizedBox(width: 4),
+            Text(
+              textOfInfo,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+        Text(infoText),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget infoAboutTrip(
-      IconData icon,
-      Color color,
-      String textOfInfo,
-      String infoText,
-    ) {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                color: color,
-                size: 20,
-              ),
-              SizedBox(width: 4),
-              Text(
-                textOfInfo,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          Text(infoText),
-        ],
-      );
+    double width = MediaQuery.of(context).size.width;
+
+    List<String> navigationButtons = [
+      'Description',
+      'Details',
+      'User Info',
+    ];
+
+    int visibleButton = 0;
+    PageController ctrl = PageController();
+
+    void changeVisibility(int index) {
+      if (visibleButton != index) {
+        // setState(() {
+        visibleButton = index;
+        // });
+      }
     }
 
     return FutureBuilder<Map<String, dynamic>?>(
       future: fetchContributor(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Container(
+            color: Colors.white,
+            height: 500,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ));
         } else if (snapshot.hasError) {
           return Center(child: Text('Error loading data'));
         } else if (snapshot.hasData) {
@@ -117,48 +150,50 @@ class DetailsPageExtension extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(
-                          Colors.teal[500],
-                        ),
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.teal, width: 2),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                    for (int index = 0;
+                        index < navigationButtons.length;
+                        index++)
+                      NavigationButton(
+                        visibleButton: visibleButton,
+                        index: index,
+                        containerText: navigationButtons[index],
+                        onButtonPressed: () {
+                          ctrl.animateToPage(
+                            index, //* after tap what page i want to go
+                            duration: const Duration(
+                              milliseconds: 100,
+                            ),
+                            curve: Curves.ease,
+                          );
+                        },
                       ),
-                      onPressed: () {},
-                      child: Text(
-                        "Overview",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Details",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Reviews",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
-                    style: TextStyle(color: Colors.grey[600]),
+                SizedBox(
+                  width: width,
+                  height: 100,
+                  child: PageView(
+                    onPageChanged: (index) {
+                      changeVisibility(index);
+                    },
+                    controller: ctrl,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      ),
+                      SpecificationList(data),
+                    ],
                   ),
                 ),
                 Row(

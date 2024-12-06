@@ -66,14 +66,13 @@ class CommunityReadSingleCard extends StatelessWidget {
         );
       },
       openBuilder: (context, action) {
-        return Builder(builder: (context) {
-          return DetailsPage(
-              cardUniqueId: fetchCardId,
-              imageUri: fetchImageUri,
-              bookMark: isInWishlist,
-              toggleWishList: toggleWishList,
-              uploadedUser: fetchContributor);
-        });
+        return DetailsPage(
+          cardUniqueId: fetchCardId,
+          imageUri: fetchImageUri,
+          bookMark: isInWishlist,
+          toggleWishList: toggleWishList,
+          uploadedUser: fetchContributor,
+        );
       },
       transitionDuration: const Duration(
         milliseconds: 300,

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/google_login_provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/app_bar_Content.dart';
 import 'package:travel_app/features/user_contribution_page/specific_user_read_contribution.dart';
-import 'form_ui_collect_travel_info.dart';
+import 'form_ui.dart';
 
 class UserContributionPage extends StatefulWidget {
   @override
@@ -136,7 +136,7 @@ class _UserContributionPageState extends State<UserContributionPage> {
           minChildSize: 0.60,
           builder: (context, scrollController) {
             //* User Post method is trigger from hear
-            return FormUICollectTravelInfo(
+            return FormUI(
               globalKey: formKey,
               onTapToSaveFormData: (
                 String? location,

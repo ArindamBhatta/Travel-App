@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/card_to_details_page_provider.dart';
+import 'package:travel_app/features/details_page/utils/details_page_provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation.dart';
 import 'package:travel_app/features/introduction_page/Interface/introduction_page.dart';
 import 'common/utils/google_login_provider.dart';
@@ -17,6 +18,9 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => HomePageProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DetailsPageProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => CardToDetailsPageProvider(),

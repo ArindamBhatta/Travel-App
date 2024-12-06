@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/common/widgets/custom_text_form_field.dart';
 
 class SearchBarContainer extends SliverPersistentHeaderDelegate {
   @override
@@ -34,11 +33,29 @@ class _SearchBarState extends State<_SearchBar> {
       color: Colors.white30,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: CustomTextFormField(
-          labelText: 'Search',
-          prefixIcon: Icons.search,
-          suffixIcon: Icons.tune_outlined,
-          textBoxHeight: 20.0,
+        child: TextFormField(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(16),
+            filled: true,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.teal[400]!),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            fillColor: Colors.white,
+            labelText: 'Search',
+            prefixIcon: Icon(Icons.search),
+            suffixIcon: Icon(Icons.tune_outlined),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+          onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
         ),
       ),
     );

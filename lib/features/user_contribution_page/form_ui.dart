@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/widgets/custom_text_form_field.dart';
 
-class FormUICollectTravelInfo extends StatelessWidget {
+class FormUI extends StatelessWidget {
   final GlobalKey<FormState> globalKey;
 
   final Function(
@@ -12,7 +12,7 @@ class FormUICollectTravelInfo extends StatelessWidget {
     String? imageUrl,
   ) onTapToSaveFormData;
 
-  FormUICollectTravelInfo({
+  FormUI({
     super.key,
     required this.globalKey,
     required this.onTapToSaveFormData,
@@ -81,6 +81,18 @@ class FormUICollectTravelInfo extends StatelessWidget {
                 onSaved: (value) => imageUrl = value,
               ),
               SizedBox(height: 8),
+              CustomTextFormField(
+                labelText: 'Description',
+                prefixIcon: Icons.image,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Your Image';
+                  }
+                  return null;
+                },
+                onSaved: (value) => imageUrl = value,
+              ),
+              SizedBox(height: 16),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,

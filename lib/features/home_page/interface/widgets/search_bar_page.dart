@@ -92,3 +92,41 @@ class _SearchBarState extends State<SearchBarPage>
     );
   }
 }
+/* 
+/* 
+
+
+
+
+
+
+Container(
+      height: 120,
+      color: Colors.white30,
+      child: 
+    TextFormField(
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(16),
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.teal[400]!),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        fillColor: Colors.white,
+        labelText: Icons.search,
+       
+        suffixIcon: Icons.tune_outlined,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+      ),
+    
+    
+   
+    );
+ */
+ */
