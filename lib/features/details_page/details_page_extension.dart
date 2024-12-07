@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/details_page/navigation_button.dart';
-import 'package:travel_app/features/details_page/specification_list.dart';
 
 class DetailsPageExtension extends StatefulWidget {
   final DocumentReference uploadedUser;
@@ -65,22 +63,6 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
-    List<String> navigationButtons = [
-      'Description',
-      'Details',
-      'User Info',
-    ];
-
-    void changeVisibility(int index) {
-      if (selectedButtonId != index) {
-        //* setState(() {
-        selectedButtonId = index;
-        //* });
-      }
-    }
-
     return FutureBuilder<Map<String, dynamic>?>(
       future: fetchContributor(),
       builder: (context, snapshot) {
@@ -88,7 +70,7 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
           return Center(
               child: Container(
             color: Colors.white,
-            height: 500,
+            height: 300,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -103,6 +85,7 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
           Map<String, dynamic> data = snapshot.data!;
 
           return Container(
+            height: 300,
             padding: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -111,7 +94,7 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
               ),
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -153,88 +136,106 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int index = 0;
-                        index < navigationButtons.length;
-                        index++)
-                      NavigationButton(
-                        selectedButtonId: selectedButtonId,
-                        buttonId: index,
-                        containerText: navigationButtons[index],
-                        onButtonPressed: (int tappedButtonId) {
-                          print(tappedButtonId);
-                          setState(() {
-                            selectedButtonId = tappedButtonId;
-                          });
-                          ctrl.animateToPage(
-                            index,
-                            duration: const Duration(
-                              milliseconds: 100,
-                            ),
-                            curve: Curves.ease,
-                          );
-                        },
-                      ),
-                  ],
-                ),
-                SizedBox(
-                  width: width,
-                  height: 100,
-                  child: PageView(
-                    onPageChanged: (index) {
-                      // changeVisibility(index);
-                    },
-                    controller: ctrl,
+                SizedBox(height: 20),
+                DefaultTabController(
+                  length: 3,
+                  child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
-                              style: TextStyle(color: Colors.grey[600]),
+                      TabBar(
+                        indicator: UnderlineTabIndicator(
+                          borderSide: BorderSide(
+                            color: Colors.green,
+                            width: 1.5,
+                          ),
+                        ),
+                        tabs: [
+                          Text(
+                            'Description',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.black,
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              infoAboutTrip(
-                                Icons.watch_later,
-                                Colors.red,
-                                '2 Days',
-                                "Duration",
-                              ),
-                              infoAboutTrip(
-                                Icons.location_on,
-                                Colors.green,
-                                '100 KM',
-                                "Distance",
-                              ),
-                              infoAboutTrip(
-                                Icons.wb_sunny_rounded,
-                                Colors.yellow,
-                                "13 °C",
-                                "Weather",
-                              ),
-                            ],
+                          Text(
+                            'Details',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            'User info',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.black,
+                            ),
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          'Welcome to Details page',
-                          style: TextStyle(color: Colors.grey[600]),
+                      SizedBox(
+                        height: 140,
+                        child: TabBarView(
+                          children: [
+                            Container(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Text(
+                                      'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      infoAboutTrip(
+                                        Icons.watch_later,
+                                        Colors.red,
+                                        '2 Days',
+                                        "Duration",
+                                      ),
+                                      infoAboutTrip(
+                                        Icons.location_on,
+                                        Colors.green,
+                                        '100 KM',
+                                        "Distance",
+                                      ),
+                                      infoAboutTrip(
+                                        Icons.wb_sunny_rounded,
+                                        Colors.yellow,
+                                        "13 °C",
+                                        "Weather",
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 100,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 100,
+                              color: Colors.blue,
+                            ),
+                          ],
                         ),
                       ),
-                      SpecificationList(data),
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
