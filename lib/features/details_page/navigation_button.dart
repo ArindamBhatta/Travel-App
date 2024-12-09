@@ -38,7 +38,6 @@ class NavigationButton extends StatelessWidget {
       ),
       onPressed: () {
         onButtonPressed(buttonId);
-        // checkToggleValue();
       },
       child: Text(
         containerText,

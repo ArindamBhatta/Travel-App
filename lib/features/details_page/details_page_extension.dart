@@ -136,47 +136,134 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 DefaultTabController(
                   length: 3,
                   child: Column(
                     children: [
-                      TabBar(
-                        indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                            color: Colors.green,
-                            width: 1.5,
-                          ),
+                      Container(
+                        color: Colors.white,
+                        child: TabBar(
+                          dividerColor: Colors.white,
+                          indicator: BoxDecoration(),
+                          tabs: [
+                            Tab(
+                              child: Builder(
+                                builder: (context) {
+                                  final TabController controller =
+                                      DefaultTabController.of(context);
+                                  return AnimatedBuilder(
+                                    animation: controller,
+                                    builder: (context, _) {
+                                      final isSelected = controller.index == 0;
+                                      return Container(
+                                        width: 100,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: isSelected
+                                              ? Colors.teal[500]
+                                              : Colors.white,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Description',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0,
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            Tab(
+                              iconMargin: null,
+                              child: Builder(
+                                builder: (context) {
+                                  final TabController controller =
+                                      DefaultTabController.of(context);
+                                  return AnimatedBuilder(
+                                    animation: controller,
+                                    builder: (context, _) {
+                                      final isSelected = controller.index == 1;
+                                      return Container(
+                                        width: 100,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: isSelected
+                                              ? Colors.teal[500]
+                                              : Colors.white,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Details',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0,
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            Tab(
+                              child: Builder(
+                                builder: (context) {
+                                  final TabController controller =
+                                      DefaultTabController.of(context);
+                                  return AnimatedBuilder(
+                                    animation: controller,
+                                    builder: (context, _) {
+                                      final isSelected = controller.index == 2;
+                                      return Container(
+                                        width: 100,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: isSelected
+                                              ? Colors.teal[500]
+                                              : Colors.white,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Details',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0,
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        tabs: [
-                          Text(
-                            'Description',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            'Details',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            'User info',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
                       ),
                       SizedBox(
                         height: 140,
@@ -224,11 +311,60 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                             ),
                             Container(
                               height: 100,
-                              color: Colors.green,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  'Darjeeling is one of the world’s new holiday destinations in West Bengal. Located on the west Bengal of the India.',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
                             ),
                             Container(
                               height: 100,
-                              color: Colors.blue,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        SizedBox(
+                                          width: 50.0, // Set the desired width
+                                          height:
+                                              50.0, // Set the desired height
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                              '${data['avatar']}',
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${data['name']}',
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '${data['email']}',
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/features/home_page/interface/widgets/side_drawer.dart';
 
 import '../../../common/utils/google_login_provider.dart';
 import '../../../common/utils/remote_data.dart';
@@ -22,6 +23,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //* global scope property or has part
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final StreamController<Map<String, dynamic>> streamController =
+      StreamController<Map<String, dynamic>>();
+
+  final Map<String, dynamic> data = {};
+
+  Map<String, dynamic>? userLoginData;
+
+  //* global scope method or Do part
   @override
   void initState() {
     super.initState();
@@ -34,10 +46,6 @@ class _HomePageState extends State<HomePage> {
     streamController.close();
     super.dispose();
   }
-
-  Map<String, dynamic> data = {};
-  final StreamController<Map<String, dynamic>> streamController =
-      StreamController<Map<String, dynamic>>();
 
   void silentLoginWithAccessToken() async {
     //* only for android
@@ -89,7 +97,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    userLoginData = context.watch<GoogleLoginProvider>().userData;
+
+    //* functional  scope
     return Scaffold(
+      key: _scaffoldKey, // Assign the key to the Scaffold
+
+      drawer: SideDrawer(userLoginData), // Add the SideDrawer
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -103,7 +117,10 @@ class _HomePageState extends State<HomePage> {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: AppBarContent(
-                  headingText: 'Where do you Wish to go',
+                  userInfo: userLoginData,
+                  headingText: 'Welcome to Travel App',
+                  onAvatarTap: () => _scaffoldKey.currentState!
+                      .openDrawer(), // Open the drawer
                 ),
               ),
             ),

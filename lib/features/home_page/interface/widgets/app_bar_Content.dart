@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
 
-import '../../../../common/utils/google_login_provider.dart';
-
 class AppBarContent extends StatelessWidget {
+  //* has part
   final String? headingText;
+  final VoidCallback onAvatarTap;
+  final Map<String, dynamic>? userInfo;
+
   AppBarContent({
     super.key,
+    required this.userInfo,
     required this.headingText,
+    required this.onAvatarTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic>? userData =
-        context.watch<GoogleLoginProvider>().userData;
-
-    if (userData == null) {
+    if (userInfo == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -29,53 +30,58 @@ class AppBarContent extends StatelessWidget {
         top: 8.0,
         bottom: 8.0,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-              '${userData['photoUrl']}',
-            ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${userData['name']}',
-                  softWrap: false,
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+      child: Builder(
+        builder: (context) => Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: onAvatarTap, // Trigger the callback // Open the drawer
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  '${userInfo?['photoUrl']}',
                 ),
-                Text(
-                  headingText.toString(),
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${userInfo?['name']}',
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                  Text(
+                    headingText.toString(),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              alignment: Alignment.topRight,
-              padding: EdgeInsets.all(0),
+            TextButton(
+              style: TextButton.styleFrom(
+                alignment: Alignment.topRight,
+                padding: EdgeInsets.all(0),
+              ),
+              onPressed: () => logoutPopup(context),
+              child: Icon(
+                Icons.logout_sharp,
+                color: Colors.black,
+              ),
             ),
-            onPressed: () => logoutPopup(context),
-            child: Icon(
-              Icons.logout_sharp,
-              color: Colors.black,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
