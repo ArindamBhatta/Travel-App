@@ -38,7 +38,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: IndexedStack(
         index: currentPageIndex,
         children: screens,

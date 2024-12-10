@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //* global scope property or has part
+  //* global scope property, has part
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final StreamController<Map<String, dynamic>> streamController =
@@ -47,14 +47,15 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  //* only for android
   void silentLoginWithAccessToken() async {
-    //* only for android
     final GoogleSignIn googleSignIn = GoogleSignIn();
     GoogleSignInAccount? googleUser = await googleSignIn.signInSilently();
     try {
       if (googleUser != null) {
         context.read<GoogleLoginProvider>().setUserData(
           {
+            'email': googleUser.email,
             'name': googleUser.displayName,
             'photoUrl': googleUser.photoUrl,
           },
@@ -98,19 +99,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     userLoginData = context.watch<GoogleLoginProvider>().userData;
-
-    //* functional  scope
+    // * functional  scope
     return Scaffold(
-      key: _scaffoldKey, // Assign the key to the Scaffold
-
+      key: _scaffoldKey, //* Assign the key to the ScaffoldS
       drawer: SideDrawer(userLoginData), // Add the SideDrawer
-      backgroundColor: Colors.white,
+
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               elevation: 0,
               expandedHeight: 75.0,

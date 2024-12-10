@@ -14,6 +14,8 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+  //* global scope property, or has part
+
   //* Show a loading dialog
   void _showLoadingDialog() {
     showDialog(

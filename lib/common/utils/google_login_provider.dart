@@ -13,6 +13,7 @@ class GoogleLoginProvider extends ChangeNotifier {
       _userData = {
         'name': data['name'] ?? '',
         'photoUrl': data['photoUrl'] ?? '',
+        'email': data['email']
       };
       notifyListeners();
     }

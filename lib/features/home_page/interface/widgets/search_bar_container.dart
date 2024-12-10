@@ -30,7 +30,6 @@ class _SearchBarState extends State<_SearchBar> {
   Widget build(BuildContext context) {
     return Container(
       height: 120,
-      color: Colors.white30,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: TextFormField(
