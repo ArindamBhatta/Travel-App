@@ -24,123 +24,121 @@ class ContributionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shadowColor: Colors.black,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                CachedNetworkImage(
-                  imageUrl: imageUri,
-                  fit: BoxFit.cover,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          8.0,
-                        ),
-                        topRight: Radius.circular(
-                          8.0,
-                        ),
-                      ),
-                      color: Colors.transparent,
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                        colorFilter: const ColorFilter.mode(
-                          Color.fromARGB(255, 254, 189, 184),
-                          BlendMode.colorBurn,
-                        ),
-                      ),
-                    ),
-                  ),
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(
-                    strokeWidth: 2.0,
-                    color: Colors.black,
-                    //
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.green,
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.error,
-                  ),
-                ),
-
-                //* Heart button
-
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: InkWell(
-                    onTap: () {
-                      toggleWishList();
-                    },
-                    child: Container(
-                      width: 35,
-                      height: 35,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: imageUri,
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withAlpha(50),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            4.0,
+                          ),
+                          topRight: Radius.circular(
+                            4.0,
+                          ),
+                        ),
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          colorFilter: const ColorFilter.mode(
+                            Color.fromARGB(255, 254, 189, 184),
+                            BlendMode.colorBurn,
+                          ),
+                        ),
                       ),
-                      child: Icon(
-                        Icons.favorite,
-                        size: 20,
-                        color: bookMark ? Colors.red : Colors.white,
+                    ),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: Colors.black,
+                      //
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.green,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error,
+                    ),
+                  ),
+
+                  //* Heart button
+
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: InkWell(
+                      onTap: () {
+                        toggleWishList();
+                      },
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withAlpha(50),
+                        ),
+                        child: Icon(
+                          Icons.favorite,
+                          size: 20,
+                          color: bookMark ? Colors.red : Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          //* location name
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              top: 10,
-            ),
-            child: Text(
-              location,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+                ],
               ),
             ),
-          ),
 
-          //* icon location and state
-          Padding(
-            padding: const EdgeInsets.only(left: 5, top: 5, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(
-                  Icons.location_on,
-                  size: 20,
-                  color: Colors.green,
+            //* location name
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                top: 10,
+              ),
+              child: Text(
+                location,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 5),
-                Expanded(
-                  child: Text(
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    '$state  , $country',
-                    style: const TextStyle(
-                      fontSize: 14,
+              ),
+            ),
+
+            //* icon location and state
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    size: 20,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
+                      '$state, $country',
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

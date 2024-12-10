@@ -50,11 +50,14 @@ class _IntroductionPageState extends State<IntroductionPage> {
     _actualListLength = list.length;
     _pageController = PageController();
 
-    _pageController.addListener(() {
-      setState(() {
-        currentPage = _pageController.page!.toInt(); //* Update the current page
-      });
-    });
+    _pageController.addListener(
+      () {
+        setState(() {
+          currentPage =
+              _pageController.page!.toInt(); //* Update the current page
+        });
+      },
+    );
 
     _timer = Timer.periodic(
       const Duration(seconds: 4),
@@ -140,7 +143,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
                             width: 0.8,
                           ),
                         ),
-                        color: Colors.white,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
                         spacing: const EdgeInsets.all(8.0),
                         activeColor: Colors.white,
                         size: const Size(8.0, 8.0), // Size of inactive dots

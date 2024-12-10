@@ -8,9 +8,9 @@ class SearchBarContainer extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 120.0;
+  double get maxExtent => 90.0;
   @override
-  double get minExtent => 85.0;
+  double get minExtent => 75.0;
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       false;
@@ -28,7 +28,11 @@ class _SearchBarState extends State<_SearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    Color contextColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Container(
+      //* Dynamically determine the container color based on the theme
+      color: contextColor,
       height: 120,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,10 +45,13 @@ class _SearchBarState extends State<_SearchBar> {
               borderRadius: BorderRadius.circular(12),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: BorderSide(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black),
               borderRadius: BorderRadius.circular(12),
             ),
-            fillColor: Colors.white,
+            fillColor: contextColor,
             labelText: 'Search',
             prefixIcon: Icon(Icons.search),
             suffixIcon: Icon(Icons.tune_outlined),

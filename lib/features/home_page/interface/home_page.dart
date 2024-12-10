@@ -7,12 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/side_drawer.dart';
 
 import '../../../common/utils/google_login_provider.dart';
-import '../../../common/utils/remote_data.dart';
 
 import 'widgets/search_bar_container.dart';
-import 'widgets/community_post_data.dart';
+import 'widgets/card_view_to_details_page.dart';
 import 'widgets/app_bar_Content.dart';
 import 'widgets/text_button_navigation.dart';
+
+enum allButtonText { All, Popular, Recommended, WishListed }
 
 class HomePage extends StatefulWidget {
   final String? userAccessToken;
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   final Map<String, dynamic> data = {};
 
   Map<String, dynamic>? userLoginData;
+  List<String> textButtons = ['All', 'Popular', 'Recommended', 'WishListed'];
 
   //* global scope method or Do part
   @override
@@ -99,10 +101,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     userLoginData = context.watch<GoogleLoginProvider>().userData;
+
     // * functional  scope
     return Scaffold(
       key: _scaffoldKey, //* Assign the key to the ScaffoldS
-      drawer: SideDrawer(userLoginData), // Add the SideDrawer
+      drawer: SideDrawer(userLoginData), //* Add the SideDrawer
 
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -135,25 +138,16 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Row(
                         children: [
-                          TextButtonNavigation(
-                            id: 0,
-                            buttonText: allButtonText.All.name,
-                          ),
-                          const SizedBox(width: 8),
-                          TextButtonNavigation(
-                            id: 1,
-                            buttonText: allButtonText.Popular.name,
-                          ),
-                          const SizedBox(width: 8),
-                          TextButtonNavigation(
-                            id: 2,
-                            buttonText: allButtonText.Recommended.name,
-                          ),
-                          const SizedBox(width: 8),
-                          TextButtonNavigation(
-                            id: 3,
-                            buttonText: allButtonText.WishListed.name,
-                          ),
+                          for (int index = 0;
+                              index < textButtons.length;
+                              index++)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: TextButtonNavigation(
+                                id: index,
+                                buttonText: textButtons[index],
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -194,7 +188,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   }
-
                   return SliverPadding(
                     padding: EdgeInsets.all(16),
                     sliver: SliverGrid(
@@ -202,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                         (BuildContext context, int index) {
                           Map<String, dynamic> singleContributorData =
                               contributionsData[index];
-                          return CommunityPostData(
+                          return CardViewToDetailsPage(
                             singleContributorData,
                             userData,
                           );
@@ -212,6 +205,8 @@ class _HomePageState extends State<HomePage> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
+                        crossAxisSpacing: 6,
+                        mainAxisSpacing: 6,
                         childAspectRatio: 0.85,
                       ),
                     ),

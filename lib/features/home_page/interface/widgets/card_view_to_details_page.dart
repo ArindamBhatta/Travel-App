@@ -6,11 +6,11 @@ import 'package:travel_app/features/home_page/interface/widgets/contributions_ca
 
 import '../../../details_page/details_page.dart';
 
-class CommunityPostData extends StatelessWidget {
+class CardViewToDetailsPage extends StatelessWidget {
   final Map<String, dynamic> allContributorData;
   final Map<String, dynamic> userData;
 
-  CommunityPostData(
+  CardViewToDetailsPage(
     this.allContributorData,
     this.userData,
   );

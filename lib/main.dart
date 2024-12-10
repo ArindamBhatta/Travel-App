@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/card_to_details_page_provider.dart';
 import 'package:travel_app/features/details_page/utils/details_page_provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation.dart';
-import 'package:travel_app/features/home_page/module/data/theme_switching_provider.dart';
+import 'package:travel_app/features/home_page/module/data/theme_provider.dart';
 import 'package:travel_app/features/introduction_page/Interface/introduction_page.dart';
 import 'common/utils/google_login_provider.dart';
 import 'features/home_page/module/data/home_page_provider.dart';
@@ -18,7 +18,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ThemeSwitchingProvider(),
+          create: (context) => ThemeProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => HomePageProvider(),
@@ -58,16 +58,13 @@ class TravelApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Travel App',
-      //* for Dark theme
-      darkTheme: context.read<ThemeSwitchingProvider>().darkMode,
-      //* for Normal theme
-      theme: context.read<ThemeSwitchingProvider>().lightMode,
-
+      themeMode: ThemeMode.system,
+      theme: MyThemes.lightTheme,
+      darkTheme: MyThemes.darkTheme,
       home: Builder(
         builder: (context) {
           String? userAccessToken =
               context.watch<GoogleLoginProvider>().userAccessToken;
-
           return userAccessToken != null
               ? HomePageNavigation(userAccessToken)
               : IntroductionPage();

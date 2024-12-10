@@ -139,13 +139,6 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            backgroundColor: Colors.teal[400],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
           onPressed: signInWithGoogle,
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -154,6 +147,9 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               Image.asset(
                 'assets/images/google_logo.png', // Ensure Google logo image exists in assets
                 height: 34,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black
+                    : null,
               ),
               SizedBox(width: 20),
               Text(

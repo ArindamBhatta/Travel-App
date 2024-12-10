@@ -36,7 +36,7 @@ class AppBarContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: onAvatarTap, // Trigger the callback // Open the drawer
+              onTap: onAvatarTap, //* Trigger the callback // Open the drawer
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
                   '${userInfo?['photoUrl']}',
@@ -54,7 +54,6 @@ class AppBarContent extends StatelessWidget {
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -62,7 +61,6 @@ class AppBarContent extends StatelessWidget {
                   Text(
                     headingText.toString(),
                     style: TextStyle(
-                      color: Colors.grey,
                       fontSize: 14,
                     ),
                   ),
@@ -77,7 +75,6 @@ class AppBarContent extends StatelessWidget {
               onPressed: () => logoutPopup(context),
               child: Icon(
                 Icons.logout_sharp,
-                color: Colors.black,
               ),
             ),
           ],

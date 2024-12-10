@@ -26,9 +26,35 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     );
   }
 
+  //* custom widget
+  Widget buildNavigationItem(
+    IconData icon,
+    int pageIndex,
+    double width,
+    Color color,
+  ) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        showCurrentPage(pageIndex);
+      },
+      icon: Icon(
+        icon,
+        color: (currentPageIndex == pageIndex) ? Colors.blue : color,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    //*functional scope
     double width = MediaQuery.of(context).size.width;
+    double spacing = width * 0.1;
+
+    //* Determine the color based on the current theme
+    Color iconColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
 
     List<Widget> screens = [
       HomePage(widget.userAccessToken),
@@ -38,68 +64,48 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.black,
       body: IndexedStack(
         index: currentPageIndex,
         children: screens,
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: FloatingActionButton.extended(
           heroTag: 'unique_fab_id_2',
           elevation: 1,
-          backgroundColor: Colors.white70,
           onPressed: null,
           label: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               buildNavigationItem(
                 Icons.home,
                 0,
                 width,
-                Colors.black,
+                iconColor,
               ),
-              SizedBox(width: width * 0.06),
+              SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.add_to_photos_outlined,
                 1,
                 width,
-                Colors.black,
+                iconColor,
               ),
-              SizedBox(width: width * 0.06),
+              SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.notification_add_outlined,
                 2,
                 width,
-                Colors.black,
+                iconColor,
               ),
-              SizedBox(width: width * 0.06),
+              SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.settings_outlined,
                 3,
                 width,
-                Colors.black,
+                iconColor,
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildNavigationItem(
-    IconData icon,
-    int pageIndex,
-    double width,
-    Color color,
-  ) {
-    return TextButton(
-      onPressed: () {
-        showCurrentPage(pageIndex);
-      },
-      child: Icon(
-        icon,
-        color: (currentPageIndex == pageIndex) ? Colors.blue : color,
       ),
     );
   }
