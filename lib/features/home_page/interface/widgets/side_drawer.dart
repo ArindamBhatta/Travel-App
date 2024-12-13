@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/common/utils/theme_provider.dart';
 // import 'package:provider/provider.dart';
 // import 'package:travel_app/features/home_page/module/data/theme_provider.dart';
 
@@ -7,11 +9,12 @@ class SideDrawer extends StatelessWidget {
   final Map<String, dynamic>? userLoginData;
   SideDrawer(this.userLoginData);
 
-  Widget NavigationButton(IconData icon, String buttonName) {
+  Widget NavigationButton(
+      IconData icon, String buttonName, BuildContext context) {
     return ListTile(
       leading: Icon(
         icon,
-        color: Colors.teal[400],
+        color: Theme.of(context).iconTheme.color,
       ),
       title: Text(
         buttonName,
@@ -27,7 +30,7 @@ class SideDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     //* functional scope
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
       shape: Border.symmetric(
         horizontal: BorderSide.none,
       ),
@@ -41,24 +44,34 @@ class SideDrawer extends StatelessWidget {
                 margin: EdgeInsets.all(0),
                 padding: EdgeInsets.all(0),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.black
-                      : Colors.blue,
+                  color: Theme.of(context).drawerTheme.backgroundColor,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(
-                        '${userLoginData?['photoUrl']}',
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: NetworkImage(
+                            '${userLoginData?['photoUrl']}',
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            context.read<ThemeProvider>().toggleTheme();
+                          },
+                          icon: Icon(
+                            Icons.abc,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 10),
                     Text(
                       '${userLoginData?['name']}',
                       style: TextStyle(
-                        color: Colors.white,
                         fontSize: 18,
                       ),
                     ),
@@ -73,7 +86,6 @@ class SideDrawer extends StatelessWidget {
                         overflow: TextOverflow.fade,
                         '${userLoginData?['email']}',
                         style: TextStyle(
-                          color: Colors.white,
                           fontSize: 18,
                         ),
                       ),
@@ -83,9 +95,21 @@ class SideDrawer extends StatelessWidget {
               ),
             ),
           ),
-          NavigationButton(Icons.home, 'Home'),
-          NavigationButton(Icons.settings, 'Settings'),
-          NavigationButton(Icons.logout_outlined, 'logout')
+          NavigationButton(
+            Icons.home,
+            'Home',
+            context,
+          ),
+          NavigationButton(
+            Icons.settings,
+            'Settings',
+            context,
+          ),
+          NavigationButton(
+            Icons.logout_outlined,
+            'logout',
+            context,
+          )
         ],
       ),
     );

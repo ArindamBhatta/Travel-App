@@ -14,6 +14,10 @@ class DetailsPageExtension extends StatefulWidget {
 }
 
 class _DetailsPageExtensionState extends State<DetailsPageExtension> {
+  //*global scope
+  int selectedButtonId = 0;
+  PageController ctrl = PageController();
+
   Future<Map<String, dynamic>?> fetchContributor() async {
     try {
       DocumentReference user = widget.uploadedUser;
@@ -58,8 +62,29 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
     );
   }
 
-  int selectedButtonId = 0;
-  PageController ctrl = PageController();
+  Widget tabBarButton(bool isSelected, String buttonText) {
+    return Container(
+      margin: EdgeInsets.zero,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).brightness == Brightness.light
+            ? (isSelected ? Colors.teal[500] : Colors.white)
+            : (isSelected ? Colors.teal[500] : Colors.grey.shade900),
+      ),
+      child: Center(
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14.0,
+            color: (Theme.of(context).brightness == Brightness.light
+                ? (isSelected ? Colors.white : Colors.black)
+                : (isSelected ? Colors.white : Colors.white)),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +94,6 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
               child: Container(
-            color: Colors.white,
             height: 300,
             child: Center(
               child: CircularProgressIndicator(),
@@ -88,7 +112,6 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
             height: 300,
             padding: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(30),
               ),
@@ -136,15 +159,17 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 DefaultTabController(
                   length: 3,
                   child: Column(
                     children: [
-                      Container(
-                        color: Colors.white,
+                      SizedBox(
+                        height: 36,
                         child: TabBar(
-                          dividerColor: Colors.white,
+                          labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                          dividerColor:
+                              Theme.of(context).scaffoldBackgroundColor,
                           indicator: BoxDecoration(),
                           tabs: [
                             Tab(
@@ -156,29 +181,9 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                                     animation: controller,
                                     builder: (context, _) {
                                       final isSelected = controller.index == 0;
-                                      return Container(
-                                        width: 100,
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: isSelected
-                                              ? Colors.teal[500]
-                                              : Colors.white,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Description',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14.0,
-                                              color: isSelected
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                      return tabBarButton(
+                                        isSelected,
+                                        'Description',
                                       );
                                     },
                                   );
@@ -195,29 +200,9 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                                     animation: controller,
                                     builder: (context, _) {
                                       final isSelected = controller.index == 1;
-                                      return Container(
-                                        width: 100,
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: isSelected
-                                              ? Colors.teal[500]
-                                              : Colors.white,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Details',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14.0,
-                                              color: isSelected
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                      return tabBarButton(
+                                        isSelected,
+                                        'Details',
                                       );
                                     },
                                   );
@@ -233,29 +218,9 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                                     animation: controller,
                                     builder: (context, _) {
                                       final isSelected = controller.index == 2;
-                                      return Container(
-                                        width: 100,
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: isSelected
-                                              ? Colors.teal[500]
-                                              : Colors.white,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Details',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14.0,
-                                              color: isSelected
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                      return tabBarButton(
+                                        isSelected,
+                                        'user info',
                                       );
                                     },
                                   );
@@ -372,34 +337,24 @@ class _DetailsPageExtensionState extends State<DetailsPageExtension> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal[500],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Book Now",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Icon(
-                          Icons.arrow_forward,
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Book Now",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: Colors.white,
-                          size: 20,
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(
+                        Icons.arrow_forward,
+                        size: 20,
+                      )
+                    ],
                   ),
                 ),
               ],

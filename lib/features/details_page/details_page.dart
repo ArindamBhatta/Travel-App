@@ -38,7 +38,6 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -128,7 +127,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     height: 20,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(50),
                       ),
@@ -138,7 +137,10 @@ class _DetailsPageState extends State<DetailsPage> {
               ],
             ),
           ),
-          DetailsPageExtension(widget.uploadedUser, widget.location),
+          DetailsPageExtension(
+            widget.uploadedUser,
+            widget.location,
+          ),
         ],
       ),
     );

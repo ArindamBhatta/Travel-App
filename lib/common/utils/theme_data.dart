@@ -1,45 +1,48 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MyThemes {
+abstract class MyThemes {
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
     colorScheme: ColorScheme.dark(),
     appBarTheme: AppBarTheme(color: Colors.grey.shade900),
 
-    //* card
+    //* card-theme
     cardTheme: CardTheme(
       margin: EdgeInsets.zero,
       elevation: 0,
       color: Colors.black,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero, // Set corners to 0 radius
+        borderRadius: BorderRadius.zero,
       ),
     ),
-    //* text
+
+    //* text-theme
     textTheme: GoogleFonts.poppinsTextTheme().apply(
       bodyColor: Colors.white,
       displayColor: Colors.white,
     ),
-    //* elevation - button
+
+    //* elevation-button
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.grey.shade700,
+        backgroundColor: Colors.teal[700],
         shadowColor: Colors.black,
+        iconColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: EdgeInsets.symmetric(vertical: 12),
       ),
     ),
+
     //* text-button
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: Colors.grey.shade900,
+        textStyle: TextStyle().copyWith(),
       ),
     ),
 
@@ -49,9 +52,15 @@ class MyThemes {
       foregroundColor: Colors.white,
       elevation: sqrt1_2,
     ),
-    //*drawer
+
+    //* drawer
     drawerTheme: DrawerThemeData(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey.shade900,
+    ),
+
+    //* iconTheme
+    iconTheme: IconThemeData(
+      color: Colors.teal[700],
     ),
   );
 
@@ -66,12 +75,13 @@ class MyThemes {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black,
-        backgroundColor: Colors.teal[400],
+        backgroundColor: Colors.teal[500],
         shadowColor: Colors.grey,
+        iconColor: Colors.white,
+        textStyle: TextStyle(color: Colors.white),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: EdgeInsets.symmetric(vertical: 12),
       ),
     ),
     //
@@ -98,12 +108,10 @@ class MyThemes {
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: Colors.black, // Text color
-        backgroundColor: Colors.white, // Transparent for minimal look
-        textStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        // textStyle: TextStyle(),
+        textStyle: TextStyle().copyWith(),
       ),
     ),
     //* floating action button
@@ -113,17 +121,11 @@ class MyThemes {
     ),
 
     drawerTheme: DrawerThemeData(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.white,
+    ),
+
+    iconTheme: IconThemeData(
+      color: Colors.teal[400],
     ),
   );
-}
-
-class ThemeProvider extends ChangeNotifier {
-  //* global scope property
-  ThemeData? themeMode;
-
-  //*method
-  void toggleTheme() {
-    notifyListeners();
-  }
 }

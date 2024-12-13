@@ -29,7 +29,6 @@ class SpecificationList extends StatelessWidget {
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

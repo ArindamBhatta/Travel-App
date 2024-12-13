@@ -143,9 +143,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                             width: 0.8,
                           ),
                         ),
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
+                        color: Colors.white,
                         spacing: const EdgeInsets.all(8.0),
                         activeColor: Colors.white,
                         size: const Size(8.0, 8.0), // Size of inactive dots

@@ -40,7 +40,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
       },
       icon: Icon(
         icon,
-        color: (currentPageIndex == pageIndex) ? Colors.blue : color,
+        color: (currentPageIndex == pageIndex) ? Colors.teal : color,
       ),
     );
   }
@@ -52,7 +52,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     double spacing = width * 0.1;
 
     //* Determine the color based on the current theme
-    Color iconColor = Theme.of(context).brightness == Brightness.dark
+    Color color = Theme.of(context).brightness == Brightness.dark
         ? Colors.white
         : Colors.black;
 
@@ -80,28 +80,28 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
                 Icons.home,
                 0,
                 width,
-                iconColor,
+                color,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.add_to_photos_outlined,
                 1,
                 width,
-                iconColor,
+                color,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.notification_add_outlined,
                 2,
                 width,
-                iconColor,
+                color,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.settings_outlined,
                 3,
                 width,
-                iconColor,
+                color,
               ),
             ],
           ),

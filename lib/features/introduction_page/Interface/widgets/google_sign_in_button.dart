@@ -147,9 +147,6 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               Image.asset(
                 'assets/images/google_logo.png', // Ensure Google logo image exists in assets
                 height: 34,
-                color: Theme.of(context).brightness == Brightness.light
-                    ? Colors.black
-                    : null,
               ),
               SizedBox(width: 20),
               Text(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
-import '../../../../common/utils/remote_data.dart';
 
 class TextButtonNavigation extends StatelessWidget {
   //* global scope property
@@ -25,7 +24,6 @@ class TextButtonNavigation extends StatelessWidget {
     }
 
     //* give us the enum value by using index value index is passing from parent class enum.values[0] == 'All'
-    final selectedFilter = allButtonText.values[id];
 
     return TextButton(
       style: ButtonStyle(
@@ -55,7 +53,6 @@ class TextButtonNavigation extends StatelessWidget {
       ),
       onPressed: () {
         context.read<HomePageProvider>().toggleTextVisibility(id);
-        context.read<HomePageProvider>().updateFilter(selectedFilter);
       },
       child: Text(
         buttonText,

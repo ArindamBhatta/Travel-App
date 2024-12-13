@@ -54,7 +54,6 @@ void logoutPopup(BuildContext context) {
           Text(
             'Are you sure you want to logout?',
             style: TextStyle(
-              color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -69,9 +68,6 @@ void logoutPopup(BuildContext context) {
                   padding: EdgeInsets.symmetric(
                     horizontal: 36,
                     vertical: 2,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
                   ),
                 ),
                 onPressed: () {
@@ -89,13 +85,9 @@ void logoutPopup(BuildContext context) {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal[500],
                   padding: EdgeInsets.symmetric(
                     horizontal: 36,
                     vertical: 2,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
                   ),
                 ),
                 onPressed: () {
