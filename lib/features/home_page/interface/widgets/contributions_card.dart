@@ -99,42 +99,42 @@ class ContributionsCard extends StatelessWidget {
             ),
 
             //* location name
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-                top: 10,
-              ),
-              child: Text(
-                location,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-
-            //* icon location and state
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    size: 20,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      softWrap: false,
-                      overflow: TextOverflow.fade,
-                      '$state, $country',
-                      style: const TextStyle(
-                        fontSize: 14,
+            SizedBox(
+              height: 70,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
+                          '$location',
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                          ),
+                          Expanded(
+                            child: Text(
+                              softWrap: false,
+                              overflow: TextOverflow.fade,
+                              '$state, $country',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

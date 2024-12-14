@@ -10,8 +10,8 @@ class HomePageNavigation extends StatefulWidget {
 }
 
 class _HomePageNavigationState extends State<HomePageNavigation> {
-  int currentPageIndex = 0; //* index Stack needs this current page
-  List<int> loadingPages = [0]; //* push the content on tap a navigation.
+  int currentPageIndex = 0;
+  List<int> loadingPages = [0];
 
   //* when user press the icon.
   void showCurrentPage(int onTapPageIndex) {
@@ -31,7 +31,6 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     IconData icon,
     int pageIndex,
     double width,
-    Color color,
   ) {
     return IconButton(
       padding: EdgeInsets.zero,
@@ -40,7 +39,6 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
       },
       icon: Icon(
         icon,
-        color: (currentPageIndex == pageIndex) ? Colors.teal : color,
       ),
     );
   }
@@ -50,11 +48,6 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
     //*functional scope
     double width = MediaQuery.of(context).size.width;
     double spacing = width * 0.1;
-
-    //* Determine the color based on the current theme
-    Color color = Theme.of(context).brightness == Brightness.dark
-        ? Colors.white
-        : Colors.black;
 
     List<Widget> screens = [
       HomePage(widget.userAccessToken),
@@ -80,28 +73,24 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
                 Icons.home,
                 0,
                 width,
-                color,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.add_to_photos_outlined,
                 1,
                 width,
-                color,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.notification_add_outlined,
                 2,
                 width,
-                color,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
                 Icons.settings_outlined,
                 3,
                 width,
-                color,
               ),
             ],
           ),

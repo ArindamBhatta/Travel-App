@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/common/utils/theme/colors.dart';
 
 import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
 
@@ -36,7 +37,7 @@ class AppBarContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: onAvatarTap, //* Trigger the callback // Open the drawer
+              onTap: onAvatarTap,
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
                   '${userInfo?['photoUrl']}',
@@ -46,22 +47,22 @@ class AppBarContent extends StatelessWidget {
             const SizedBox(width: 20),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${userInfo?['name']}',
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: Text(
+                      headingText.toString(),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                color: AppColors.baseColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                   ),
-                  Text(
-                    headingText.toString(),
-                    style: TextStyle(
-                      fontSize: 14,
+                  SizedBox(height: 4),
+                  Center(
+                    child: Text(
+                      'Your Dream Destinations',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],

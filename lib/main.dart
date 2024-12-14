@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/common/utils/card_to_details_page_provider.dart';
 import 'package:travel_app/common/utils/theme/themes.dart';
-import 'package:travel_app/common/utils/theme_provider.dart';
 import 'package:travel_app/features/details_page/utils/details_page_provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation.dart';
 import 'package:travel_app/features/introduction_page/Interface/introduction_page.dart';
@@ -18,16 +16,10 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (context) => HomePageProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => DetailsPageProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CardToDetailsPageProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => GoogleLoginProvider(),
@@ -39,11 +31,11 @@ Future<void> main() async {
 }
 
 class TravelApp extends StatelessWidget {
-  //* global scope property, has part
+  //* global scope property, method
 
   @override
   Widget build(BuildContext context) {
-    //* function scope
+    //* functional scope
     context.read<GoogleLoginProvider>().getUserAccessToken();
 
     return MaterialApp(

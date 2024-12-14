@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:travel_app/common/utils/theme_provider.dart';
-// import 'package:provider/provider.dart';
-// import 'package:travel_app/features/home_page/module/data/theme_provider.dart';
 
 class SideDrawer extends StatelessWidget {
   //*global scope
@@ -14,13 +10,9 @@ class SideDrawer extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: Theme.of(context).iconTheme.color,
       ),
       title: Text(
         buttonName,
-        style: TextStyle(
-          color: Colors.teal[400],
-        ),
       ),
       onTap: () {},
     );
@@ -58,22 +50,11 @@ class SideDrawer extends StatelessWidget {
                             '${userLoginData?['photoUrl']}',
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            context.read<ThemeProvider>().toggleTheme();
-                          },
-                          icon: Icon(
-                            Icons.abc,
-                          ),
-                        ),
                       ],
                     ),
                     SizedBox(height: 10),
                     Text(
                       '${userLoginData?['name']}',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -85,9 +66,6 @@ class SideDrawer extends StatelessWidget {
                         softWrap: false,
                         overflow: TextOverflow.fade,
                         '${userLoginData?['email']}',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
                       ),
                     )
                   ],

@@ -10,7 +10,7 @@ import '../../../common/utils/google_login_provider.dart';
 
 import 'widgets/search_bar_container.dart';
 import 'widgets/card_view_to_details_page.dart';
-import 'widgets/app_bar_Content.dart';
+import 'widgets/app_bar_content.dart';
 import 'widgets/text_button_navigation.dart';
 
 enum allButtonText { All, Popular, Recommended, WishListed }
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                 collapseMode: CollapseMode.pin,
                 background: AppBarContent(
                   userInfo: userLoginData,
-                  headingText: 'Welcome to Travel App',
+                  headingText: 'Wanderly',
                   onAvatarTap: () => _scaffoldKey.currentState!
                       .openDrawer(), // Open the drawer
                 ),

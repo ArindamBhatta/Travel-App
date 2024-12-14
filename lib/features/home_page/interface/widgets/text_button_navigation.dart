@@ -23,29 +23,15 @@ class TextButtonNavigation extends StatelessWidget {
       buttonTextIsSelected = true;
     }
 
-    //* give us the enum value by using index value index is passing from parent class enum.values[0] == 'All'
-
     return TextButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(Theme.of(context).brightness ==
-                Brightness.light
-            ? (buttonTextIsSelected ? Colors.teal[500] : Colors.white)
-            : (buttonTextIsSelected ? Colors.teal[100] : Colors.grey.shade800)),
-
-        ///
-        padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 2,
-          ),
+        backgroundColor: WidgetStateProperty.all(
+          Theme.of(context).colorScheme.primaryContainer,
         ),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             side: BorderSide(
               width: 0.6,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.grey.shade400
-                  : Colors.grey.shade700,
             ),
             borderRadius: BorderRadius.circular(6),
           ),
@@ -55,13 +41,16 @@ class TextButtonNavigation extends StatelessWidget {
         context.read<HomePageProvider>().toggleTextVisibility(id);
       },
       child: Text(
-        buttonText,
-        style: TextStyle(
-            color: (Theme.of(context).brightness == Brightness.light
-                ? (buttonTextIsSelected ? Colors.white : Colors.black)
-                : (buttonTextIsSelected
-                    ? Colors.grey.shade900
-                    : Colors.white))),
+        '$buttonText',
+        style: buttonTextIsSelected
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                )
+            : Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
       ),
     );
   }

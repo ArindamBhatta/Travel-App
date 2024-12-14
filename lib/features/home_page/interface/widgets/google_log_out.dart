@@ -44,7 +44,6 @@ void logoutPopup(BuildContext context) {
                     ),
                     child: Icon(
                       Icons.close,
-                      size: 20,
                     ),
                   ),
                 ),
@@ -53,10 +52,6 @@ void logoutPopup(BuildContext context) {
           ),
           Text(
             'Are you sure you want to logout?',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
           ),
           SizedBox(height: 24),
           Row(
@@ -64,7 +59,6 @@ void logoutPopup(BuildContext context) {
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
                   padding: EdgeInsets.symmetric(
                     horizontal: 36,
                     vertical: 2,
@@ -77,10 +71,6 @@ void logoutPopup(BuildContext context) {
                 },
                 child: const Text(
                   'logout',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
               ),
               ElevatedButton(
@@ -95,10 +85,7 @@ void logoutPopup(BuildContext context) {
                 },
                 child: const Text(
                   'cancel',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(),
                 ),
               ),
             ],
