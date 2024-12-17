@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
 
 class SideDrawer extends StatelessWidget {
   //*global scope
@@ -6,15 +7,24 @@ class SideDrawer extends StatelessWidget {
   SideDrawer(this.userLoginData);
 
   Widget NavigationButton(
-      IconData icon, String buttonName, BuildContext context) {
+    IconData buttonIcon,
+    String buttonName,
+    Function buttonPress,
+  ) {
     return ListTile(
       leading: Icon(
-        icon,
+        buttonIcon,
       ),
-      title: Text(
-        buttonName,
+      title: Row(
+        children: [
+          Text(
+            buttonName,
+          ),
+        ],
       ),
-      onTap: () {},
+      onTap: () {
+        buttonPress();
+      },
     );
   }
 
@@ -76,17 +86,17 @@ class SideDrawer extends StatelessWidget {
           NavigationButton(
             Icons.home,
             'Home',
-            context,
+            () {},
           ),
           NavigationButton(
             Icons.settings,
             'Settings',
-            context,
+            () {},
           ),
           NavigationButton(
             Icons.logout_outlined,
             'logout',
-            context,
+            logoutPopup,
           )
         ],
       ),

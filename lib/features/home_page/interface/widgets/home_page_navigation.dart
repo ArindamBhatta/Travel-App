@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
+import 'package:travel_app/features/all_contributor_page/all_contribution_page.dart';
+import 'package:travel_app/features/trip_booking_page/book_trip_page.dart';
 import '../../../user_contribution_page/contribution_page.dart';
 
 class HomePageNavigation extends StatefulWidget {
@@ -10,35 +12,52 @@ class HomePageNavigation extends StatefulWidget {
 }
 
 class _HomePageNavigationState extends State<HomePageNavigation> {
-  int currentPageIndex = 0;
-  List<int> loadingPages = [0];
+  //* global scope - property
+  static int currentPageIndex = 0;
+  static List<int> loadingPages = [0];
+
+  //* all icon in default state
+  final List<IconData> defaultIcons = [
+    Icons.home_outlined,
+    Icons.add_to_photos_outlined,
+    Icons.person_2_sharp,
+    Icons.add_location_alt_outlined,
+  ];
+  //* all icon in active state
+  final List<IconData> activeIcons = [
+    Icons.home,
+    Icons.add_to_photos,
+    Icons.person_2,
+    Icons.add_location_alt,
+  ];
 
   //* when user press the icon.
-  void showCurrentPage(int onTapPageIndex) {
-    // *if this condition is false
-    if (!loadingPages.contains(onTapPageIndex)) {
-      loadingPages.add(onTapPageIndex);
+  void showCurrentPage(int currentIndex) {
+    if (!loadingPages.contains(currentIndex)) {
+      loadingPages.add(currentIndex);
     }
     setState(
       () {
-        currentPageIndex = onTapPageIndex;
+        currentPageIndex = currentIndex;
       },
     );
   }
 
-  //* custom widget
+  //* custom widget pass the value showCurrentPage
   Widget buildNavigationItem(
-    IconData icon,
-    int pageIndex,
+    int currentIndex,
     double width,
   ) {
     return IconButton(
       padding: EdgeInsets.zero,
       onPressed: () {
-        showCurrentPage(pageIndex);
+        showCurrentPage(currentIndex);
       },
       icon: Icon(
-        icon,
+        currentPageIndex == currentIndex
+            ? activeIcons[currentIndex]
+            : defaultIcons[currentIndex],
+        color: currentPageIndex == currentIndex ? Colors.teal : null,
       ),
     );
   }
@@ -51,9 +70,9 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
 
     List<Widget> screens = [
       HomePage(widget.userAccessToken),
-      loadingPages.contains(1) ? UserContributionPage() : Container(),
-      loadingPages.contains(2) ? Container() : Container(),
-      loadingPages.contains(3) ? Container() : Container(),
+      loadingPages.contains(1) ? NotificationPage() : Container(),
+      loadingPages.contains(2) ? UserContributionPage() : Container(),
+      loadingPages.contains(3) ? BookTripPage() : Container(),
     ];
 
     return Scaffold(
@@ -70,25 +89,21 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
           label: Row(
             children: [
               buildNavigationItem(
-                Icons.home,
                 0,
                 width,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
-                Icons.add_to_photos_outlined,
                 1,
                 width,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
-                Icons.notification_add_outlined,
                 2,
                 width,
               ),
               SizedBox(width: spacing),
               buildNavigationItem(
-                Icons.settings_outlined,
                 3,
                 width,
               ),

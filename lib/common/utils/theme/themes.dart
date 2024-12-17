@@ -1,13 +1,12 @@
 import 'package:google_fonts/google_fonts.dart';
-
-import 'colors.dart';
 import 'package:flutter/material.dart';
+import 'colors.dart';
 
 abstract final class AppTheme {
   static const InputDecorationTheme _inputDecorationTheme =
       InputDecorationTheme(
     hintStyle: TextStyle(
-      color: AppColors.textColorLightMode,
+      color: AppColors.dangerButton,
       fontSize: 18.0,
       fontWeight: FontWeight.w400,
     ),
@@ -15,15 +14,36 @@ abstract final class AppTheme {
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
+    //* default text
+    inputDecorationTheme: _inputDecorationTheme,
+    //! defined color as per Material 3 concept in abstract class
     colorScheme: AppColors.lightColorScheme,
-    textTheme: GoogleFonts.poppinsTextTheme(),
-    inputDecorationTheme: _inputDecorationTheme,
-  );
-
-  static ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: AppColors.darkColorScheme,
-    textTheme: GoogleFonts.poppinsTextTheme(),
-    inputDecorationTheme: _inputDecorationTheme,
+    textTheme: GoogleFonts.poppinsTextTheme().apply(
+      bodyColor: Colors.black,
+      displayColor: Colors.black,
+    ),
+//* Elevated button
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.teal[500],
+        shadowColor: Colors.grey,
+        iconColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    ),
+    //* floating action button
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.grey, // Icon/Text color
+    ),
+    iconTheme: IconThemeData(
+      color: Colors.teal[400],
+    ),
+    dialogTheme: DialogTheme(
+      iconColor: Colors.red,
+    ),
   );
 }

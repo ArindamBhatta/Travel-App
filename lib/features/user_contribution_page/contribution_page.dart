@@ -157,63 +157,64 @@ class _UserContributionPageState extends State<UserContributionPage> {
   Widget build(BuildContext context) {
     userUid = context.watch<GoogleLoginProvider>().userAccessToken;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('users/$userUid/contributions')
-                    .snapshots(), //* Stream wants the documents. meaning Map<String, dynamic> value not the path.
-                builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'unable to fetch data right now, try again later .',
-                      ),
-                    );
-                  } else if (snapshot.hasData) {
-                    final List<QueryDocumentSnapshot> allPostReference =
-                        snapshot.data!.docs;
+      appBar: AppBar(
+        title: Center(child: Text('My Contribution')),
+      ),
+      body: Column(
+        children: [
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users/$userUid/contributions')
+                  .snapshots(), //* Stream wants the documents. meaning Map<String, dynamic> value not the path.
+              builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'unable to fetch data right now, try again later .',
+                    ),
+                  );
+                } else if (snapshot.hasData) {
+                  final List<QueryDocumentSnapshot> allPostReference =
+                      snapshot.data!.docs;
 
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: allPostReference.length,
-                        itemBuilder: (context, index) {
-                          // QueryDocumentSnapshot qds = allPostReference[index];
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: allPostReference.length,
+                      itemBuilder: (context, index) {
+                        // QueryDocumentSnapshot qds = allPostReference[index];
 
-                          final individualPostReference =
-                              allPostReference[index].data();
-                          if (individualPostReference != null) {
-                            Map<String, dynamic> jsonData =
-                                individualPostReference as Map<String, dynamic>;
-                            final reference = jsonData['myContribution'];
-                            DocumentReference path =
-                                reference as DocumentReference;
+                        final individualPostReference =
+                            allPostReference[index].data();
+                        if (individualPostReference != null) {
+                          Map<String, dynamic> jsonData =
+                              individualPostReference as Map<String, dynamic>;
+                          final reference = jsonData['myContribution'];
+                          DocumentReference path =
+                              reference as DocumentReference;
 
-                            return SpecificUserReadContribution(
-                              userSpecificPost: path,
-                            );
-                          }
-                          return null;
-                        },
-                      ),
-                    );
-                  } else if (snapshot.data!.docs.isEmpty) {
-                    return Center(
-                      child: Text('No user  upload their views'),
-                    );
-                  } else {
-                    return Center(
-                      child: Text("something Happen"),
-                    );
-                  }
-                }),
-          ],
-        ),
+                          return SpecificUserReadContribution(
+                            userSpecificPost: path,
+                          );
+                        }
+                        return null;
+                      },
+                    ),
+                  );
+                } else if (snapshot.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text('No user  upload their views'),
+                  );
+                } else {
+                  return Center(
+                    child: Text("something Happen"),
+                  );
+                }
+              }),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[800],

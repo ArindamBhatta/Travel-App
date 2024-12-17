@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../common/utils/google_login_provider.dart';
 import '../../../introduction_page/Interface/introduction_page.dart';
 
-Future<void> googleLogout(BuildContext context) async {
+void googleLogout(BuildContext context) async {
   try {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
@@ -25,73 +25,52 @@ void logoutPopup(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Are you sure you want to logout?',
+            ),
+            SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(
-                  onTap: () => Navigator.of(context).pop,
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black.withAlpha(50),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 36,
                     ),
-                    child: Icon(
-                      Icons.close,
+                    backgroundColor: Theme.of(context).dialogTheme.iconColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    googleLogout(context);
+                    context.read<GoogleLoginProvider>().removeUserAccessToken();
+                  },
+                  child: const Text(
+                    'logout',
+                  ),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 36,
                     ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'cancel',
                   ),
                 ),
               ],
             ),
-          ),
-          Text(
-            'Are you sure you want to logout?',
-          ),
-          SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 36,
-                    vertical: 2,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  googleLogout(context);
-                  context.read<GoogleLoginProvider>().removeUserAccessToken();
-                },
-                child: const Text(
-                  'logout',
-                ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 36,
-                    vertical: 2,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'cancel',
-                  style: TextStyle(),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 24),
-        ],
+          ],
+        ),
       );
     },
   );

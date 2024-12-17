@@ -7,43 +7,23 @@ abstract final class AppColors {
   static const Color? textColorDarkMood = Colors.white;
   static const Color dangerButton = Colors.red;
 
-  static final lightColorScheme = ColorScheme.fromSeed(
-    seedColor: Colors.teal,
+  static final ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    surface: Colors.teal[10],
-    onPrimary: Colors.teal[400],
-    primary: Colors.red[400],
+    primary: Colors.teal, //* Main brand color
+    onPrimary: Colors.white, //* Text/icon color on primary
+    primaryContainer: Colors.teal[400], //* Subdued teal for containers
+    onPrimaryContainer: Colors.red, //* Text color on primary container
+
+    secondary: Colors.orangeAccent, //* Accent color for interactive elements
+    onSecondary: Colors.white, //* Text/icon color on secondary
+    secondaryContainer:
+        Colors.orange.shade100, //* Subdued orange for containers
+    onSecondaryContainer: Colors.orange.shade900, //* App background
+
+    surface: Colors.white, //* Cards, sheets, etc.
+    onSurface: Colors.teal, //* Text/icons on surface
+
+    error: Colors.redAccent, //* Error color
+    onError: Colors.white, //* Text/icons on error color
   );
-
-  static final darkColorScheme = ColorScheme.fromSeed(
-    seedColor: Colors.teal,
-    brightness: Brightness.dark,
-    primary: Colors.white,
-  );
-
-  // static final lightColorScheme = ColorScheme(
-  //   brightness: Brightness.light,
-  //   primary: Colors.black,
-  //   onPrimary: Colors.white,
-  //   secondary: Colors.white10,
-  //   onSecondary: Colors.white24,
-  //   primaryContainer: baseColor,
-  //   surface: Colors.white,
-  //   error: Colors.red,
-  //   onError: Colors.white,
-  //   onSurface: Colors.white,
-  // );
-
-  // static const darkColorScheme = ColorScheme(
-  //   brightness: Brightness.dark,
-  //   primary: Colors.black,
-  //   primaryContainer: baseColor,
-  //   onPrimary: baseColor,
-  //   secondary: Colors.white,
-  //   onSecondary: Colors.white,
-  //   surface: Colors.white,
-  //   onSurface: Colors.white,
-  //   error: Colors.black,
-  //   onError: AppColors.dangerButton,
-  // );
 }

@@ -73,9 +73,9 @@ class AppBarContent extends StatelessWidget {
                 alignment: Alignment.topRight,
                 padding: EdgeInsets.all(0),
               ),
-              onPressed: () => logoutPopup(context),
+              onPressed: () {},
               child: Icon(
-                Icons.logout_sharp,
+                Icons.notifications_none_sharp,
               ),
             ),
           ],

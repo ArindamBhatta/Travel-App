@@ -1,17 +1,11 @@
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/side_drawer.dart';
-
 import '../../../common/utils/google_login_provider.dart';
-
-import 'widgets/search_bar_container.dart';
-import 'widgets/card_view_to_details_page.dart';
-import 'widgets/app_bar_content.dart';
-import 'widgets/text_button_navigation.dart';
+import 'widgets/home_page_body.dart';
 
 enum allButtonText { All, Popular, Recommended, WishListed }
 
@@ -24,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //* global scope property, has part
+  //* global scope property
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final StreamController<Map<String, dynamic>> streamController =
@@ -35,11 +29,12 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? userLoginData;
   List<String> textButtons = ['All', 'Popular', 'Recommended', 'WishListed'];
 
-  //* global scope method or Do part
+  //* method
   @override
   void initState() {
     super.initState();
     initStream(widget.userAccessToken);
+
     silentLoginWithAccessToken();
   }
 
@@ -70,6 +65,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  //* combine two streaming Data
   void initStream(userUid) {
     FirebaseFirestore.instance
         .collection('/destinations/contributor/data')
@@ -83,6 +79,7 @@ class _HomePageState extends State<HomePage> {
         data['contributions'] = contributions;
       },
     );
+
     FirebaseFirestore.instance
         .collection('users')
         .doc(userUid)
@@ -104,123 +101,16 @@ class _HomePageState extends State<HomePage> {
 
     // * functional  scope
     return Scaffold(
-      key: _scaffoldKey, //* Assign the key to the ScaffoldS
+      key: _scaffoldKey, //* Scaffold key
       drawer: SideDrawer(userLoginData), //* Add the SideDrawer
+      resizeToAvoidBottomInset: false, //* fixed bottom sheet
 
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              expandedHeight: 75.0,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: AppBarContent(
-                  userInfo: userLoginData,
-                  headingText: 'Wanderly',
-                  onAvatarTap: () => _scaffoldKey.currentState!
-                      .openDrawer(), // Open the drawer
-                ),
-              ),
-            ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: SearchBarContainer(),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Row(
-                        children: [
-                          for (int index = 0;
-                              index < textButtons.length;
-                              index++)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: TextButtonNavigation(
-                                id: index,
-                                buttonText: textButtons[index],
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-            StreamBuilder<Map<String, dynamic>>(
-              stream: streamController.stream,
-              builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text(
-                        'unable to fetch data right now, try again later .',
-                      ),
-                    ),
-                  );
-                } else if (snapshot.hasData) {
-                  final Map<String, dynamic> comboData = snapshot.data!;
-                  List<Map<String, dynamic>> contributionsData =
-                      comboData['contributions'];
-                  Map<String, dynamic> userData = comboData['user'];
-
-                  if (contributionsData.length == 0) {
-                    return SliverToBoxAdapter(
-                      child: Center(
-                        child: Text(
-                          'No User Post yet.',
-                        ),
-                      ),
-                    );
-                  }
-                  return SliverPadding(
-                    padding: EdgeInsets.all(16),
-                    sliver: SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          Map<String, dynamic> singleContributorData =
-                              contributionsData[index];
-                          return CardViewToDetailsPage(
-                            singleContributorData,
-                            userData,
-                          );
-                        },
-                        childCount: contributionsData.length,
-                      ),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 6,
-                        mainAxisSpacing: 6,
-                        childAspectRatio: 0.85,
-                      ),
-                    ),
-                  );
-                } else {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text('Something happen'),
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
+        child: HomePageBody(
+          userLoginData: userLoginData,
+          scaffoldKey: _scaffoldKey,
+          textButtons: textButtons,
+          streamController: streamController,
         ),
       ),
     );
