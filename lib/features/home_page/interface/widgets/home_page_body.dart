@@ -27,13 +27,13 @@ class HomePageBody extends StatelessWidget {
           automaticallyImplyLeading: false,
           elevation: 0,
           expandedHeight: 75.0,
+          //* giving the flexible space title and background is their
           flexibleSpace: FlexibleSpaceBar(
-            collapseMode: CollapseMode.pin,
             background: HomePageAppBar(
               userInfo: userLoginData,
               headingText: 'Wanderly',
               onAvatarTap: () =>
-                  _scaffoldKey.currentState!.openDrawer(), // Open the drawer
+                  _scaffoldKey.currentState!.openDrawer(), //* Open the drawer
             ),
           ),
         ),
