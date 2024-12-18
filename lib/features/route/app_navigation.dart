@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
-import 'package:travel_app/features/all_contributor_page/all_contribution_page.dart';
+import 'package:travel_app/features/all_contributor_page/community_post_page.dart';
 import 'package:travel_app/features/trip_booking_page/book_trip_page.dart';
-import '../../../user_contribution_page/contribution_page.dart';
+import 'package:travel_app/features/user_contribution_page/contribution_page.dart';
 
-class HomePageNavigation extends StatefulWidget {
+class AppNavigation extends StatefulWidget {
   final String? userAccessToken;
-  HomePageNavigation(this.userAccessToken);
+  AppNavigation(this.userAccessToken);
   @override
-  State<HomePageNavigation> createState() => _HomePageNavigationState();
+  State<AppNavigation> createState() => _AppNavigationState();
 }
 
-class _HomePageNavigationState extends State<HomePageNavigation> {
+class _AppNavigationState extends State<AppNavigation> {
   //* global scope - property
   static int currentPageIndex = 0;
   static List<int> loadingPages = [0];
@@ -46,7 +46,7 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
   //* custom widget pass the value showCurrentPage
   Widget buildNavigationItem(
     int currentIndex,
-    double width,
+    //double width,
   ) {
     return IconButton(
       padding: EdgeInsets.zero,
@@ -65,12 +65,12 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
   @override
   Widget build(BuildContext context) {
     //*functional scope
-    double width = MediaQuery.of(context).size.width;
-    double spacing = width * 0.1;
 
     List<Widget> screens = [
       HomePage(widget.userAccessToken),
-      loadingPages.contains(1) ? NotificationPage() : Container(),
+      loadingPages.contains(1)
+          ? CommunityPostPage(widget.userAccessToken)
+          : Container(),
       loadingPages.contains(2) ? UserContributionPage() : Container(),
       loadingPages.contains(3) ? BookTripPage() : Container(),
     ];
@@ -81,31 +81,28 @@ class _HomePageNavigationState extends State<HomePageNavigation> {
         children: screens,
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: FloatingActionButton.extended(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 4,
+        ),
+        child: FloatingActionButton(
           heroTag: 'unique_fab_id_2',
-          elevation: 1,
+          elevation: 1.5,
           onPressed: null,
-          label: Row(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildNavigationItem(
                 0,
-                width,
               ),
-              SizedBox(width: spacing),
               buildNavigationItem(
                 1,
-                width,
               ),
-              SizedBox(width: spacing),
               buildNavigationItem(
                 2,
-                width,
               ),
-              SizedBox(width: spacing),
               buildNavigationItem(
                 3,
-                width,
               ),
             ],
           ),

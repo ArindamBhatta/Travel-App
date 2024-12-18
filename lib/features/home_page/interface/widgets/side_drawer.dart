@@ -86,17 +86,29 @@ class SideDrawer extends StatelessWidget {
           NavigationButton(
             Icons.home,
             'Home',
-            () {},
+            () {
+              Navigator.of(context).pop();
+            },
           ),
           NavigationButton(
             Icons.settings,
             'Settings',
-            () {},
+            () {
+              Navigator.of(context).pop();
+            },
           ),
           NavigationButton(
             Icons.logout_outlined,
             'logout',
-            logoutPopup,
+            () {
+              Navigator.of(context).pop();
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return LogOutDialog();
+                },
+              );
+            },
           )
         ],
       ),

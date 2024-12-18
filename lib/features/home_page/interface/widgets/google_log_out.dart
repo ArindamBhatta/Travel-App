@@ -21,57 +21,59 @@ void googleLogout(BuildContext context) async {
   }
 }
 
-void logoutPopup(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Are you sure you want to logout?',
-            ),
-            SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 36,
-                    ),
-                    backgroundColor: Theme.of(context).dialogTheme.iconColor,
+class LogOutDialog extends StatelessWidget {
+  const LogOutDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Are you sure you want to logout?',
+          ),
+          SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 36,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    googleLogout(context);
-                    context.read<GoogleLoginProvider>().removeUserAccessToken();
-                  },
-                  child: const Text(
-                    'logout',
+                  backgroundColor: Theme.of(context).dialogTheme.iconColor,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  googleLogout(context);
+                  context.read<GoogleLoginProvider>().removeUserAccessToken();
+                },
+                child: const Text(
+                  'logout',
+                ),
+              ),
+              SizedBox(width: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 36,
                   ),
                 ),
-                SizedBox(width: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 36,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'cancel',
-                  ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'cancel',
                 ),
-              ],
-            ),
-          ],
-        ),
-      );
-    },
-  );
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

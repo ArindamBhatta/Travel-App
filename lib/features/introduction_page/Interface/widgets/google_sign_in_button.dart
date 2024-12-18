@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/google_login_provider.dart';
-import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation.dart';
+import 'package:travel_app/features/route/app_navigation.dart';
 
 class GoogleSignInButton extends StatefulWidget {
   const GoogleSignInButton({super.key});
@@ -23,8 +23,9 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -124,7 +125,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePageNavigation(user!.uid)),
+        MaterialPageRoute(builder: (context) => AppNavigation(user!.uid)),
       );
     } catch (error) {
       print('Error during sign-in: $error');

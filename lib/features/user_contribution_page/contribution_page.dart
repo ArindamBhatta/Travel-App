@@ -158,7 +158,11 @@ class _UserContributionPageState extends State<UserContributionPage> {
     userUid = context.watch<GoogleLoginProvider>().userAccessToken;
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('My Contribution')),
+        title: Center(
+          child: Text(
+            'My Contribution',
+          ),
+        ),
       ),
       body: Column(
         children: [

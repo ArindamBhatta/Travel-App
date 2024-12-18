@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'search_bar_container.dart';
 import 'card_view_to_details_page.dart';
-import 'app_bar_content.dart';
+import 'home_page_app_bar.dart';
 import 'text_button_navigation.dart';
 import 'dart:async';
 
@@ -29,7 +29,7 @@ class HomePageBody extends StatelessWidget {
           expandedHeight: 75.0,
           flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.pin,
-            background: AppBarContent(
+            background: HomePageAppBar(
               userInfo: userLoginData,
               headingText: 'Wanderly',
               onAvatarTap: () =>
@@ -37,6 +37,7 @@ class HomePageBody extends StatelessWidget {
             ),
           ),
         ),
+        //* make it's sticky
         SliverPersistentHeader(
           pinned: true,
           delegate: SearchBarContainer(),
@@ -98,11 +99,16 @@ class HomePageBody extends StatelessWidget {
                   ),
                 );
               }
+              //*sliver grid
               return SliverPadding(
                 padding: EdgeInsets.all(16),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                    //* dynamically creating and managing child widgets within a SliverGrid just like SliverGrid.builder .
+                    (
+                      BuildContext context,
+                      int index,
+                    ) {
                       Map<String, dynamic> singleContributorData =
                           contributionsData[index];
                       return CardViewToDetailsPage(
@@ -112,6 +118,7 @@ class HomePageBody extends StatelessWidget {
                     },
                     childCount: contributionsData.length,
                   ),
+                  //* gird view
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 0.85,

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/common/utils/theme/colors.dart';
 
-import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
-
-class AppBarContent extends StatelessWidget {
-  //* has part
+class HomePageAppBar extends StatelessWidget {
   final String? headingText;
   final VoidCallback onAvatarTap;
   final Map<String, dynamic>? userInfo;
 
-  AppBarContent({
+  HomePageAppBar({
     super.key,
     required this.userInfo,
     required this.headingText,
