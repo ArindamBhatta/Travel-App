@@ -15,8 +15,6 @@ class TextButtonNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //* write in function scope so when widget is rerender variable is assign initial  value
-
     return TextButton(
       onPressed: () {
         context.read<HomePageProvider>().toggleTextVisibility(id);

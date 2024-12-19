@@ -2,9 +2,9 @@ import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:travel_app/features/home_page/interface/widgets/contributions_card.dart';
+import 'package:travel_app/features/all_contributor_page/widgets/contributions_card.dart';
 
-import '../../../details_page/details_page.dart';
+import '../../details_page/details_page.dart';
 
 class CardViewToDetailsPage extends StatelessWidget {
   final Map<String, dynamic> allContributorData;

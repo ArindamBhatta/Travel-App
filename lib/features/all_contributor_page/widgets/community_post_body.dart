@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/all_contributor_page/widgets/community_post_app_bar.dart';
-import 'package:travel_app/features/home_page/interface/widgets/card_view_to_details_page.dart';
+import 'package:travel_app/features/all_contributor_page/widgets/card_view_to_details_page.dart';
 
 class CommunityPostBody extends StatelessWidget {
   final StreamController<Map<String, dynamic>> streamController;

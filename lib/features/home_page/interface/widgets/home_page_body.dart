@@ -1,23 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/home_page/interface/widgets/publisher_card.dart';
 import 'search_bar_container.dart';
-import 'card_view_to_details_page.dart';
 import 'home_page_app_bar.dart';
 import 'text_button_navigation.dart';
-import 'dart:async';
 
 class HomePageBody extends StatelessWidget {
-  const HomePageBody({
-    super.key,
-    required this.userLoginData,
-    required GlobalKey<ScaffoldState> scaffoldKey,
-    required this.textButtons,
-    required this.streamController,
-  }) : _scaffoldKey = scaffoldKey;
-
   final Map<String, dynamic>? userLoginData;
   final GlobalKey<ScaffoldState> _scaffoldKey;
   final List<String> textButtons;
-  final StreamController<Map<String, dynamic>> streamController;
+
+  const HomePageBody({
+    super.key,
+    required GlobalKey<ScaffoldState> scaffoldKey,
+    required this.userLoginData,
+    required this.textButtons,
+  }) : _scaffoldKey = scaffoldKey;
+
+  Future<List<Map<String, dynamic>>> publisherData() async {
+    QuerySnapshot<Map<String, dynamic>> jsonQuerySnapshot =
+        await FirebaseFirestore.instance
+            .collection('/destinations/publisher/data')
+            .get();
+
+    List<Map<String, dynamic>> publisherDataList = jsonQuerySnapshot.docs.map(
+      (publisherDoc) {
+        return publisherDoc.data();
+      },
+    ).toList();
+
+    return publisherDataList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,63 +76,36 @@ class HomePageBody extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
             ],
           ),
         ),
-        StreamBuilder<Map<String, dynamic>>(
-          stream: streamController.stream,
-          builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        FutureBuilder<List<Map<String, dynamic>>>(
+          future: publisherData(),
+          builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SliverToBoxAdapter(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
               return SliverToBoxAdapter(
-                child: Center(
-                  child: Text(
-                    'unable to fetch data right now, try again later .',
-                  ),
-                ),
+                child: Text('Some error is happen'),
+              );
+            } else if (snapshot.data!.isEmpty) {
+              return SliverToBoxAdapter(
+                child: Text('something happen'),
               );
             } else if (snapshot.hasData) {
-              final Map<String, dynamic> comboData = snapshot.data!;
-              List<Map<String, dynamic>> contributionsData =
-                  comboData['contributions'];
-              Map<String, dynamic> userData = comboData['user'];
-
-              if (contributionsData.length == 0) {
-                return SliverToBoxAdapter(
-                  child: Center(
-                    child: Text(
-                      'No User Post yet.',
-                    ),
-                  ),
-                );
-              }
-              //*sliver grid
+              List<Map<String, dynamic>> publisherAllData = snapshot.data!;
               return SliverPadding(
                 padding: EdgeInsets.all(16),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
-                    //* dynamically creating and managing child widgets within a SliverGrid just like SliverGrid.builder .
-                    (
-                      BuildContext context,
-                      int index,
-                    ) {
-                      Map<String, dynamic> singleContributorData =
-                          contributionsData[index];
-                      return CardViewToDetailsPage(
-                        singleContributorData,
-                        userData,
-                      );
-                    },
-                    childCount: contributionsData.length,
-                  ),
-                  //* gird view
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      (BuildContext context, int index) {
+                    Map<String, dynamic> singlePublisherData =
+                        publisherAllData[index];
+                    return PublisherCard(singlePublisherData);
+                  }, childCount: publisherAllData.length),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 0.85,
                   ),
@@ -133,7 +119,7 @@ class HomePageBody extends StatelessWidget {
               );
             }
           },
-        ),
+        )
       ],
     );
   }
