@@ -1,36 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/publisher_card.dart';
+import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import 'search_bar_container.dart';
 import 'home_page_app_bar.dart';
 import 'text_button_navigation.dart';
 
 class HomePageBody extends StatelessWidget {
   final Map<String, dynamic>? userLoginData;
-  final GlobalKey<ScaffoldState> _scaffoldKey;
-  final List<String> textButtons;
 
   const HomePageBody({
     super.key,
-    required GlobalKey<ScaffoldState> scaffoldKey,
     required this.userLoginData,
-    required this.textButtons,
-  }) : _scaffoldKey = scaffoldKey;
-
-  Future<List<Map<String, dynamic>>> publisherData() async {
-    QuerySnapshot<Map<String, dynamic>> jsonQuerySnapshot =
-        await FirebaseFirestore.instance
-            .collection('/destinations/publisher/data')
-            .get();
-
-    List<Map<String, dynamic>> publisherDataList = jsonQuerySnapshot.docs.map(
-      (publisherDoc) {
-        return publisherDoc.data();
-      },
-    ).toList();
-
-    return publisherDataList;
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,45 +28,35 @@ class HomePageBody extends StatelessWidget {
               userInfo: userLoginData,
               headingText: 'Wanderly',
               onAvatarTap: () =>
-                  _scaffoldKey.currentState!.openDrawer(), //* Open the drawer
+                  Scaffold.of(context).openDrawer(), //* Open the drawer
             ),
           ),
         ),
-        //* make it's sticky
+        //* make the search bar sticky
         SliverPersistentHeader(
           pinned: true,
           delegate: SearchBarContainer(),
         ),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Row(
-                    children: [
-                      for (int index = 0; index < textButtons.length; index++)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: TextButtonNavigation(
-                            id: index,
-                            buttonText: textButtons[index],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+        //* make the horizontal list sticky
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: HorizontalScrollViewDelegate(),
         ),
+        //*
         FutureBuilder<List<Map<String, dynamic>>>(
-          future: publisherData(),
+          future: context.read<HomePageProvider>().fetchPublisherData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SliverToBoxAdapter(
-                child: CircularProgressIndicator(),
+                child: Container(
+                  height: 500,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
               );
             } else if (snapshot.hasError) {
               return SliverToBoxAdapter(
@@ -95,7 +67,12 @@ class HomePageBody extends StatelessWidget {
                 child: Text('something happen'),
               );
             } else if (snapshot.hasData) {
-              List<Map<String, dynamic>> publisherAllData = snapshot.data!;
+              String continent =
+                  context.watch<HomePageProvider>().currentContinent.name;
+              List<Map<String, dynamic>> publisherAllData = snapshot.data!
+                  .where((item) => item['continent'] == continent)
+                  .toList();
+
               return SliverPadding(
                 padding: EdgeInsets.all(16),
                 sliver: SliverGrid(
@@ -122,5 +99,45 @@ class HomePageBody extends StatelessWidget {
         )
       ],
     );
+  }
+}
+
+class HorizontalScrollViewDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      height: 90,
+      margin: EdgeInsets.zero,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: [
+              for (int index = 0; index < Continent.values.length; index++)
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: TextButtonNavigation(
+                    id: index,
+                    continent: Continent.values[index],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 60.0;
+
+  @override
+  double get minExtent => 60.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

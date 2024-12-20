@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -15,13 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Map<String, dynamic>? userLoginData;
-
-  List<String> textButtons = ['All', 'Popular', 'Recommended', 'WishListed'];
-
-  DocumentReference? publisherDocumentRef;
 
   @override
   void initState() {
@@ -58,16 +51,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     userLoginData = context.watch<GoogleLoginProvider>().userData;
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: SideDrawer(userLoginData),
-      resizeToAvoidBottomInset: false, //* fixed bottom sheet
 
+    return Scaffold(
+      drawer: SideDrawer(userLoginData),
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: HomePageBody(
           userLoginData: userLoginData,
-          scaffoldKey: _scaffoldKey,
-          textButtons: textButtons,
         ),
       ),
     );
