@@ -45,8 +45,9 @@ class TextButtonNavigation extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        context.read<HomePageProvider>().toggleTextVisibility(id);
-        context.read<HomePageProvider>().setCurrentContinent(this.continent);
+        context
+            .read<HomePageProvider>()
+            .setCurrentContinent(this.continent, this.id);
       },
       child: Text(
         '${this.continent.name}',

@@ -34,14 +34,10 @@ class HomePageProvider extends ChangeNotifier {
     return publisherDataList;
   }
 
-  void toggleTextVisibility(int index) {
+  void setCurrentContinent(Continent continent, int index) {
     if (this.textVisibilityIndex != index) {
       this.textVisibilityIndex = index;
     }
-    notifyListeners();
-  }
-
-  void setCurrentContinent(Continent continent) {
     this.currentContinent = continent;
     notifyListeners();
   }

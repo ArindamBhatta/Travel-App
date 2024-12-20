@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SearchBarContainer extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return _SearchBar();
-  }
-
+class StickySearchBar extends SliverPersistentHeaderDelegate {
   @override
   double get maxExtent => 90.0;
   @override
@@ -14,24 +8,13 @@ class SearchBarContainer extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       false;
-}
-
-class _SearchBar extends StatefulWidget {
-  const _SearchBar();
 
   @override
-  State<_SearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<_SearchBar> {
-  bool isExpanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    Color contextColor = Theme.of(context).scaffoldBackgroundColor;
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       margin: EdgeInsets.zero,
-      color: contextColor,
+      color: Colors.white,
       height: 90,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,7 +24,7 @@ class _SearchBarState extends State<_SearchBar> {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            fillColor: contextColor,
+            fillColor: Colors.white,
             labelText: 'Search',
             prefixIcon: Icon(Icons.search),
             suffixIcon: Icon(Icons.tune_outlined),

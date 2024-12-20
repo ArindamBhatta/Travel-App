@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/publisher_card.dart';
+import 'package:travel_app/features/home_page/interface/widgets/sticky_navigation_button.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
-import 'search_bar_container.dart';
+import 'sticky_search_bar.dart';
 import 'home_page_app_bar.dart';
-import 'text_button_navigation.dart';
 
 class HomePageBody extends StatelessWidget {
   final Map<String, dynamic>? userLoginData;
@@ -32,17 +32,14 @@ class HomePageBody extends StatelessWidget {
             ),
           ),
         ),
-        //* make the search bar sticky
         SliverPersistentHeader(
           pinned: true,
-          delegate: SearchBarContainer(),
+          delegate: StickySearchBar(),
         ),
-        //* make the horizontal list sticky
         SliverPersistentHeader(
           pinned: true,
-          delegate: HorizontalScrollViewDelegate(),
+          delegate: StickyNavigationButton(),
         ),
-        //*
         FutureBuilder<List<Map<String, dynamic>>>(
           future: context.read<HomePageProvider>().fetchPublisherData(),
           builder: (context, snapshot) {
@@ -99,45 +96,5 @@ class HomePageBody extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-class HorizontalScrollViewDelegate extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      height: 90,
-      margin: EdgeInsets.zero,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: [
-              for (int index = 0; index < Continent.values.length; index++)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: TextButtonNavigation(
-                    id: index,
-                    continent: Continent.values[index],
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => 60.0;
-
-  @override
-  double get minExtent => 60.0;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }
