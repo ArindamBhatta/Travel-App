@@ -4,7 +4,7 @@ import 'package:travel_app/features/home_page/module/data/home_page_provider.dar
 
 class TextButtonNavigation extends StatelessWidget {
   final int id;
-  final Continent continent;
+  final Button continent;
 
   TextButtonNavigation({
     required this.id,

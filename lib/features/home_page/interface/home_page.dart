@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       drawer: SideDrawer(userLoginData),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: HomePageBody(
+        child: new HomePageBody(
           userLoginData: userLoginData,
         ),
       ),

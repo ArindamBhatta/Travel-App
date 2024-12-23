@@ -27,12 +27,12 @@ class StickyNavigationButton extends SliverPersistentHeaderDelegate {
           padding: const EdgeInsets.only(left: 16.0),
           child: Row(
             children: [
-              for (int index = 0; index < Continent.values.length; index++)
+              for (int index = 0; index < Button.values.length; index++)
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: TextButtonNavigation(
                     id: index,
-                    continent: Continent.values[index],
+                    continent: Button.values[index],
                   ),
                 ),
             ],

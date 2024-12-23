@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 enum Continent {
@@ -15,30 +14,35 @@ enum Continent {
   const Continent(this.name);
 }
 
+enum Tags {
+  Mountain('Mountain'),
+  Hiking('Hiking'),
+  AdventureSports('Adventure sports');
+
+  final String name;
+  const Tags(this.name);
+}
+
+enum Button {
+  All('All'),
+  Popular('Popular'),
+  Recommended('Recommended'),
+  MostReviewed('Most reviewed');
+
+  final String name;
+  const Button(this.name);
+}
+
 class HomePageProvider extends ChangeNotifier {
   //*global scope property
-  int textVisibilityIndex = 0;
-  Continent currentContinent = Continent.asia;
+  int textVisibilityIndex = 1;
+  Button currentButton = Button.Popular;
 
-  Future<List<Map<String, dynamic>>> fetchPublisherData() async {
-    QuerySnapshot<Map<String, dynamic>> jsonQuerySnapshot =
-        await FirebaseFirestore.instance
-            .collection('/destinations/publisher/data')
-            .get();
-
-    List<Map<String, dynamic>> publisherDataList = jsonQuerySnapshot.docs.map(
-      (publisherDoc) {
-        return publisherDoc.data();
-      },
-    ).toList();
-    return publisherDataList;
-  }
-
-  void setCurrentContinent(Continent continent, int index) {
+  void setCurrentContinent(Button continent, int index) {
     if (this.textVisibilityIndex != index) {
       this.textVisibilityIndex = index;
     }
-    this.currentContinent = continent;
+    this.currentButton = continent;
     notifyListeners();
   }
 }

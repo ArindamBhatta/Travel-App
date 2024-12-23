@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/home_page/interface/widgets/filter_data.dart';
 
 class StickySearchBar extends SliverPersistentHeaderDelegate {
   @override
@@ -27,7 +28,17 @@ class StickySearchBar extends SliverPersistentHeaderDelegate {
             fillColor: Colors.white,
             labelText: 'Search',
             prefixIcon: Icon(Icons.search),
-            suffixIcon: Icon(Icons.tune_outlined),
+            suffixIcon: IconButton(
+              icon: Icon(Icons.tune_outlined),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FilterData();
+                  },
+                );
+              },
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
