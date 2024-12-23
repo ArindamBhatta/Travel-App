@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-abstract class Service {
+abstract class HomePageService {
   static Future<List<Map<String, dynamic>>> fetchPublisherData() async {
     QuerySnapshot<Map<String, dynamic>> jsonQuerySnapshot =
         await FirebaseFirestore.instance

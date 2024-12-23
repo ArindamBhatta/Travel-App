@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
+import 'package:travel_app/features/home_page/module/service/home_page_service.dart';
 
 class FilterData extends StatefulWidget {
   FilterData();
@@ -9,97 +10,116 @@ class FilterData extends StatefulWidget {
 }
 
 class _FilterDataState extends State<FilterData> {
-  Continent? selectedContinent = Continent.asia;
-  Tags selectedTags = Tags.Mountain;
+  List<Continent> selectedContinents = [];
+  List<Tags> selectedTags = [];
+
+  Future<List<Map<String, dynamic>>?> getFilterPublisherData() async {
+    //*Step 1: - Fetch all publisher data
+    List<Map<String, dynamic>> allPublisherData =
+        await HomePageService.fetchPublisherData();
+
+    //* Step 2: - Filter based on selected continents
+    List<Map<String, dynamic>> filteredData = allPublisherData.where(
+      (publisherItem) {
+        //* Step 3: - Check if the publisher's continent exists in the selectedContinents list
+        return selectedContinents
+            .any((continent) => publisherItem['continent'] == continent.name);
+      },
+    ).toList();
+    return filteredData;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 200,
+      height: MediaQuery.of(context).size.height * 0.9,
       padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Filter Your Dream Destinations',
+            'Where Do You Want To Go',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 10),
-          Text('Select a Continent'),
+          Text('Select Continents'),
           SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DropdownButton<Continent>(
-                value: selectedContinent,
-                items: Continent.values.map((continent) {
-                  return DropdownMenuItem(
-                    value: continent,
-                    child: Text(continent.name),
-                  );
-                }).toList(),
-                onChanged: (Continent? value) {
-                  if (value == null) return;
-                  setState(
-                    () {
-                      selectedContinent = value;
-                    },
-                  );
+          Wrap(
+            spacing: 8.0,
+            children: Continent.values.map((continent) {
+              return FilterChip(
+                label: Text(continent.name),
+                selected: selectedContinents.contains(continent),
+                onSelected: (isSelected) {
+                  setState(() {
+                    isSelected
+                        ? selectedContinents.add(continent)
+                        : selectedContinents.remove(continent);
+                  });
                 },
-              ),
-              DropdownButton<Tags>(
-                value: selectedTags,
-                items: Tags.values.map((tag) {
-                  return DropdownMenuItem(
-                    value: tag,
-                    child: Text(tag.name),
-                  );
-                }).toList(),
-                onChanged: (Tags? tagsValue) {
-                  if (tagsValue == null) return;
-                  setState(
-                    () {
-                      selectedTags = tagsValue;
-                    },
-                  );
-                },
-              ),
-            ],
+              );
+            }).toList(),
           ),
+          SizedBox(height: 20),
+          Text('Select Tags'),
+          SizedBox(height: 10),
+          Wrap(
+            spacing: 8.0,
+            children: Tags.values.map(
+              (tag) {
+                return FilterChip(
+                  label: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        tagsIcon(tag.name),
+                        size: 18.0,
+                      ),
+                      SizedBox(width: 4.0),
+                      Text(tag.name),
+                    ],
+                  ),
+                  selected: selectedTags.contains(tag),
+                  onSelected: (isSelected) {
+                    setState(
+                      () {
+                        isSelected
+                            ? selectedTags.add(tag)
+                            : selectedTags.remove(tag);
+                      },
+                    );
+                  },
+                );
+              },
+            ).toList(),
+          ),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 36,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 36),
                   backgroundColor: Theme.of(context).dialogTheme.iconColor,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text(
-                  'cancel',
-                ),
+                child: const Text('cancel'),
               ),
               SizedBox(width: 8),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 36,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 36),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  getFilterPublisherData();
                 },
-                child: const Text(
-                  'submit',
-                ),
+                child: const Text('submit'),
               ),
             ],
           ),

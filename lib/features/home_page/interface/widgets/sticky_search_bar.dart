@@ -33,6 +33,8 @@ class StickySearchBar extends SliverPersistentHeaderDelegate {
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
+                  isScrollControlled:
+                      true, //* Important to enable custom height
                   builder: (BuildContext context) {
                     return FilterData();
                   },
