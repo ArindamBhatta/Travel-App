@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/module/model/destination_model.dart';
 import 'package:travel_app/features/home_page/module/repo/home_page_repo.dart';
-import 'package:travel_app/features/home_page/module/service/home_page_service.dart';
 
 enum Continent {
   asia('Asia'),
@@ -82,6 +81,8 @@ class HomePageProvider extends ChangeNotifier {
   int textVisibilityIndex = 0;
   Button currentButton = Button.All;
 
+  List<DestinationModel>? allPublisherData;
+
   //*global scope property for search bar filter [Asia, 'North America'];
   List<String> userSelectedContinents = [];
   List<String> userSelectedTags = [];
@@ -92,6 +93,10 @@ class HomePageProvider extends ChangeNotifier {
     }
     this.currentButton = continent;
     notifyListeners();
+  }
+
+  void fetchAllDestinationData() async {
+    allPublisherData = await HomePageRepo.fetchDestinationData();
   }
 
   Future<List<DestinationModel>?> getFilterPublisherData() async {
@@ -118,15 +123,12 @@ class HomePageProvider extends ChangeNotifier {
           },
         ).toList();
         notifyListeners();
-        print(filteredData);
         return filteredData;
       } else {
-        print(continentBaseFilteredData);
         notifyListeners();
         return continentBaseFilteredData;
       }
     } else {
-      print(allPublisherData);
       notifyListeners();
       return allPublisherData;
     }

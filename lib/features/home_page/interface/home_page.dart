@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/side_drawer.dart';
+import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import '../../../common/utils/google_login_provider.dart';
 import 'widgets/home_page_body.dart';
 
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     silentLoginWithAccessToken();
+    context.read<HomePageProvider>().fetchAllDestinationData();
   }
 
   @override
@@ -51,7 +53,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     userLoginData = context.watch<GoogleLoginProvider>().userData;
-
+    print(
+        '--------- ----------- --------- -------- ------ ${context.read<HomePageProvider>().allPublisherData}');
     return Scaffold(
       drawer: SideDrawer(userLoginData),
       resizeToAvoidBottomInset: false,

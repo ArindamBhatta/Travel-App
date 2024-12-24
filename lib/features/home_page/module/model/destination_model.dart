@@ -38,4 +38,9 @@ class DestinationModel {
     data['tags'] = this.tags;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'DestinationModel(name: ${name ?? 'null'})';
+  }
 }

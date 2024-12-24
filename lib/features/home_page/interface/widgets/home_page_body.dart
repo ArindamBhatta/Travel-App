@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/publisher_card.dart';
 import 'package:travel_app/features/home_page/interface/widgets/sticky_navigation_button.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
+import 'package:travel_app/features/home_page/module/model/destination_model.dart';
 import 'sticky_search_bar.dart';
 import 'home_page_app_bar.dart';
 
@@ -40,7 +41,7 @@ class HomePageBody extends StatelessWidget {
           pinned: true,
           delegate: StickyNavigationButton(),
         ),
-        FutureBuilder<List<Map<String, dynamic>>?>(
+        FutureBuilder<List<DestinationModel>?>(
           future: context.read<HomePageProvider>().getFilterPublisherData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -64,14 +65,14 @@ class HomePageBody extends StatelessWidget {
                 child: Text('something happen'),
               );
             } else if (snapshot.hasData) {
-              List<Map<String, dynamic>> publisherAllData = snapshot.data!;
+              List<DestinationModel>? publisherAllData = snapshot.data!;
 
               return SliverPadding(
                 padding: EdgeInsets.all(16),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                    Map<String, dynamic> singlePublisherData =
+                    DestinationModel singlePublisherData =
                         publisherAllData[index];
                     return PublisherCard(singlePublisherData);
                   }, childCount: publisherAllData.length),
@@ -93,10 +94,4 @@ class HomePageBody extends StatelessWidget {
       ],
     );
   }
-  /* 
-  String continent = context.watch<HomePageProvider>().currentButton.name;
-  publisherAllData
-                  .where((item) => item['continent'] == continent)
-                  .toList();
-   */
 }
