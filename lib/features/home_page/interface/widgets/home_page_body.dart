@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/publisher_card.dart';
 import 'package:travel_app/features/home_page/interface/widgets/sticky_navigation_button.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
-import 'package:travel_app/features/home_page/module/service/home_page_service.dart';
 import 'sticky_search_bar.dart';
 import 'home_page_app_bar.dart';
 
@@ -41,8 +40,8 @@ class HomePageBody extends StatelessWidget {
           pinned: true,
           delegate: StickyNavigationButton(),
         ),
-        FutureBuilder<List<Map<String, dynamic>>>(
-          future: HomePageService.fetchPublisherData(),
+        FutureBuilder<List<Map<String, dynamic>>?>(
+          future: context.read<HomePageProvider>().getFilterPublisherData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SliverToBoxAdapter(
@@ -65,14 +64,7 @@ class HomePageBody extends StatelessWidget {
                 child: Text('something happen'),
               );
             } else if (snapshot.hasData) {
-              String continent =
-                  context.watch<HomePageProvider>().currentButton.name;
-
               List<Map<String, dynamic>> publisherAllData = snapshot.data!;
-              //* if(continent a || continent b) && (tags a || tags b) true then return.
-              publisherAllData
-                  .where((item) => item['continent'] == continent)
-                  .toList();
 
               return SliverPadding(
                 padding: EdgeInsets.all(16),
@@ -101,4 +93,10 @@ class HomePageBody extends StatelessWidget {
       ],
     );
   }
+  /* 
+  String continent = context.watch<HomePageProvider>().currentButton.name;
+  publisherAllData
+                  .where((item) => item['continent'] == continent)
+                  .toList();
+   */
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/home_page/module/model/destination_model.dart';
+import 'package:travel_app/features/home_page/module/repo/home_page_repo.dart';
+import 'package:travel_app/features/home_page/module/service/home_page_service.dart';
 
 enum Continent {
   asia('Asia'),
@@ -75,9 +78,13 @@ enum Button {
 }
 
 class HomePageProvider extends ChangeNotifier {
-  //*global scope property
-  int textVisibilityIndex = 1;
-  Button currentButton = Button.Popular;
+  //*global scope property for [all, popular, recommended]
+  int textVisibilityIndex = 0;
+  Button currentButton = Button.All;
+
+  //*global scope property for search bar filter [Asia, 'North America'];
+  List<String> userSelectedContinents = [];
+  List<String> userSelectedTags = [];
 
   void setCurrentContinent(Button continent, int index) {
     if (this.textVisibilityIndex != index) {
@@ -85,5 +92,43 @@ class HomePageProvider extends ChangeNotifier {
     }
     this.currentButton = continent;
     notifyListeners();
+  }
+
+  Future<List<DestinationModel>?> getFilterPublisherData() async {
+    //*Step 1: - Fetch all publisher data
+    List<DestinationModel>? allPublisherData =
+        await HomePageRepo.fetchDestinationData();
+
+    //* Step 2: - Filter based on selected continents
+    if (userSelectedContinents.length != 0) {
+      List<DestinationModel>? continentBaseFilteredData =
+          allPublisherData?.where((destination) {
+        return userSelectedContinents
+            .any((continent) => //* check with firebase data
+                destination.continent == continent);
+      }).toList();
+
+      //* Step 3: - Filter based on selected tags
+      if (userSelectedTags.length != 0) {
+        List<DestinationModel>? filteredData = continentBaseFilteredData?.where(
+          (destination) {
+            return userSelectedTags.any((tag) =>
+                //* check with firebase tags[element1, element2, element3] contains method
+                destination.tags!.contains(tag));
+          },
+        ).toList();
+        notifyListeners();
+        print(filteredData);
+        return filteredData;
+      } else {
+        print(continentBaseFilteredData);
+        notifyListeners();
+        return continentBaseFilteredData;
+      }
+    } else {
+      print(allPublisherData);
+      notifyListeners();
+      return allPublisherData;
+    }
   }
 }
