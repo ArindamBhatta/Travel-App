@@ -10,8 +10,8 @@ class FilterData extends StatefulWidget {
 }
 
 class _FilterDataState extends State<FilterData> {
-  List<Continent> selectedContinents = [];
-  List<Tags> selectedTags = [];
+  List<String> userSelectedContinents = []; //* [Asia, 'North America'];
+  List<String> userSelectedTags = [];
 
   Future<List<Map<String, dynamic>>?> getFilterPublisherData() async {
     //*Step 1: - Fetch all publisher data
@@ -19,13 +19,22 @@ class _FilterDataState extends State<FilterData> {
         await HomePageService.fetchPublisherData();
 
     //* Step 2: - Filter based on selected continents
-    List<Map<String, dynamic>> filteredData = allPublisherData.where(
-      (publisherItem) {
-        //* Step 3: - Check if the publisher's continent exists in the selectedContinents list
-        return selectedContinents
-            .any((continent) => publisherItem['continent'] == continent.name);
+    List<Map<String, dynamic>> continentBaseFilteredData =
+        allPublisherData.where((destination) {
+      return userSelectedContinents
+          .any((continent) => //* check with firebase data
+              destination['continent'] == continent);
+    }).toList();
+
+    //* Step 3: - Filter based on selected tags
+    List<Map<String, dynamic>> filteredData = continentBaseFilteredData.where(
+      (destination) {
+        return userSelectedTags.any((tag) =>
+            //* check with firebase tags[element1, element2, element3] contains method
+            destination['tags'].contains(tag));
       },
     ).toList();
+    print(filteredData.length);
     return filteredData;
   }
 
@@ -33,7 +42,7 @@ class _FilterDataState extends State<FilterData> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height,
       padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,19 +59,25 @@ class _FilterDataState extends State<FilterData> {
           SizedBox(height: 10),
           Wrap(
             spacing: 8.0,
-            children: Continent.values.map((continent) {
-              return FilterChip(
-                label: Text(continent.name),
-                selected: selectedContinents.contains(continent),
-                onSelected: (isSelected) {
-                  setState(() {
-                    isSelected
-                        ? selectedContinents.add(continent)
-                        : selectedContinents.remove(continent);
-                  });
-                },
-              );
-            }).toList(),
+            children: Continent.values.map(
+              (continent) {
+                return FilterChip(
+                  label: Text(continent.name),
+                  selected: userSelectedContinents.contains(continent.name),
+                  onSelected: (isSelected
+                      //* onSelected want void Function(bool); Called when the FilterChip should change between selected and de-selected states. When the FilterChip is tapped, toggle !selected.
+                      ) {
+                    setState(
+                      () {
+                        isSelected
+                            ? userSelectedContinents.add(continent.name)
+                            : userSelectedContinents.remove(continent.name);
+                      },
+                    );
+                  },
+                );
+              },
+            ).toList(),
           ),
           SizedBox(height: 20),
           Text('Select Tags'),
@@ -83,13 +98,13 @@ class _FilterDataState extends State<FilterData> {
                       Text(tag.name),
                     ],
                   ),
-                  selected: selectedTags.contains(tag),
+                  selected: userSelectedTags.contains(tag.name),
                   onSelected: (isSelected) {
                     setState(
                       () {
                         isSelected
-                            ? selectedTags.add(tag)
-                            : selectedTags.remove(tag);
+                            ? userSelectedTags.add(tag.name)
+                            : userSelectedTags.remove(tag.name);
                       },
                     );
                   },
@@ -117,7 +132,8 @@ class _FilterDataState extends State<FilterData> {
                   padding: EdgeInsets.symmetric(horizontal: 36),
                 ),
                 onPressed: () {
-                  getFilterPublisherData();
+                  print(userSelectedContinents);
+                  print(userSelectedTags);
                 },
                 child: const Text('submit'),
               ),
