@@ -82,8 +82,8 @@ class HomePageProvider extends ChangeNotifier {
   Button currentButton = Button.All;
 
   List<DestinationModel>? allPublisherData;
+  bool isLoading = false;
 
-  //*global scope property for search bar filter [Asia, 'North America'];
   List<String> userSelectedContinents = [];
   List<String> userSelectedTags = [];
 
@@ -96,14 +96,19 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   void fetchAllDestinationData() async {
-    allPublisherData = await HomePageRepo.fetchDestinationData();
+    isLoading = true;
+    notifyListeners();
+    try {
+      allPublisherData = await HomePageRepo.fetchDestinationData();
+    } catch (error) {
+      print('Error fetching data: $error');
+      allPublisherData = null;
+    }
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<List<DestinationModel>?> getFilterPublisherData() async {
-    //*Step 1: - Fetch all publisher data
-    List<DestinationModel>? allPublisherData =
-        await HomePageRepo.fetchDestinationData();
-
     //* Step 2: - Filter based on selected continents
     if (userSelectedContinents.length != 0) {
       List<DestinationModel>? continentBaseFilteredData =
