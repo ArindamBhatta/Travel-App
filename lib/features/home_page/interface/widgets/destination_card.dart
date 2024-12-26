@@ -1,10 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/home_page/module/model/destination_model.dart';
 
-class PublisherCard extends StatelessWidget {
-  final DestinationModel singlePublisherData;
-  PublisherCard(this.singlePublisherData);
+class DestinationCard extends StatelessWidget {
+  final String? imageUri;
+  final String? name;
+  final String? continent;
+  final String? country;
+
+  DestinationCard({
+    required this.imageUri,
+    required this.name,
+    required this.continent,
+    required this.country,
+  });
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -15,7 +23,7 @@ class PublisherCard extends StatelessWidget {
             child: Stack(
               children: [
                 CachedNetworkImage(
-                  imageUrl: '${singlePublisherData.imageUrl}',
+                  imageUrl: '$imageUri',
                   fit: BoxFit.cover,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
@@ -88,7 +96,7 @@ class PublisherCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${singlePublisherData.name}',
+                    '$name',
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: TextStyle(
@@ -100,7 +108,7 @@ class PublisherCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '${singlePublisherData.name} ${singlePublisherData.country}',
+                          '$country , $continent',
                           softWrap: false,
                           overflow: TextOverflow.fade,
                           style: TextStyle(

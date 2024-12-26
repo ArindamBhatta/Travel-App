@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/home_page/interface/widgets/publisher_card.dart';
+import 'package:travel_app/features/home_page/interface/widgets/card_to_details_page.dart';
+
 import 'package:travel_app/features/home_page/interface/widgets/sticky_navigation_button.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import 'package:travel_app/features/home_page/module/model/destination_model.dart';
@@ -68,9 +69,8 @@ class HomePageBody extends StatelessWidget {
                   sliver: SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        DestinationModel singlePublisherData =
-                            allPublisherData[index];
-                        return PublisherCard(singlePublisherData);
+                        DestinationModel destination = allPublisherData[index];
+                        return CardToDetailsPage(destination);
                       },
                       childCount: allPublisherData.length,
                     ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
 import 'package:travel_app/features/all_contributor_page/community_post_page.dart';
 import 'package:travel_app/features/trip_booking_page/book_trip_page.dart';
-import 'package:travel_app/features/user_contribution_page/contribution_page.dart';
+import 'package:travel_app/features/user_contribution_page/user_contribution_page.dart';
 
 class AppNavigation extends StatefulWidget {
   final String? userAccessToken;

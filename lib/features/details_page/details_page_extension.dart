@@ -14,7 +14,6 @@ class DetailsPageExtension extends StatefulWidget {
 }
 
 class _DetailsPageExtensionState extends State<DetailsPageExtension> {
-  //*global scope
   int selectedButtonId = 0;
   PageController ctrl = PageController();
 
