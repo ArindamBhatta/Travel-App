@@ -3,23 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleLoginProvider extends ChangeNotifier {
-  Map<String, dynamic>? _userData;
+  Map<String, dynamic>? userData;
   String? userAccessToken;
 
   List<DocumentReference>? allWishListReference = [];
 
   void setUserData(Map<String, dynamic>? data) {
     if (data != null) {
-      _userData = {
+      userData = {
         'name': data['name'] ?? '',
-        'photoUrl': data['photoUrl'] ?? '',
-        'email': data['email']
+        'email': data['email'],
+        'photoUrl': data['photoUrl'] ?? ''
       };
       notifyListeners();
     }
   }
-
-  Map<String, dynamic>? get userData => _userData;
 
   void setAccessToken(String? accessToken) async {
     userAccessToken = accessToken;

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? userLoginData;
 
+  void getRef() async {
+    // Reference to the Firestore collection
+    CollectionReference destinationDocumentPath =
+        FirebaseFirestore.instance.collection('/destinations/publisher/data');
+
+    // Fetch all documents in the collection
+    QuerySnapshot publisherAllData = await destinationDocumentPath.get();
+
+    // Loop through each document in the snapshot and print the document ID
+    List<String> allDoc = publisherAllData.docs.map((publisherData) {
+      return publisherData.id;
+    }).toList();
+    print(allDoc);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +45,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  //* only for android
+  //* Google Sign In Silently
   void silentLoginWithAccessToken() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     GoogleSignInAccount? googleUser = await googleSignIn.signInSilently();
@@ -58,7 +74,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    userLoginData = context.watch<GoogleLoginProvider>().userData;
+    getRef();
+
+    userLoginData = context
+        .watch<GoogleLoginProvider>()
+        .userData; // watch user login details
     return Scaffold(
       drawer: SideDrawer(userLoginData),
       resizeToAvoidBottomInset: false,

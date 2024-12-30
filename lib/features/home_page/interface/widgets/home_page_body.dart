@@ -20,6 +20,7 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     //* Step 1 - Provider Initialization: The ChangeNotifierProvider initializes the HomePageProvider and calls fetchAllDestinationData() automatically.
     //* Step 2: - Consumer: The Consumer listens to the state changes and rebuilds the relevant parts of the widget tree.
+
     return ChangeNotifierProvider(
       create: (context) => HomePageProvider()..fetchAllDestinationData(),
       child: Consumer<HomePageProvider>(

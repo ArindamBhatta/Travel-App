@@ -15,6 +15,7 @@ class CardToDetailsPage extends StatelessWidget {
     String? continent = destination.continent;
     String? country = destination.country;
     String? knowFor = destination.knownFor;
+    List<String>? viewPoints = destination.tags;
 
     return OpenContainer(
       closedElevation: 0.0,
@@ -34,6 +35,7 @@ class CardToDetailsPage extends StatelessWidget {
           country: country,
           continent: continent,
           knowFor: knowFor,
+          viewPoints: viewPoints,
         );
       },
       transitionDuration: const Duration(

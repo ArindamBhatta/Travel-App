@@ -25,9 +25,10 @@ class _CommunityPostPageState extends State<CommunityPostPage> {
 
   //* combine two streaming Data
   void initStream(userUid) {
+    // create two property 1. allContributionData List of all contributed data, 2.userData particular user data.
     List<Map<String, dynamic>> allContributionsData = [];
     Map<String, dynamic>? userData;
-
+    // create a stream using snapshots
     FirebaseFirestore.instance
         .collection('/destinations/contributor/data')
         .snapshots()

@@ -14,10 +14,7 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
-  //* global scope property, or has part
-
-  //* Show a loading dialog
-  void _showLoadingDialog() {
+  void showLoadingDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -46,90 +43,72 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     );
   }
 
-  //* Method to connect with Firebase and Google Sign-In
-  Future<void> signInWithGoogle() async {
+  // Google Sign-In
+  void signInWithGoogle(BuildContext buildContext) async {
     try {
-      _showLoadingDialog();
+      showLoadingDialog();
 
-      //* Step 1: Trigger the Google Sign-In flow. If the user signs in successfully, it returns a GoogleSignInAccount object. If the user cancels, it returns null.
+      // Use the provider data outside async calls
+      final googleLoginProvider = buildContext.read<GoogleLoginProvider>();
+
+      //* Step 1: If the user signs in successfully, it returns a GoogleSignInAccount object.
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         print('No google user is found');
-        Navigator.pop(context);
+        Navigator.pop(buildContext);
         return;
       }
-      //*Step 2: Retrieve authentication details for the signed-in Google user The `authentication` method fetches the user's access token and ID token.
-      final googleAuth = await googleUser.authentication;
-      //* These tokens will be used to authenticate the user with Firebase.
-      final credential = GoogleAuthProvider.credential(
+
+      //*Step 2: google authentication details store in a variable
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      //* Step 3: These tokens help to authenticate the user with Firebase.
+      OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      //* Step 6: Sign in to Firebase using the generated credential. Firebase validates the tokens with Google and creates or links the user in Firebase.
+
+      //* Step 4: Sign in with Firebase.
       await FirebaseAuth.instance.signInWithCredential(credential);
 
-      //* How to Get Firebase UID? After a successful Firebase authentication (signInWithCredential), you can get the Firebase user object from FirebaseAuth. Here's how:
-      final User? user = FirebaseAuth.instance.currentUser;
+      // Step 5: get Firebase UID
+      User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        print('Firebase UID: ${user.uid}');
+        print('Firebase👍 UID: ${user.uid}');
       }
 
-      //* Get the user Details upload in provider also in fireStore users document.
+      //* Document map upload in Firestore
       if (user != null) {
-        //* Update Provider data after successful sign-in
-        context.read<GoogleLoginProvider>().setUserData(
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'email': user.email,
+          'name': googleUser.displayName,
+          'avatar': googleUser.photoUrl,
+          'uid': user.uid,
+          'wishlistLocations': googleLoginProvider.allWishListReference,
+        });
+        print('User data successfully uploaded to Firestore!');
+      }
+
+      //* Update provider data user UID store in firebase
+      if (user != null) {
+        googleLoginProvider.setUserData(
           {
-            'email': user.email,
             'name': googleUser.displayName,
-            'avatar': googleUser.photoUrl,
-            'uid': user.uid,
+            'email': user.email,
+            'photoUrl': googleUser.photoUrl,
           },
         );
+        googleLoginProvider.setAccessToken(user.uid);
       }
 
-      //* document map upload in firestore
-      try {
-        if (user != null) {
-          final Map<String, dynamic> fireStoreDoc = {
-            'email': user.email,
-            'name': googleUser.displayName,
-            'avatar': googleUser.photoUrl,
-            'uid': user.uid,
-            'wishlistLocations':
-                context.watch<GoogleLoginProvider>().allWishListReference
-          };
-          print('User Details: $fireStoreDoc');
-          //! write Data in fire store
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid) //* Use UID as document ID
-              .set(
-                fireStoreDoc,
-                SetOptions(
-                  merge: true, //* Merge to avoid overwriting existing data
-                ),
-              );
-          print('User data successfully uploaded to Firestore!');
-        }
-      } catch (error) {
-        print('Error during Google Sign-In: $error');
-      }
-
-      if (user != null) {
-        context.read<GoogleLoginProvider>().setAccessToken(user.uid);
-      }
-
-      context.read<GoogleLoginProvider>().getUserAccessToken();
-
-      Navigator.pop(context);
-
+      // Navigate to the next screen
       Navigator.pushReplacement(
-        context,
+        buildContext,
         MaterialPageRoute(builder: (context) => AppNavigation(user!.uid)),
       );
     } catch (error) {
       print('Error during sign-in: $error');
-      Navigator.pop(context); //* Close dialog in case of an error
+      Navigator.pop(buildContext);
     }
   }
 
@@ -140,13 +119,15 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: signInWithGoogle,
+          onPressed: () {
+            signInWithGoogle(context);
+          },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/google_logo.png', // Ensure Google logo image exists in assets
+                'assets/images/google_logo.png',
                 height: 34,
               ),
               SizedBox(width: 20),
