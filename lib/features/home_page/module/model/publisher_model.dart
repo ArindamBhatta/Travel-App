@@ -1,4 +1,4 @@
-class DestinationModel {
+class PublisherModel {
   String? continent;
   String? country;
   String? imageUrl;
@@ -7,7 +7,7 @@ class DestinationModel {
   String? ref;
   List<String>? tags;
 
-  DestinationModel({
+  PublisherModel({
     this.continent,
     this.country,
     this.knownFor,
@@ -17,7 +17,7 @@ class DestinationModel {
     this.tags,
   });
 
-  DestinationModel.fromJson(Map<String, dynamic> json) {
+  PublisherModel.fromJsonNameConstructor(Map<String, dynamic> json) {
     continent = json['continent'];
     country = json['country'];
     knownFor = json['knownFor'];
@@ -25,18 +25,6 @@ class DestinationModel {
     name = json['name'];
     ref = json['ref'];
     tags = json['tags'].cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['continent'] = this.continent;
-    data['country'] = this.country;
-    data['knownFor'] = this.knownFor;
-    data['imageUrl'] = this.imageUrl;
-    data['name'] = this.name;
-    data['ref'] = this.ref;
-    data['tags'] = this.tags;
-    return data;
   }
 
   @override

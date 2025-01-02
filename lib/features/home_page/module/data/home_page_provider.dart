@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/home_page/module/model/destination_model.dart';
+import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 import 'package:travel_app/features/home_page/module/repo/home_page_repo.dart';
 
 enum Continent {
@@ -81,7 +81,7 @@ class HomePageProvider extends ChangeNotifier {
   int textVisibilityIndex = 0;
   Button currentButton = Button.All;
 
-  List<DestinationModel>? allPublisherData;
+  List<PublisherModel>? allPublisherData;
   bool isLoading = false;
 
   List<String> userSelectedContinents = [];
@@ -95,11 +95,12 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void fetchAllDestinationData() async {
+  //Show All Publisher Data in UI
+  void showPublisherData() async {
     isLoading = true;
     notifyListeners();
     try {
-      allPublisherData = await HomePageRepo.fetchDestinationData();
+      allPublisherData = await HomePageRepo.fetchPublisherData();
     } catch (error) {
       print('Error fetching data: $error');
       allPublisherData = null;
@@ -108,10 +109,10 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<DestinationModel>?> getFilterPublisherData() async {
+  Future<List<PublisherModel>?> getFilterPublisherData() async {
     //* Step 2: - Filter based on selected continents
     if (userSelectedContinents.length != 0) {
-      List<DestinationModel>? continentBaseFilteredData =
+      List<PublisherModel>? continentBaseFilteredData =
           allPublisherData?.where((destination) {
         return userSelectedContinents
             .any((continent) => //* check with firebase data
@@ -120,7 +121,7 @@ class HomePageProvider extends ChangeNotifier {
 
       //* Step 3: - Filter based on selected tags
       if (userSelectedTags.length != 0) {
-        List<DestinationModel>? filteredData = continentBaseFilteredData?.where(
+        List<PublisherModel>? filteredData = continentBaseFilteredData?.where(
           (destination) {
             return userSelectedTags.any((tag) =>
                 //* check with firebase tags[element1, element2, element3] contains method

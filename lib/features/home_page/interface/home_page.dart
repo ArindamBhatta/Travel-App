@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/side_drawer.dart';
-import 'package:travel_app/features/home_page/module/model/destination_model.dart';
+import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 import 'package:travel_app/features/home_page/module/repo/home_page_repo.dart';
 import '../../../common/utils/google_login_provider.dart';
 import 'widgets/home_page_body.dart';
@@ -18,21 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? userLoginData;
-
-  void getRef() async {
-    // Reference to the Firestore collection
-    CollectionReference destinationDocumentPath =
-        FirebaseFirestore.instance.collection('/destinations/publisher/data');
-
-    // Fetch all documents in the collection
-    QuerySnapshot publisherAllData = await destinationDocumentPath.get();
-
-    // Loop through each document in the snapshot and print the document ID
-    List<String> allDoc = publisherAllData.docs.map((publisherData) {
-      return publisherData.id;
-    }).toList();
-    print(allDoc);
-  }
 
   @override
   void initState() {
@@ -66,16 +50,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<List<DestinationModel>?> fetchAllDestinationData() async {
-    List<DestinationModel>? allPublisherData =
-        await HomePageRepo.fetchDestinationData();
+  Future<List<PublisherModel>?> fetchAllDestinationData() async {
+    List<PublisherModel>? allPublisherData =
+        await HomePageRepo.fetchPublisherData();
     return allPublisherData;
   }
 
   @override
   Widget build(BuildContext context) {
-    getRef();
-
     userLoginData = context
         .watch<GoogleLoginProvider>()
         .userData; // watch user login details

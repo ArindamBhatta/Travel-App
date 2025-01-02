@@ -2,10 +2,10 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/interface/widgets/destination_card.dart';
 import 'package:travel_app/features/home_page/interface/widgets/destination_details.dart';
-import 'package:travel_app/features/home_page/module/model/destination_model.dart';
+import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 
 class CardToDetailsPage extends StatelessWidget {
-  final DestinationModel destination;
+  final PublisherModel destination;
   CardToDetailsPage(this.destination);
 
   @override

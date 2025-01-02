@@ -4,7 +4,7 @@ import 'package:travel_app/features/home_page/interface/widgets/card_to_details_
 
 import 'package:travel_app/features/home_page/interface/widgets/sticky_navigation_button.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
-import 'package:travel_app/features/home_page/module/model/destination_model.dart';
+import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 import 'sticky_search_bar.dart';
 import 'home_page_app_bar.dart';
 
@@ -18,16 +18,16 @@ class HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //* Step 1 - Provider Initialization: The ChangeNotifierProvider initializes the HomePageProvider and calls fetchAllDestinationData() automatically.
+    //* Step 1 - Provider Initialization: The ChangeNotifierProvider initializes the HomePageProvider and calls showPublisherData() automatically.
     //* Step 2: - Consumer: The Consumer listens to the state changes and rebuilds the relevant parts of the widget tree.
 
     return ChangeNotifierProvider(
-      create: (context) => HomePageProvider()..fetchAllDestinationData(),
+      create: (context) => HomePageProvider()..showPublisherData(),
       child: Consumer<HomePageProvider>(
         builder: (context, homePageProvider, child) {
           bool isLoading = homePageProvider.isLoading;
 
-          List<DestinationModel>? allPublisherData =
+          List<PublisherModel>? allPublisherData =
               homePageProvider.allPublisherData;
 
           return CustomScrollView(
@@ -70,7 +70,7 @@ class HomePageBody extends StatelessWidget {
                   sliver: SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        DestinationModel destination = allPublisherData[index];
+                        PublisherModel destination = allPublisherData[index];
                         return CardToDetailsPage(destination);
                       },
                       childCount: allPublisherData.length,
