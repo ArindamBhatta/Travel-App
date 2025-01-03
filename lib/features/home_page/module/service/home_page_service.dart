@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 abstract class HomePageService {
   static Map<String, dynamic>? combinedData = {};
 
-  static Future<Map<String, dynamic>?> fetchCombinedData() async {
+  static Future<Map<String, dynamic>?> fetchAllFireStoreData() async {
     try {
       //Step: 1 Get the Publisher Data
 
@@ -30,7 +30,8 @@ abstract class HomePageService {
         return destination.id;
       }).toList();
       combinedData!['publisherDataIds'] = listOfPublisherDataIds;
-      //Step 3: - current user Document
+
+      //Step 3 method 2 : - current user Document
       DocumentReference currentUserPath = FirebaseFirestore.instance
           .collection('users')
           .doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');
@@ -54,50 +55,3 @@ abstract class HomePageService {
     }
   }
 }
-
-
-/* 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-abstract class HomePageService {
-  static Future<Map<String, dynamic>?> fetchPublisherData() async {
-    try {
-      // Initialize combined data map
-      Map<String, dynamic> combinedData = {};
-
-      // Step 1: Fetch publisher data
-      CollectionReference publisherCollectionRef = FirebaseFirestore.instance.collection('/destinations/publisher/data');
-      QuerySnapshot publisherSnapshot = await publisherCollectionRef.get();
-
-      // Transform publisher data into a list of maps
-      List<Map<String, dynamic>> publisherDataList = publisherSnapshot.docs.map((doc) {
-        return doc.data() as Map<String, dynamic>;
-      }).toList();
-
-      // Add publisher data to combined map
-      combinedData['publisherData'] = publisherDataList;
-
-      // Extract publisher document IDs
-      List<String> publisherDocumentIds = publisherSnapshot.docs.map((doc) => doc.id).toList();
-      combinedData['publisherDataIds'] = publisherDocumentIds;
-
-      // Step 2: Fetch current user data
-      DocumentReference currentUserRef = FirebaseFirestore.instance.collection('users').doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');
-      DocumentSnapshot currentUserSnapshot = await currentUserRef.get();
-
-      // Validate current user data
-      if (!currentUserSnapshot.exists || currentUserSnapshot.data() == null) {
-        throw Exception("Current user data not found or is null");
-      }
-
-      // Add current user data to combined map
-      combinedData['userData'] = currentUserSnapshot.data() as Map<String, dynamic>;
-
-      return combinedData;
-    } catch (error) {
-      print("Error fetching publisher data at HomePageService.fetchPublisherData: $error");
-      return null;
-    }
-  }
-}
- */

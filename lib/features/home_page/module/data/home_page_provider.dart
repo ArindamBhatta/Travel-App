@@ -81,11 +81,14 @@ class HomePageProvider extends ChangeNotifier {
   int textVisibilityIndex = 0;
   Button currentButton = Button.All;
 
+  bool isLoading = false; // for UI Loading
+
   List<PublisherModel>? allPublisherData;
-  bool isLoading = false;
+  List<String>? allPublisherDataKey;
 
   List<String> userSelectedContinents = [];
   List<String> userSelectedTags = [];
+  List<dynamic>? userWishlist = [];
 
   void setCurrentContinent(Button continent, int index) {
     if (this.textVisibilityIndex != index) {
@@ -101,16 +104,41 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
     try {
       allPublisherData = await HomePageRepo.fetchPublisherData();
+      allPublisherDataKey = await HomePageRepo.fetchPublisherDataKeys();
+      userWishlist = await HomePageRepo.userWishList();
     } catch (error) {
       print('Error fetching data: $error');
       allPublisherData = null;
+      allPublisherDataKey = null;
+      userWishlist = null;
     }
     isLoading = false;
     notifyListeners();
   }
 
+  // Refresh data and notify listeners
+  Future<void> refreshPublisherData() async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      // Refresh cached data in the repository
+      await HomePageRepo.refreshCombinedData();
+
+      // Fetch updated data
+      allPublisherData = await HomePageRepo.fetchPublisherData();
+      allPublisherDataKey = await HomePageRepo.fetchPublisherDataKeys();
+    } catch (error) {
+      print('Error refreshing data: $error');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  //Filter base on continent and tags
   Future<List<PublisherModel>?> getFilterPublisherData() async {
-    //* Step 2: - Filter based on selected continents
+    //* Step 1: - We get all data now Filter based on selected continents
     if (userSelectedContinents.length != 0) {
       List<PublisherModel>? continentBaseFilteredData =
           allPublisherData?.where((destination) {
@@ -129,6 +157,7 @@ class HomePageProvider extends ChangeNotifier {
           },
         ).toList();
         notifyListeners();
+        print('filter data is $filteredData');
         return filteredData;
       } else {
         notifyListeners();

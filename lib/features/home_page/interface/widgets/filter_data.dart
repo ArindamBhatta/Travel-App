@@ -38,7 +38,7 @@ class _FilterDataState extends State<FilterData> {
                   selected: context
                       .read<HomePageProvider>()
                       .userSelectedContinents
-                      .contains(continent.name), //* check
+                      .contains(continent.name),
                   onSelected: (isSelected) {
                     setState(
                       () {

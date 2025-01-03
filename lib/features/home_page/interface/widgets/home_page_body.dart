@@ -29,6 +29,10 @@ class HomePageBody extends StatelessWidget {
 
           List<PublisherModel>? allPublisherData =
               homePageProvider.allPublisherData;
+          List<String>? allPublisherDataKey =
+              homePageProvider.allPublisherDataKey;
+
+          List<dynamic>? userWishlist = homePageProvider.userWishlist;
 
           return CustomScrollView(
             slivers: [
@@ -58,7 +62,9 @@ class HomePageBody extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              else if (allPublisherData == null || allPublisherData.isEmpty)
+              else if ((allPublisherData == null &&
+                      allPublisherDataKey == null) ||
+                  (allPublisherData!.isEmpty && allPublisherDataKey!.isEmpty))
                 const SliverFillRemaining(
                   child: Center(
                     child: Text('No data available'),
@@ -70,8 +76,16 @@ class HomePageBody extends StatelessWidget {
                   sliver: SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        PublisherModel destination = allPublisherData[index];
-                        return CardToDetailsPage(destination);
+                        PublisherModel publisherSingleData =
+                            allPublisherData[index];
+
+                        String publisherDataKey = allPublisherDataKey![index];
+
+                        return CardToDetailsPage(
+                          destination: publisherSingleData,
+                          destinationKey: publisherDataKey,
+                          userWishlist: userWishlist,
+                        );
                       },
                       childCount: allPublisherData.length,
                     ),

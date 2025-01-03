@@ -6,12 +6,16 @@ class DestinationCard extends StatelessWidget {
   final String? name;
   final String? continent;
   final String? country;
+  final bool bookmark;
+  final void Function() toggleInFireStore;
 
   DestinationCard({
     required this.imageUri,
     required this.name,
     required this.continent,
     required this.country,
+    required this.bookmark,
+    required this.toggleInFireStore,
   });
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,7 @@ class DestinationCard extends StatelessWidget {
                   top: 10,
                   right: 10,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: toggleInFireStore,
                     child: Container(
                       width: 35,
                       height: 35,
@@ -77,7 +81,7 @@ class DestinationCard extends StatelessWidget {
                       child: Icon(
                         Icons.favorite,
                         size: 20,
-                        color: Colors.white,
+                        color: bookmark ? Colors.red : Colors.white,
                       ),
                     ),
                   ),
