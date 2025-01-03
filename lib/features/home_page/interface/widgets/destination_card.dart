@@ -81,7 +81,7 @@ class DestinationCard extends StatelessWidget {
                       child: Icon(
                         Icons.favorite,
                         size: 20,
-                        color: bookmark ? Colors.red : Colors.white,
+                        color: this.bookmark ? Colors.red : Colors.white,
                       ),
                     ),
                   ),

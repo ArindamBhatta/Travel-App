@@ -138,7 +138,14 @@ class HomePageProvider extends ChangeNotifier {
 
   //Filter base on continent and tags
   Future<List<PublisherModel>?> getFilterPublisherData() async {
-    //* Step 1: - We get all data now Filter based on selected continents
+    // Step 1: - check data is present or not.
+    if (allPublisherData != null) {
+      print('Data is present hear ${allPublisherData?.length}');
+    } else {
+      print('Data is not present hear ---------');
+    }
+
+    //* Step 2: - We get all data now Filter based on selected continents
     if (userSelectedContinents.length != 0) {
       List<PublisherModel>? continentBaseFilteredData =
           allPublisherData?.where((destination) {
@@ -157,7 +164,6 @@ class HomePageProvider extends ChangeNotifier {
           },
         ).toList();
         notifyListeners();
-        print('filter data is $filteredData');
         return filteredData;
       } else {
         notifyListeners();

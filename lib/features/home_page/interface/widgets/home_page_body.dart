@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/card_to_details_page.dart';
-
 import 'package:travel_app/features/home_page/interface/widgets/sticky_navigation_button.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
@@ -18,20 +17,15 @@ class HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //* Step 1 - Provider Initialization: The ChangeNotifierProvider initializes the HomePageProvider and calls showPublisherData() automatically.
-    //* Step 2: - Consumer: The Consumer listens to the state changes and rebuilds the relevant parts of the widget tree.
-
     return ChangeNotifierProvider(
       create: (context) => HomePageProvider()..showPublisherData(),
       child: Consumer<HomePageProvider>(
         builder: (context, homePageProvider, child) {
           bool isLoading = homePageProvider.isLoading;
-
-          List<PublisherModel>? allPublisherData =
-              homePageProvider.allPublisherData;
+          List<PublisherModel>? filteredPublisherData =
+              homePageProvider.allPublisherData; // Use the filtered data.
           List<String>? allPublisherDataKey =
               homePageProvider.allPublisherDataKey;
-
           List<dynamic>? userWishlist = homePageProvider.userWishlist;
 
           return CustomScrollView(
@@ -62,9 +56,10 @@ class HomePageBody extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              else if ((allPublisherData == null &&
+              else if ((filteredPublisherData == null &&
                       allPublisherDataKey == null) ||
-                  (allPublisherData!.isEmpty && allPublisherDataKey!.isEmpty))
+                  (filteredPublisherData!.isEmpty &&
+                      allPublisherDataKey!.isEmpty))
                 const SliverFillRemaining(
                   child: Center(
                     child: Text('No data available'),
@@ -77,7 +72,7 @@ class HomePageBody extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         PublisherModel publisherSingleData =
-                            allPublisherData[index];
+                            filteredPublisherData[index];
 
                         String publisherDataKey = allPublisherDataKey![index];
 
@@ -87,7 +82,7 @@ class HomePageBody extends StatelessWidget {
                           userWishlist: userWishlist,
                         );
                       },
-                      childCount: allPublisherData.length,
+                      childCount: filteredPublisherData.length,
                     ),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(

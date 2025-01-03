@@ -98,11 +98,10 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
           continent: continent,
           knowFor: knowFor,
           viewPoints: viewPoints,
+          bookmark: isInWishlist,
+          toggleInFireStore: toggleWishListInFireStore,
         );
       },
-      transitionDuration: const Duration(
-        milliseconds: 300,
-      ),
     );
   }
 }

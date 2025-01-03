@@ -2,13 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
-class DestinationDetails extends StatelessWidget {
+class DestinationDetails extends StatefulWidget {
   final String? imageUri;
   final String? name;
   final String? knowFor;
   final String? country;
   final String? continent;
   final List<String>? viewPoints;
+  final bool bookmark;
+  final void Function() toggleInFireStore;
 
   const DestinationDetails({
     super.key,
@@ -18,7 +20,21 @@ class DestinationDetails extends StatelessWidget {
     required this.country,
     required this.continent,
     required this.viewPoints,
+    required this.bookmark,
+    required this.toggleInFireStore,
   });
+
+  @override
+  State<DestinationDetails> createState() => _DestinationDetailsState();
+}
+
+class _DestinationDetailsState extends State<DestinationDetails> {
+  bool bookmark = false;
+  @override
+  void initState() {
+    bookmark = widget.bookmark;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +43,7 @@ class DestinationDetails extends StatelessWidget {
         children: [
           Positioned.fill(
             child: CachedNetworkImage(
-              imageUrl: '$imageUri',
+              imageUrl: '${widget.imageUri}',
               fit: BoxFit.cover,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
@@ -78,7 +94,14 @@ class DestinationDetails extends StatelessWidget {
             top: 60,
             right: 20,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                widget.toggleInFireStore();
+                setState(
+                  () {
+                    bookmark = !bookmark;
+                  },
+                );
+              },
               child: Container(
                 width: 35,
                 height: 35,
@@ -86,7 +109,11 @@ class DestinationDetails extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.white.withAlpha(50),
                 ),
-                child: Icon(Icons.favorite, size: 20, color: Colors.red),
+                child: Icon(
+                  Icons.favorite,
+                  size: 20,
+                  color: bookmark == true ? Colors.red : Colors.white,
+                ),
               ),
             ),
           ),
@@ -108,7 +135,7 @@ class DestinationDetails extends StatelessWidget {
                   controller: scrollController,
                   children: [
                     Text(
-                      '$name',
+                      '${widget.name}',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -118,19 +145,19 @@ class DestinationDetails extends StatelessWidget {
                       height: 2.0,
                     ),
                     Text(
-                      '$country, $continent',
+                      '${widget.country}, ${widget.continent}',
                       style: TextStyle(color: Colors.grey[900]),
                     ),
                     SizedBox(
                       height: 14.0,
                     ),
-                    Text('$knowFor'),
+                    Text('${widget.knowFor}'),
                     SizedBox(
                       height: 16.0,
                     ),
                     Wrap(
                       spacing: 8.0,
-                      children: viewPoints!.map(
+                      children: widget.viewPoints!.map(
                         (tag) {
                           return Chip(
                             padding: EdgeInsets.all(4),
