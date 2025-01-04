@@ -19,7 +19,21 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => HomePageProvider()..showPublisherData(),
+      /* 
+       create: (context) => HomePageProvider() This line create a new context of HomePageProvider
+       ..showPublisherData() This part immediately calls the showPublisherData() method on the newly created HomePageProvider instance. This means that when the provider is created, it will automatically fetch and load the publisher data.       
+      */
+
+// child: This property specifies the widget tree that will have access to the data provided by HomePageProvider.
       child: Consumer<HomePageProvider>(
+        /* 
+         Consumer<HomePageProvider>
+          builder: This is where you define how to build the UI based on the data provided by HomePageProvider.
+          (context, homePageProvider, child)
+            context: The build context of the widget.
+              homePageProvider: An instance of the HomePageProvider class, allowing you to access its properties and methods.
+            child: The widget that was passed as a child to ChangeNotifierProvider. This is often used to pass down widgets that don't need to rebuild when the provider's state changes.
+        */
         builder: (context, homePageProvider, child) {
           bool isLoading = homePageProvider.isLoading;
           List<PublisherModel>? filteredPublisherData =

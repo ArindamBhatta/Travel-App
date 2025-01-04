@@ -2,33 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
-class FilterData extends StatefulWidget {
-  FilterData();
+class FilterPage extends StatefulWidget {
+  FilterPage();
 
   @override
-  State<FilterData> createState() => _FilterDataState();
+  State<FilterPage> createState() => _FilterPageState();
 }
 
-class _FilterDataState extends State<FilterData> {
+class _FilterPageState extends State<FilterPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Call provider without context
+    WidgetsBinding.instance.addPostFrameCallback(
+      (ctx) {
+        context.read<HomePageProvider>().showPublisherData();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      padding: EdgeInsets.all(16.0),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Where Do You Want To Go',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
-          Text('Select Continents'),
-          SizedBox(height: 10),
+          SizedBox(height: 8),
+          Text(
+            'Select Continents',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(height: 8),
           Wrap(
             spacing: 8.0,
             children: Continent.values.map(
@@ -58,9 +74,15 @@ class _FilterDataState extends State<FilterData> {
               },
             ).toList(),
           ),
-          SizedBox(height: 20),
-          Text('Select Tags'),
-          SizedBox(height: 10),
+          SizedBox(height: 8),
+          Text(
+            'Select Tags',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(height: 8),
           Wrap(
             spacing: 8.0,
             children: Tags.values.map(
@@ -115,15 +137,24 @@ class _FilterDataState extends State<FilterData> {
                 child: const Text('cancel'),
               ),
               SizedBox(width: 8),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 36),
-                ),
-                onPressed: () {
-                  context.read<HomePageProvider>().getFilterPublisherData();
-                  Navigator.pop(context);
+              Consumer<HomePageProvider>(
+                builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return CircularProgressIndicator();
+                  }
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 36),
+                    ),
+                    onPressed: provider.allPublisherData == null
+                        ? null
+                        : () {
+                            provider.filterPublisherData();
+                            Navigator.pop(context);
+                          },
+                    child: const Text('submit'),
+                  );
                 },
-                child: const Text('submit'),
               ),
             ],
           ),

@@ -85,10 +85,10 @@ class HomePageProvider extends ChangeNotifier {
 
   List<PublisherModel>? allPublisherData;
   List<String>? allPublisherDataKey;
+  List<dynamic>? userWishlist;
 
   List<String> userSelectedContinents = [];
   List<String> userSelectedTags = [];
-  List<dynamic>? userWishlist = [];
 
   void setCurrentContinent(Button continent, int index) {
     if (this.textVisibilityIndex != index) {
@@ -117,7 +117,7 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   // Refresh data and notify listeners
-  Future<void> refreshPublisherData() async {
+  void refreshPublisherData() async {
     isLoading = true;
     notifyListeners();
 
@@ -127,7 +127,6 @@ class HomePageProvider extends ChangeNotifier {
 
       // Fetch updated data
       allPublisherData = await HomePageRepo.fetchPublisherData();
-      allPublisherDataKey = await HomePageRepo.fetchPublisherDataKeys();
     } catch (error) {
       print('Error refreshing data: $error');
     } finally {
@@ -136,13 +135,12 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
-  //Filter base on continent and tags
-  Future<List<PublisherModel>?> getFilterPublisherData() async {
+  void filterPublisherData() {
+    isLoading = false;
     // Step 1: - check data is present or not.
-    if (allPublisherData != null) {
-      print('Data is present hear ${allPublisherData?.length}');
-    } else {
-      print('Data is not present hear ---------');
+    if (allPublisherData == null) {
+      print('Data is not present here');
+      return;
     }
 
     //* Step 2: - We get all data now Filter based on selected continents
@@ -163,15 +161,14 @@ class HomePageProvider extends ChangeNotifier {
                 destination.tags!.contains(tag));
           },
         ).toList();
+        isLoading = true;
+        allPublisherData = filteredData;
         notifyListeners();
-        return filteredData;
       } else {
         notifyListeners();
-        return continentBaseFilteredData;
       }
     } else {
       notifyListeners();
-      return allPublisherData;
     }
   }
 }

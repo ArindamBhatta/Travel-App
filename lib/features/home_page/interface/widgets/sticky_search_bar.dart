@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/home_page/interface/widgets/filter_data.dart';
+import 'package:travel_app/features/home_page/interface/widgets/filter_Page.dart';
 
 class StickySearchBar extends SliverPersistentHeaderDelegate {
   @override
@@ -36,7 +36,7 @@ class StickySearchBar extends SliverPersistentHeaderDelegate {
                   isScrollControlled:
                       true, //* Important to enable custom height
                   builder: (BuildContext context) {
-                    return FilterData();
+                    return FilterPage();
                   },
                 );
               },
