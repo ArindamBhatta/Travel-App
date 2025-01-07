@@ -81,14 +81,43 @@ class HomePageProvider extends ChangeNotifier {
   int textVisibilityIndex = 0;
   Button currentButton = Button.All;
 
-  bool isLoading = false; // for UI Loading
+  bool isLoading = false; // for User something is coming their
 
   List<PublisherModel>? allPublisherData;
   List<String>? allPublisherDataKey;
   List<dynamic>? userWishlist;
 
-  List<String> userSelectedContinents = [];
-  List<String> userSelectedTags = [];
+  List<String> userSelectedContinents = [
+    'Asia',
+    'Africa',
+    'North America',
+    'South America',
+    'Antarctica',
+    'Europe',
+    'Australia',
+    'Oceania'
+  ];
+  List<String> userSelectedTags = [
+    'Adventure sports',
+    'Beach',
+    'City',
+    'Cultural experiences',
+    'Foodie',
+    'Hiking',
+    'Historic',
+    'Island',
+    'Luxury',
+    'Mountain',
+    'Nightlife',
+    'Off-the-beaten-path',
+    'Romantic',
+    'Rural',
+    'Secluded',
+    'Sightseeing',
+    'Skiing',
+    'Wine tasting',
+    'Winter destination'
+  ];
 
   void setCurrentContinent(Button continent, int index) {
     if (this.textVisibilityIndex != index) {
@@ -98,7 +127,7 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Show All Publisher Data in UI
+  // Fetch All Publisher Data
   void showPublisherData() async {
     isLoading = true;
     notifyListeners();
@@ -116,59 +145,59 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Refresh data and notify listeners
-  void refreshPublisherData() async {
-    isLoading = true;
-    notifyListeners();
-
+  // Filter Publisher Data Based on User Selection
+  void filterPublisherData(
+      List<String> selectedContinents, List<String> selectedTags) {
     try {
-      // Refresh cached data in the repository
-      await HomePageRepo.refreshCombinedData();
+      // Step 1: - check data is present or not.
+      if (allPublisherData == null) {
+        isLoading = false;
+        notifyListeners();
+        print('Data is not present here');
+        return;
+      }
+      isLoading = true;
+      notifyListeners();
 
-      // Fetch updated data
-      allPublisherData = await HomePageRepo.fetchPublisherData();
+      //* Step 2: - We get all data now Filter based on selected continents
+      if (userSelectedContinents.length != 0) {
+        List<PublisherModel>? continentBaseFilteredData =
+            allPublisherData?.where((destination) {
+          return userSelectedContinents.any(
+            (continent) => destination.continent == continent,
+          );
+        }).toList();
+
+        //* Step 3: - Filter based on selected tags
+        if (userSelectedTags.length != 0) {
+          List<PublisherModel>? filteredData = continentBaseFilteredData?.where(
+            (destination) {
+              return userSelectedTags.any(
+                (tag) =>
+                    //* check with firebase tags[element1, element2, element3] contains method
+                    destination.tags!.contains(tag),
+              );
+            },
+          ).toList();
+          allPublisherData = filteredData;
+          print('publisherData is ${allPublisherData?.length}');
+          print('all publisher key length is ${allPublisherDataKey?.length}');
+          isLoading = false;
+          notifyListeners();
+        } else {
+          isLoading = false;
+          notifyListeners();
+          return;
+        }
+      } else {
+        isLoading = false;
+        notifyListeners();
+        return;
+      }
     } catch (error) {
-      print('Error refreshing data: $error');
-    } finally {
       isLoading = false;
       notifyListeners();
-    }
-  }
-
-  void filterPublisherData() {
-    isLoading = false;
-    // Step 1: - check data is present or not.
-    if (allPublisherData == null) {
-      print('Data is not present here');
-      return;
-    }
-
-    //* Step 2: - We get all data now Filter based on selected continents
-    if (userSelectedContinents.length != 0) {
-      List<PublisherModel>? continentBaseFilteredData =
-          allPublisherData?.where((destination) {
-        return userSelectedContinents
-            .any((continent) => //* check with firebase data
-                destination.continent == continent);
-      }).toList();
-
-      //* Step 3: - Filter based on selected tags
-      if (userSelectedTags.length != 0) {
-        List<PublisherModel>? filteredData = continentBaseFilteredData?.where(
-          (destination) {
-            return userSelectedTags.any((tag) =>
-                //* check with firebase tags[element1, element2, element3] contains method
-                destination.tags!.contains(tag));
-          },
-        ).toList();
-        isLoading = true;
-        allPublisherData = filteredData;
-        notifyListeners();
-      } else {
-        notifyListeners();
-      }
-    } else {
-      notifyListeners();
+      print('error in loading data $error');
     }
   }
 }

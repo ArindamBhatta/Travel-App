@@ -1,164 +1,165 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/features/home_page/interface/widgets/filter_page_chip.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
 class FilterPage extends StatefulWidget {
-  FilterPage();
-
   @override
   State<FilterPage> createState() => _FilterPageState();
 }
 
 class _FilterPageState extends State<FilterPage> {
-  @override
-  void initState() {
-    super.initState();
-    // Call provider without context
-    WidgetsBinding.instance.addPostFrameCallback(
-      (ctx) {
-        context.read<HomePageProvider>().showPublisherData();
-      },
-    );
-  }
+  List<String> selectedContinents = [
+    'Asia',
+    'Africa',
+    'North America',
+    'South America',
+    'Antarctica',
+    'Europe',
+    'Australia',
+    'Oceania'
+  ];
+
+  List<String> selectedTags = [
+    'Adventure sports',
+    'Beach',
+    'City',
+    'Cultural experiences',
+    'Foodie',
+    'Hiking',
+    'Historic',
+    'Island',
+    'Luxury',
+    'Mountain',
+    'Nightlife',
+    'Off-the-beaten-path',
+    'Romantic',
+    'Rural',
+    'Secluded',
+    'Sightseeing',
+    'Skiing',
+    'Wine tasting',
+    'Winter destination'
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = context.read<HomePageProvider>();
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Where Do You Want To Go',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Select Continents',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-          SizedBox(height: 8),
-          Wrap(
-            spacing: 8.0,
-            children: Continent.values.map(
-              (continent) {
-                return FilterChip(
-                  label: Text(continent.name),
-                  selected: context
-                      .read<HomePageProvider>()
-                      .userSelectedContinents
-                      .contains(continent.name),
-                  onSelected: (isSelected) {
-                    setState(
-                      () {
-                        isSelected
-                            ? context
-                                .read<HomePageProvider>()
-                                .userSelectedContinents
-                                .add(continent.name)
-                            : context
-                                .read<HomePageProvider>()
-                                .userSelectedContinents
-                                .remove(continent.name);
-                      },
-                    );
-                  },
-                );
-              },
-            ).toList(),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Select Tags',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-          SizedBox(height: 8),
-          Wrap(
-            spacing: 8.0,
-            children: Tags.values.map(
-              (tag) {
-                return FilterChip(
-                  label: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        tagsIcon(tag.name),
-                        size: 18.0,
-                      ),
-                      SizedBox(width: 4.0),
-                      Text(tag.name),
-                    ],
-                  ),
-                  selected: context
-                      .read<HomePageProvider>()
-                      .userSelectedTags
-                      .contains(tag.name),
-                  onSelected: (isSelected) {
-                    setState(
-                      () {
-                        isSelected
-                            ? context
-                                .read<HomePageProvider>()
-                                .userSelectedTags
-                                .add(tag.name)
-                            : context
-                                .read<HomePageProvider>()
-                                .userSelectedTags
-                                .remove(tag.name);
-                      },
-                    );
-                  },
-                );
-              },
-            ).toList(),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 36),
-                  backgroundColor: Theme.of(context).dialogTheme.iconColor,
+              const Text(
+                'Where Do You Want To Go',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('cancel'),
               ),
-              SizedBox(width: 8),
-              Consumer<HomePageProvider>(
-                builder: (context, provider, child) {
-                  if (provider.isLoading) {
-                    return CircularProgressIndicator();
-                  }
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 36),
-                    ),
-                    onPressed: provider.allPublisherData == null
-                        ? null
-                        : () {
-                            provider.filterPublisherData();
-                            Navigator.pop(context);
-                          },
-                    child: const Text('submit'),
+              const SizedBox(height: 8),
+              FilterPageChip(
+                title: 'Select Continents',
+                items: Continent.values
+                    .map((continent) => continent.name)
+                    .toList(),
+                selectedItems: selectedContinents,
+                onSelected: (isSelected, item) {
+                  setState(
+                    () {
+                      isSelected
+                          ? selectedContinents.add(item)
+                          : selectedContinents.remove(item);
+                    },
+                  );
+                },
+                onClearSwitchChanged: (isCleared) {
+                  setState(
+                    () {
+                      if (!isCleared) {
+                        // Clear the content
+                        selectedContinents.clear();
+                        homeProvider.userSelectedTags.clear();
+                      } else {
+                        // Reset to default selection when toggled back on
+                        selectedContinents.addAll(
+                          Continent.values.map(
+                            (continent) => continent.name,
+                          ),
+                        );
+                        homeProvider.userSelectedContinents.addAll(Continent
+                            .values
+                            .map((continent) => continent.name));
+                      }
+                    },
                   );
                 },
               ),
+              const SizedBox(height: 8),
+              FilterPageChip(
+                title: 'Select Tags',
+                items: Tags.values.map((tag) => tag.name).toList(),
+                selectedItems: selectedTags,
+                onSelected: (isSelected, item) {
+                  setState(
+                    () {
+                      isSelected
+                          ? selectedTags.add(item)
+                          : selectedTags.remove(item);
+                    },
+                  );
+                },
+                onClearSwitchChanged: (isCleared) {
+                  setState(
+                    () {
+                      if (!isCleared) {
+                        // Clear the content
+                        selectedTags.clear();
+                        homeProvider.userSelectedTags.clear();
+                      } else {
+                        // Reset to default selection when toggled back on
+                        selectedTags.addAll(
+                          Tags.values.map(
+                            (tag) => tag.name,
+                          ),
+                        );
+                        homeProvider.userSelectedTags
+                            .addAll(Tags.values.map((tag) => tag.name));
+                      }
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: homeProvider.allPublisherData == null
+                        ? null
+                        : () {
+                            homeProvider.filterPublisherData(
+                              selectedContinents,
+                              selectedTags,
+                            );
+                            Navigator.pop(context);
+                          },
+                    child: const Text('Submit'),
+                  ),
+                ],
+              ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

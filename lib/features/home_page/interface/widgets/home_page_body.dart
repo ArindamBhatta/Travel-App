@@ -15,31 +15,22 @@ class HomePageBody extends StatelessWidget {
     required this.userLoginData,
   });
 
+  final HomePageProvider hpp = HomePageProvider();
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomePageProvider()..showPublisherData(),
-      /* 
-       create: (context) => HomePageProvider() This line create a new context of HomePageProvider
-       ..showPublisherData() This part immediately calls the showPublisherData() method on the newly created HomePageProvider instance. This means that when the provider is created, it will automatically fetch and load the publisher data.       
-      */
-
-// child: This property specifies the widget tree that will have access to the data provided by HomePageProvider.
+    return ChangeNotifierProvider.value(
+      value: context.read<HomePageProvider>()..showPublisherData(),
       child: Consumer<HomePageProvider>(
-        /* 
-         Consumer<HomePageProvider>
-          builder: This is where you define how to build the UI based on the data provided by HomePageProvider.
-          (context, homePageProvider, child)
-            context: The build context of the widget.
-              homePageProvider: An instance of the HomePageProvider class, allowing you to access its properties and methods.
-            child: The widget that was passed as a child to ChangeNotifierProvider. This is often used to pass down widgets that don't need to rebuild when the provider's state changes.
-        */
         builder: (context, homePageProvider, child) {
           bool isLoading = homePageProvider.isLoading;
-          List<PublisherModel>? filteredPublisherData =
-              homePageProvider.allPublisherData; // Use the filtered data.
+
+          List<PublisherModel>? allPublisherData =
+              homePageProvider.allPublisherData;
+
           List<String>? allPublisherDataKey =
               homePageProvider.allPublisherDataKey;
+          // user wishlist data.
           List<dynamic>? userWishlist = homePageProvider.userWishlist;
 
           return CustomScrollView(
@@ -64,19 +55,24 @@ class HomePageBody extends StatelessWidget {
                 pinned: true,
                 delegate: StickyNavigationButton(),
               ),
-              if (isLoading)
+              if (isLoading == true)
                 const SliverFillRemaining(
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
-              else if ((filteredPublisherData == null &&
+              else if ((allPublisherData == null &&
                       allPublisherDataKey == null) ||
-                  (filteredPublisherData!.isEmpty &&
-                      allPublisherDataKey!.isEmpty))
+                  (allPublisherData!.isEmpty && allPublisherDataKey!.isEmpty))
                 const SliverFillRemaining(
                   child: Center(
                     child: Text('No data available'),
+                  ),
+                )
+              else if (allPublisherData.length != allPublisherDataKey?.length)
+                const SliverFillRemaining(
+                  child: Center(
+                    child: Text('Match every document keys'),
                   ),
                 )
               else
@@ -86,7 +82,7 @@ class HomePageBody extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         PublisherModel publisherSingleData =
-                            filteredPublisherData[index];
+                            allPublisherData[index];
 
                         String publisherDataKey = allPublisherDataKey![index];
 
@@ -96,7 +92,7 @@ class HomePageBody extends StatelessWidget {
                           userWishlist: userWishlist,
                         );
                       },
-                      childCount: filteredPublisherData.length,
+                      childCount: allPublisherData.length,
                     ),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
