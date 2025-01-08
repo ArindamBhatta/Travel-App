@@ -5,23 +5,23 @@ abstract class HomePageService {
 
   static Future<Map<String, dynamic>?> fetchAllFireStoreData() async {
     try {
-      //Step: 1 Get the Publisher Data
-
-      // Reference to the Firestore collection
+      // Firestore collection Reference
       CollectionReference pathOfPublisherData =
           FirebaseFirestore.instance.collection('/destinations/publisher/data');
-      // by using get() method we get QuerySnapshot
+
+      // QuerySnapshot by using get()
       QuerySnapshot publisherAllData = await pathOfPublisherData.get();
 
-      // get the whole snapshot list
+      // QuerySnapshot List by using docs
       List<QueryDocumentSnapshot<Object?>> listOfAllPublisherDocumentSnapshot =
           publisherAllData.docs;
-
+      // DocumentReference by using map
       List<Map<String, dynamic>> listOfPublisherData =
           listOfAllPublisherDocumentSnapshot
               .map((DocumentSnapshot destination) {
         return destination.data() as Map<String, dynamic>;
       }).toList();
+
       combinedData!['publisherData'] = listOfPublisherData;
 
       //Step 2: - Get the Publisher document reference
@@ -31,7 +31,7 @@ abstract class HomePageService {
       }).toList();
       combinedData!['publisherDataIds'] = listOfPublisherDataIds;
 
-      //Step 3 method 2 : - current user Document
+      //Step 3: - current user Document
       DocumentReference currentUserPath = FirebaseFirestore.instance
           .collection('users')
           .doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');

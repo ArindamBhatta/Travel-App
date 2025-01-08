@@ -9,38 +9,23 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  List<String> selectedContinents = [
-    'Asia',
-    'Africa',
-    'North America',
-    'South America',
-    'Antarctica',
-    'Europe',
-    'Australia',
-    'Oceania'
-  ];
+  List<String> selectedContinents = [];
+  List<String> selectedTags = [];
 
-  List<String> selectedTags = [
-    'Adventure sports',
-    'Beach',
-    'City',
-    'Cultural experiences',
-    'Foodie',
-    'Hiking',
-    'Historic',
-    'Island',
-    'Luxury',
-    'Mountain',
-    'Nightlife',
-    'Off-the-beaten-path',
-    'Romantic',
-    'Rural',
-    'Secluded',
-    'Sightseeing',
-    'Skiing',
-    'Wine tasting',
-    'Winter destination'
-  ];
+  @override
+  void initState() {
+    super.initState();
+    final homeProvider = context.read<HomePageProvider>();
+
+    // when the bottom sheet is their every time init State is called
+    selectedContinents = homeProvider.userSelectedContinents.isEmpty
+        ? Continent.values.map((continent) => continent.name).toList()
+        : List.from(homeProvider.userSelectedContinents);
+
+    selectedTags = homeProvider.userSelectedTags.isEmpty
+        ? Tags.values.map((tag) => tag.name).toList()
+        : List.from(homeProvider.userSelectedTags);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +68,14 @@ class _FilterPageState extends State<FilterPage> {
                       if (!isCleared) {
                         // Clear the content
                         selectedContinents.clear();
-                        homeProvider.userSelectedTags.clear();
+                        homeProvider.userSelectedContinents.clear();
                       } else {
                         // Reset to default selection when toggled back on
-                        selectedContinents.addAll(
-                          Continent.values.map(
-                            (continent) => continent.name,
-                          ),
-                        );
-                        homeProvider.userSelectedContinents.addAll(Continent
-                            .values
-                            .map((continent) => continent.name));
+                        selectedContinents = Continent.values
+                            .map((continent) => continent.name)
+                            .toList();
+                        homeProvider.userSelectedContinents =
+                            List.from(selectedContinents);
                       }
                     },
                   );
@@ -122,13 +104,9 @@ class _FilterPageState extends State<FilterPage> {
                         homeProvider.userSelectedTags.clear();
                       } else {
                         // Reset to default selection when toggled back on
-                        selectedTags.addAll(
-                          Tags.values.map(
-                            (tag) => tag.name,
-                          ),
-                        );
-                        homeProvider.userSelectedTags
-                            .addAll(Tags.values.map((tag) => tag.name));
+                        selectedTags =
+                            Tags.values.map((tag) => tag.name).toList();
+                        homeProvider.userSelectedTags = List.from(selectedTags);
                       }
                     },
                   );
@@ -147,10 +125,18 @@ class _FilterPageState extends State<FilterPage> {
                     onPressed: homeProvider.allPublisherData == null
                         ? null
                         : () {
+                            // Update provider's selected continents and tags
+                            homeProvider.userSelectedContinents =
+                                List.from(selectedContinents);
+                            homeProvider.userSelectedTags =
+                                List.from(selectedTags);
+
+                            // Call the filtering logic
                             homeProvider.filterPublisherData(
-                              selectedContinents,
-                              selectedTags,
+                              homeProvider.userSelectedContinents,
+                              homeProvider.userSelectedTags,
                             );
+
                             Navigator.pop(context);
                           },
                     child: const Text('Submit'),

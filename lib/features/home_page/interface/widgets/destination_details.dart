@@ -1,6 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DestinationDetails extends StatefulWidget {
   final String? imageUri;
@@ -30,10 +29,37 @@ class DestinationDetails extends StatefulWidget {
 
 class _DestinationDetailsState extends State<DestinationDetails> {
   bool bookmark = false;
+  final GlobalKey contentKey = GlobalKey();
+  double maxChildSize = 0.6; // Initial maxChildSize value
+
   @override
   void initState() {
-    bookmark = widget.bookmark;
     super.initState();
+    bookmark = widget.bookmark;
+
+    // Measure content height after 1st rendering using addPostFrameCallback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      updateMaxChildSize();
+    });
+  }
+
+  void updateMaxChildSize() {
+    final RenderBox? renderBox =
+        contentKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      final double contentHeight = renderBox.size.height;
+
+      final double screenHeight = MediaQuery.of(context).size.height;
+
+      // Calculate maxChildSize based on content height
+      final double calculatedMaxChildSize = contentHeight / screenHeight;
+      setState(
+        () {
+          maxChildSize = calculatedMaxChildSize.clamp(
+              0.4, 1.0); // Clamp to ensure valid range
+        },
+      );
+    }
   }
 
   @override
@@ -41,143 +67,77 @@ class _DestinationDetailsState extends State<DestinationDetails> {
     return Scaffold(
       body: Stack(
         children: [
+          // Background Image
           Positioned.fill(
             child: CachedNetworkImage(
               imageUrl: '${widget.imageUri}',
               fit: BoxFit.cover,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0),
-                  ),
-                  color: Colors.transparent,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                    colorFilter: const ColorFilter.mode(
-                      Color.fromARGB(255, 254, 189, 184),
-                      BlendMode.colorBurn,
-                    ),
-                  ),
-                ),
-              ),
-              placeholder: (context, url) => CircularProgressIndicator(
-                strokeWidth: 2.0,
-                color: Colors.black,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.green,
-                ),
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(),
               ),
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
-          // Arrow Icon
+          // Back Button
           Positioned(
             top: 60,
             left: 20,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha(50),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
             ),
           ),
-          // Heart Icon
+          // Bookmark Button
           Positioned(
             top: 60,
             right: 20,
-            child: InkWell(
-              onTap: () {
-                widget.toggleInFireStore();
-                setState(
-                  () {
-                    bookmark = !bookmark;
-                  },
-                );
-              },
-              child: Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withAlpha(50),
-                ),
-                child: Icon(
-                  Icons.favorite,
-                  size: 20,
-                  color: bookmark == true ? Colors.red : Colors.white,
-                ),
+            child: IconButton(
+              icon: Icon(
+                bookmark ? Icons.favorite : Icons.favorite_border,
+                color: bookmark ? Colors.red : Colors.white,
               ),
+              onPressed: () {
+                widget.toggleInFireStore();
+                setState(() => bookmark = !bookmark);
+              },
             ),
           ),
-
+          // Draggable Scrollable Sheet
           DraggableScrollableSheet(
             initialChildSize: 0.4,
-            builder: (BuildContext context, ScrollController scrollController) {
+            minChildSize: 0.3,
+            maxChildSize: maxChildSize,
+            builder: (context, scrollController) {
               return Container(
-                margin: EdgeInsets.all(0),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-                decoration: BoxDecoration(
+                key: contentKey, // Key to measure content height
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(24),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 child: ListView(
-                  padding: EdgeInsets.symmetric(vertical: 24.0),
                   controller: scrollController,
                   children: [
                     Text(
                       '${widget.name}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
-                      height: 2.0,
-                    ),
+                    const SizedBox(height: 8),
                     Text(
                       '${widget.country}, ${widget.continent}',
-                      style: TextStyle(color: Colors.grey[900]),
+                      style: TextStyle(color: Colors.grey[700]),
                     ),
-                    SizedBox(
-                      height: 14.0,
-                    ),
+                    const SizedBox(height: 16),
                     Text('${widget.knowFor}'),
-                    SizedBox(
-                      height: 16.0,
-                    ),
+                    const SizedBox(height: 16),
                     Wrap(
-                      spacing: 8.0,
-                      children: widget.viewPoints!.map(
-                        (tag) {
-                          return Chip(
-                            padding: EdgeInsets.all(4),
-                            label: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  tagsIcon(tag),
-                                  size: 16.0,
-                                ),
-                                SizedBox(width: 4.0),
-                                Text(
-                                  tag,
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ).toList(),
+                      spacing: 8,
+                      children: widget.viewPoints!
+                          .map((tag) => Chip(label: Text(tag)))
+                          .toList(),
                     ),
                   ],
                 ),

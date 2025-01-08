@@ -87,37 +87,11 @@ class HomePageProvider extends ChangeNotifier {
   List<String>? allPublisherDataKey;
   List<dynamic>? userWishlist;
 
-  List<String> userSelectedContinents = [
-    'Asia',
-    'Africa',
-    'North America',
-    'South America',
-    'Antarctica',
-    'Europe',
-    'Australia',
-    'Oceania'
-  ];
-  List<String> userSelectedTags = [
-    'Adventure sports',
-    'Beach',
-    'City',
-    'Cultural experiences',
-    'Foodie',
-    'Hiking',
-    'Historic',
-    'Island',
-    'Luxury',
-    'Mountain',
-    'Nightlife',
-    'Off-the-beaten-path',
-    'Romantic',
-    'Rural',
-    'Secluded',
-    'Sightseeing',
-    'Skiing',
-    'Wine tasting',
-    'Winter destination'
-  ];
+  List<String> userSelectedContinents = [];
+  List<String> userSelectedTags = [];
+
+  List<PublisherModel>? filteredPublisherData;
+  List<String>? filteredPublisherDataKey;
 
   void setCurrentContinent(Button continent, int index) {
     if (this.textVisibilityIndex != index) {
@@ -146,58 +120,72 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   // Filter Publisher Data Based on User Selection
+
   void filterPublisherData(
       List<String> selectedContinents, List<String> selectedTags) {
     try {
-      // Step 1: - check data is present or not.
-      if (allPublisherData == null) {
+      // Ensure original data exists
+      if (allPublisherData == null || allPublisherDataKey == null) {
         isLoading = false;
         notifyListeners();
         print('Data is not present here');
         return;
       }
+
       isLoading = true;
       notifyListeners();
 
-      //* Step 2: - We get all data now Filter based on selected continents
-      if (userSelectedContinents.length != 0) {
-        List<PublisherModel>? continentBaseFilteredData =
-            allPublisherData?.where((destination) {
-          return userSelectedContinents.any(
-            (continent) => destination.continent == continent,
-          );
+      // Create temporary filtered lists
+      List<PublisherModel>? tempPublisherData =
+          List<PublisherModel>.from(allPublisherData!);
+
+      List<String>? tempPublisherDataKey =
+          List<String>.from(allPublisherDataKey!);
+
+      // Filter based on selected continents
+      if (selectedContinents.isNotEmpty) {
+        List<int> matchingIndexes = [];
+        tempPublisherData = tempPublisherData.where((destination) {
+          int index = allPublisherData!.indexOf(destination);
+          if (selectedContinents
+              .any((continent) => destination.continent == continent)) {
+            matchingIndexes.add(index);
+            return true;
+          }
+          return false;
         }).toList();
 
-        //* Step 3: - Filter based on selected tags
-        if (userSelectedTags.length != 0) {
-          List<PublisherModel>? filteredData = continentBaseFilteredData?.where(
-            (destination) {
-              return userSelectedTags.any(
-                (tag) =>
-                    //* check with firebase tags[element1, element2, element3] contains method
-                    destination.tags!.contains(tag),
-              );
-            },
-          ).toList();
-          allPublisherData = filteredData;
-          print('publisherData is ${allPublisherData?.length}');
-          print('all publisher key length is ${allPublisherDataKey?.length}');
-          isLoading = false;
-          notifyListeners();
-        } else {
-          isLoading = false;
-          notifyListeners();
-          return;
-        }
-      } else {
-        isLoading = false;
-        notifyListeners();
-        return;
+        tempPublisherDataKey = matchingIndexes
+            .map((index) => allPublisherDataKey![index])
+            .toList();
       }
+
+      // Filter based on selected tags
+      if (selectedTags.isNotEmpty) {
+        List<int> matchingIndexes = [];
+        tempPublisherData = tempPublisherData.where((destination) {
+          int index = allPublisherData!.indexOf(destination);
+          if (selectedTags.any((tag) => destination.tags!.contains(tag))) {
+            matchingIndexes.add(index);
+            return true;
+          }
+          return false;
+        }).toList();
+
+        tempPublisherDataKey =
+            matchingIndexes.map((i) => allPublisherDataKey![i]).toList();
+      }
+
+      // Assign filtered results to separate properties
+      filteredPublisherData = tempPublisherData;
+      filteredPublisherDataKey = tempPublisherDataKey;
+
+      isLoading = false;
+      notifyListeners();
     } catch (error) {
       isLoading = false;
       notifyListeners();
-      print('error in loading data $error');
+      print('Error in filtering data: $error');
     }
   }
 }

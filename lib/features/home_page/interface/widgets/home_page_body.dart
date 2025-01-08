@@ -25,13 +25,17 @@ class HomePageBody extends StatelessWidget {
         builder: (context, homePageProvider, child) {
           bool isLoading = homePageProvider.isLoading;
 
-          List<PublisherModel>? allPublisherData =
-              homePageProvider.allPublisherData;
+          List<PublisherModel>? displayedPublisherData =
+              homePageProvider.filteredPublisherData ??
+                  homePageProvider.allPublisherData;
 
-          List<String>? allPublisherDataKey =
-              homePageProvider.allPublisherDataKey;
+          List<String>? displayedPublisherDataKey =
+              homePageProvider.filteredPublisherDataKey ??
+                  homePageProvider.allPublisherDataKey;
+
           // user wishlist data.
           List<dynamic>? userWishlist = homePageProvider.userWishlist;
+          print('userWishlist is ------------- ---> $userWishlist');
 
           return CustomScrollView(
             slivers: [
@@ -61,18 +65,21 @@ class HomePageBody extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              else if ((allPublisherData == null &&
-                      allPublisherDataKey == null) ||
-                  (allPublisherData!.isEmpty && allPublisherDataKey!.isEmpty))
+              else if ((displayedPublisherData == null &&
+                      displayedPublisherDataKey == null) ||
+                  (displayedPublisherData!.isEmpty &&
+                      displayedPublisherDataKey!.isEmpty))
                 const SliverFillRemaining(
                   child: Center(
                     child: Text('No data available'),
                   ),
                 )
-              else if (allPublisherData.length != allPublisherDataKey?.length)
+              else if (displayedPublisherData.length !=
+                  displayedPublisherDataKey?.length)
                 const SliverFillRemaining(
                   child: Center(
-                    child: Text('Match every document keys'),
+                    child:
+                        Text('Sorry 😓😓 needs to match every document keys'),
                   ),
                 )
               else
@@ -82,9 +89,10 @@ class HomePageBody extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         PublisherModel publisherSingleData =
-                            allPublisherData[index];
+                            displayedPublisherData[index];
 
-                        String publisherDataKey = allPublisherDataKey![index];
+                        String publisherDataKey =
+                            displayedPublisherDataKey![index];
 
                         return CardToDetailsPage(
                           destination: publisherSingleData,
@@ -92,7 +100,7 @@ class HomePageBody extends StatelessWidget {
                           userWishlist: userWishlist,
                         );
                       },
-                      childCount: allPublisherData.length,
+                      childCount: displayedPublisherData.length,
                     ),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
