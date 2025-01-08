@@ -34,7 +34,6 @@ class _FilterPageState extends State<FilterPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.6,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,8 +47,8 @@ class _FilterPageState extends State<FilterPage> {
               ),
               const SizedBox(height: 8),
               FilterPageChip(
-                title: 'Select Continents',
-                items: Continent.values
+                heading: 'Select Continents',
+                totalItem: Continent.values
                     .map((continent) => continent.name)
                     .toList(),
                 selectedItems: selectedContinents,
@@ -83,8 +82,8 @@ class _FilterPageState extends State<FilterPage> {
               ),
               const SizedBox(height: 8),
               FilterPageChip(
-                title: 'Select Tags',
-                items: Tags.values.map((tag) => tag.name).toList(),
+                heading: 'Select Tags',
+                totalItem: Tags.values.map((tag) => tag.name).toList(),
                 selectedItems: selectedTags,
                 onSelected: (isSelected, item) {
                   setState(
@@ -112,34 +111,46 @@ class _FilterPageState extends State<FilterPage> {
                   );
                 },
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(228, 255, 255, 255)),
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(
+                        'cancel',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: homeProvider.allPublisherData == null
-                        ? null
-                        : () {
-                            // Update provider's selected continents and tags
-                            homeProvider.userSelectedContinents =
-                                List.from(selectedContinents);
-                            homeProvider.userSelectedTags =
-                                List.from(selectedTags);
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: homeProvider.allPublisherData == null
+                          ? null
+                          : () {
+                              // Update provider's selected continents and tags
+                              homeProvider.userSelectedContinents =
+                                  List.from(selectedContinents);
+                              homeProvider.userSelectedTags =
+                                  List.from(selectedTags);
 
-                            // Call the filtering logic
-                            homeProvider.filterPublisherData(
-                              homeProvider.userSelectedContinents,
-                              homeProvider.userSelectedTags,
-                            );
+                              // Call the filtering logic
+                              homeProvider.filterPublisherData(
+                                homeProvider.userSelectedContinents,
+                                homeProvider.userSelectedTags,
+                              );
 
-                            Navigator.pop(context);
-                          },
-                    child: const Text('Submit'),
+                              Navigator.pop(context);
+                            },
+                      child: const Text('Apply'),
+                    ),
                   ),
                 ],
               ),

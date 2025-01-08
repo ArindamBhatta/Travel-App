@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
 class FilterPageChip extends StatefulWidget {
-  final String title;
-  final List<String> items;
+  final String heading;
+  final List<String> totalItem;
   final List<String> selectedItems;
   final Function(bool isSelected, String item) onSelected;
   final Function(bool isCleared) onClearSwitchChanged;
 
   FilterPageChip({
-    required this.title,
-    required this.items,
+    required this.heading,
+    required this.totalItem,
     required this.selectedItems,
     required this.onSelected,
     required this.onClearSwitchChanged,
@@ -21,7 +22,8 @@ class FilterPageChip extends StatefulWidget {
 
 class _FilterPageChipState extends State<FilterPageChip> {
   bool isSwitchOn = true;
-  WidgetStateProperty<Icon> thumbIcon = WidgetStateProperty<Icon>.fromMap(
+  WidgetStateProperty<Icon> toggleIconForFilterTagAndContinent =
+      WidgetStateProperty<Icon>.fromMap(
     <WidgetStatesConstraint, Icon>{
       WidgetState.selected: Icon(Icons.check),
       WidgetState.any: Icon(Icons.close),
@@ -37,13 +39,13 @@ class _FilterPageChipState extends State<FilterPageChip> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.title,
+              widget.heading,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Switch(
-              thumbIcon: thumbIcon,
+              thumbIcon: toggleIconForFilterTagAndContinent,
               value: isSwitchOn,
               activeColor: Colors.teal,
               onChanged: (bool toggle) {
@@ -59,12 +61,20 @@ class _FilterPageChipState extends State<FilterPageChip> {
         ),
         Wrap(
           spacing: 8.0,
-          children: widget.items.map(
+          children: widget.totalItem.map(
             (item) {
               return FilterChip(
                 label: Text(item),
-                checkmarkColor: Colors.teal,
+                showCheckmark: false,
+                avatar: widget.selectedItems.contains(item)
+                    ? Icon(Icons.check_circle)
+                    : Icon(
+                        tagsIcon(item),
+                        size: 18,
+                      ),
                 selectedColor: Colors.tealAccent,
+                labelStyle: TextStyle(color: Colors.black),
+                checkmarkColor: Colors.teal,
                 selected: widget.selectedItems.contains(item),
                 onSelected: (isSelected) => widget.onSelected(
                   isSelected,

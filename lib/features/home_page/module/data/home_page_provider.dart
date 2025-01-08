@@ -62,7 +62,7 @@ IconData? tagsIcon(String tag) {
     'Skiing' => Icons.downhill_skiing_outlined,
     'Wine tasting' => Icons.wine_bar_outlined,
     'Winter destination' => Icons.ac_unit,
-    _ => Icons.label_outlined,
+    _ => Icons.circle_outlined,
   };
 }
 

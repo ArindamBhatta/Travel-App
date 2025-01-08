@@ -79,9 +79,9 @@ class DestinationCard extends StatelessWidget {
                         color: Colors.white.withAlpha(50),
                       ),
                       child: Icon(
-                        Icons.favorite,
+                        this.bookmark ? Icons.favorite : Icons.favorite_border,
                         size: 20,
-                        color: this.bookmark ? Colors.red : Colors.white,
+                        color: Colors.white,
                       ),
                     ),
                   ),
