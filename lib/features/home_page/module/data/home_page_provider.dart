@@ -66,22 +66,18 @@ IconData? tagsIcon(String tag) {
   };
 }
 
-enum Button {
+enum HomePageInnerNavigationButtonText {
   All('All'),
-  Popular('Popular'),
-  Recommended('Recommended'),
-  MostReviewed('Most reviewed');
+  WishListed('Wish Listed'),
+  MostViewed('Most viewed'),
+  MostWished('Most wished');
 
   final String name;
-  const Button(this.name);
+  const HomePageInnerNavigationButtonText(this.name);
 }
 
 class HomePageProvider extends ChangeNotifier {
-  //*global scope property for [all, popular, recommended]
-  int textVisibilityIndex = 0;
-  Button currentButton = Button.All;
-
-  bool isLoading = false; // for User something is coming their
+  bool isLoading = false;
 
   List<PublisherModel>? allPublisherData;
   List<String>? allPublisherDataKey;
@@ -93,21 +89,15 @@ class HomePageProvider extends ChangeNotifier {
   List<PublisherModel>? filteredPublisherData;
   List<String>? filteredPublisherDataKey;
 
-  void setCurrentContinent(Button continent, int index) {
-    if (this.textVisibilityIndex != index) {
-      this.textVisibilityIndex = index;
-    }
-    this.currentButton = continent;
-    notifyListeners();
-  }
-
   // Fetch All Publisher Data
   void showPublisherData() async {
     isLoading = true;
     notifyListeners();
     try {
       allPublisherData = await HomePageRepo.fetchPublisherData();
+
       allPublisherDataKey = await HomePageRepo.fetchPublisherDataKeys();
+
       userWishlist = await HomePageRepo.userWishList();
     } catch (error) {
       print('Error fetching data: $error');
@@ -120,7 +110,6 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   // Filter Publisher Data Based on User Selection
-
   void filterPublisherData(
       List<String> selectedContinents, List<String> selectedTags) {
     try {

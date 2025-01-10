@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/home_page/interface/widgets/filter_page_chip.dart';
+import 'package:travel_app/features/home_page/interface/widgets/filtering_option_for_user.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
 class FilterPage extends StatefulWidget {
@@ -15,21 +15,28 @@ class _FilterPageState extends State<FilterPage> {
   @override
   void initState() {
     super.initState();
-    final homeProvider = context.read<HomePageProvider>();
+    final homePageProvider = context.read<HomePageProvider>();
 
-    // when the bottom sheet is their every time init State is called
-    selectedContinents = homeProvider.userSelectedContinents.isEmpty
+    /* when the bottom sheet is their every time init State is called
+    if selectedContinents is Empty them loop through all Continent.
+    else create a shallow copy of Provider userSelectedContinents and store in selectedContinents
+   */
+    selectedContinents = homePageProvider.userSelectedContinents.isEmpty
         ? Continent.values.map((continent) => continent.name).toList()
-        : List.from(homeProvider.userSelectedContinents);
+        : List.from(
+            homePageProvider.userSelectedContinents,
+          );
 
-    selectedTags = homeProvider.userSelectedTags.isEmpty
+    selectedTags = homePageProvider.userSelectedTags.isEmpty
         ? Tags.values.map((tag) => tag.name).toList()
-        : List.from(homeProvider.userSelectedTags);
+        : List.from(
+            homePageProvider.userSelectedTags,
+          );
   }
 
   @override
   Widget build(BuildContext context) {
-    final homeProvider = context.read<HomePageProvider>();
+    final homePageProvider = context.read<HomePageProvider>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -46,12 +53,18 @@ class _FilterPageState extends State<FilterPage> {
                 ),
               ),
               const SizedBox(height: 8),
-              FilterPageChip(
+              FilteringOptionForUser(
                 heading: 'Select Continents',
+
+                // mapping through every enum and change it a string.
                 totalItem: Continent.values
-                    .map((continent) => continent.name)
+                    .map(
+                      (continent) => continent.name,
+                    )
                     .toList(),
+
                 selectedItems: selectedContinents,
+
                 onSelected: (isSelected, item) {
                   setState(
                     () {
@@ -67,13 +80,13 @@ class _FilterPageState extends State<FilterPage> {
                       if (!isCleared) {
                         // Clear the content
                         selectedContinents.clear();
-                        homeProvider.userSelectedContinents.clear();
+                        homePageProvider.userSelectedContinents.clear();
                       } else {
                         // Reset to default selection when toggled back on
                         selectedContinents = Continent.values
                             .map((continent) => continent.name)
                             .toList();
-                        homeProvider.userSelectedContinents =
+                        homePageProvider.userSelectedContinents =
                             List.from(selectedContinents);
                       }
                     },
@@ -81,7 +94,7 @@ class _FilterPageState extends State<FilterPage> {
                 },
               ),
               const SizedBox(height: 8),
-              FilterPageChip(
+              FilteringOptionForUser(
                 heading: 'Select Tags',
                 totalItem: Tags.values.map((tag) => tag.name).toList(),
                 selectedItems: selectedTags,
@@ -100,12 +113,13 @@ class _FilterPageState extends State<FilterPage> {
                       if (!isCleared) {
                         // Clear the content
                         selectedTags.clear();
-                        homeProvider.userSelectedTags.clear();
+                        homePageProvider.userSelectedTags.clear();
                       } else {
                         // Reset to default selection when toggled back on
                         selectedTags =
                             Tags.values.map((tag) => tag.name).toList();
-                        homeProvider.userSelectedTags = List.from(selectedTags);
+                        homePageProvider.userSelectedTags =
+                            List.from(selectedTags);
                       }
                     },
                   );
@@ -132,23 +146,23 @@ class _FilterPageState extends State<FilterPage> {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: homeProvider.allPublisherData == null
-                          ? null
-                          : () {
-                              // Update provider's selected continents and tags
-                              homeProvider.userSelectedContinents =
-                                  List.from(selectedContinents);
-                              homeProvider.userSelectedTags =
-                                  List.from(selectedTags);
+                      onPressed:
+                          context.watch<HomePageProvider>().allPublisherData ==
+                                  null
+                              ? null
+                              : () {
+                                  homePageProvider.userSelectedContinents =
+                                      List.from(selectedContinents);
+                                  homePageProvider.userSelectedTags =
+                                      List.from(selectedTags);
 
-                              // Call the filtering logic
-                              homeProvider.filterPublisherData(
-                                homeProvider.userSelectedContinents,
-                                homeProvider.userSelectedTags,
-                              );
+                                  homePageProvider.filterPublisherData(
+                                    homePageProvider.userSelectedContinents,
+                                    homePageProvider.userSelectedTags,
+                                  );
 
-                              Navigator.pop(context);
-                            },
+                                  Navigator.pop(context);
+                                },
                       child: const Text('Apply'),
                     ),
                   ),
@@ -161,3 +175,19 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 }
+/* 
+void main() {
+  List<int> number = [1, 2, 3, 4, 5, 6];
+  List<int> deepCopy = List.from(number);
+  List<int> shallowCopy = number;
+
+  print('deepCopy $deepCopy');
+
+  //number = [6, 7, 8, 9, 10]; //create a new List with &address.
+  number.add(23);
+
+  print('shallowCopy $shallowCopy');
+
+  print(number);
+}
+ */

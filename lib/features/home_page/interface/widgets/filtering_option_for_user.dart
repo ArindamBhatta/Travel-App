@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
-class FilterPageChip extends StatefulWidget {
+class FilteringOptionForUser extends StatefulWidget {
   final String heading;
   final List<String> totalItem;
   final List<String> selectedItems;
   final Function(bool isSelected, String item) onSelected;
   final Function(bool isCleared) onClearSwitchChanged;
 
-  FilterPageChip({
+  FilteringOptionForUser({
     required this.heading,
     required this.totalItem,
     required this.selectedItems,
@@ -17,10 +17,10 @@ class FilterPageChip extends StatefulWidget {
   });
 
   @override
-  _FilterPageChipState createState() => _FilterPageChipState();
+  _FilteringOptionForUserState createState() => _FilteringOptionForUserState();
 }
 
-class _FilterPageChipState extends State<FilterPageChip> {
+class _FilteringOptionForUserState extends State<FilteringOptionForUser> {
   bool isSwitchOn = true;
   WidgetStateProperty<Icon> toggleIconForFilterTagAndContinent =
       WidgetStateProperty<Icon>.fromMap(

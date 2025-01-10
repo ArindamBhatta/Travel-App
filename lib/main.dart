@@ -16,7 +16,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => HomePageProvider(),
+          create: (context) => HomePageProvider()..showPublisherData(),
         ),
         ChangeNotifierProvider(
           create: (context) => DetailsPageProvider(),
