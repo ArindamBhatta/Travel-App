@@ -1,4 +1,5 @@
 class PublisherModel {
+  String? id;
   String? continent;
   String? country;
   String? imageUrl;
@@ -8,6 +9,7 @@ class PublisherModel {
   List<String>? tags;
 
   PublisherModel({
+    this.id,
     this.continent,
     this.country,
     this.knownFor,
@@ -17,7 +19,8 @@ class PublisherModel {
     this.tags,
   });
 
-  PublisherModel.fromJsonNameConstructor(Map<String, dynamic> json) {
+  PublisherModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     continent = json['continent'];
     country = json['country'];
     knownFor = json['knownFor'];
@@ -29,6 +32,6 @@ class PublisherModel {
 
   @override
   String toString() {
-    return 'DestinationModel(name: ${name ?? 'null'})';
+    return 'DestinationModel(name: ${id ?? 'null'})';
   }
 }

@@ -7,13 +7,12 @@ import 'package:travel_app/features/home_page/module/model/publisher_model.dart'
 
 class CardToDetailsPage extends StatefulWidget {
   final PublisherModel destination;
-  final String destinationKey;
+
   final List<dynamic>? userWishlist;
 
   CardToDetailsPage({
     super.key,
     required this.destination,
-    required this.destinationKey,
     required this.userWishlist,
   });
 
@@ -26,9 +25,9 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
 
   @override
   void initState() {
-    super.initState();
     isInWishlist = widget.userWishlist != null &&
-        widget.userWishlist!.contains(widget.destinationKey);
+        widget.userWishlist!.contains(widget.destination.id);
+    super.initState();
   }
 
   void toggleWishListInFireStore() async {
@@ -39,18 +38,20 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
     try {
       if (isInWishlist) {
         await userDocRef.update({
-          'wishlistLocations': FieldValue.arrayRemove([widget.destinationKey]),
+          'wishlistLocations': FieldValue.arrayRemove([widget.destination.id]),
         });
         setState(() {
           isInWishlist = false;
         });
       } else {
         await userDocRef.update({
-          'wishlistLocations': FieldValue.arrayUnion([widget.destinationKey]),
+          'wishlistLocations': FieldValue.arrayUnion([widget.destination.id]),
         });
-        setState(() {
-          isInWishlist = true;
-        });
+        setState(
+          () {
+            isInWishlist = true;
+          },
+        );
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,7 +64,11 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
     } catch (error) {
       print('Error updating wishlist: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating wishlist. Please try again.')),
+        SnackBar(
+          content: Text(
+            'Error updating wishlist. Please try again.',
+          ),
+        ),
       );
     }
   }

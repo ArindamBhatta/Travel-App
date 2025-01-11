@@ -15,23 +15,20 @@ abstract class HomePageService {
       // QuerySnapshot List by using docs
       List<QueryDocumentSnapshot<Object?>> listOfAllPublisherDocumentSnapshot =
           publisherAllData.docs;
+
       // DocumentReference by using map
       List<Map<String, dynamic>> listOfPublisherData =
           listOfAllPublisherDocumentSnapshot
               .map((DocumentSnapshot destination) {
-        return destination.data() as Map<String, dynamic>;
+        Map<String, dynamic> dataItem =
+            destination.data() as Map<String, dynamic>;
+        dataItem['id'] = destination.id;
+        return dataItem;
       }).toList();
 
       combinedData!['publisherData'] = listOfPublisherData;
 
-      //Step 2: - Get the Publisher document reference
-      List<String> listOfPublisherDataIds = listOfAllPublisherDocumentSnapshot
-          .map((DocumentSnapshot destination) {
-        return destination.id;
-      }).toList();
-      combinedData!['publisherDataIds'] = listOfPublisherDataIds;
-
-      //Step 3: - current user Document
+      // current user Document
       DocumentReference currentUserPath = FirebaseFirestore.instance
           .collection('users')
           .doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');
@@ -43,6 +40,7 @@ abstract class HomePageService {
         throw Exception("Current user data not found or is null");
       }
 
+      // get current user
       Map<String, dynamic> currentUserData =
           currentUserSnapshot.data() as Map<String, dynamic>;
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 import 'package:travel_app/features/home_page/module/repo/home_page_repo.dart';
@@ -80,14 +81,16 @@ class HomePageProvider extends ChangeNotifier {
   bool isLoading = false;
 
   List<PublisherModel>? allPublisherData;
-  List<String>? allPublisherDataKey;
   List<dynamic>? userWishlist;
 
   List<String> userSelectedContinents = [];
   List<String> userSelectedTags = [];
 
   List<PublisherModel>? filteredPublisherData;
-  List<String>? filteredPublisherDataKey;
+
+  final DocumentReference userDocRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');
 
   // Fetch All Publisher Data
   void showPublisherData() async {
@@ -96,13 +99,10 @@ class HomePageProvider extends ChangeNotifier {
     try {
       allPublisherData = await HomePageRepo.fetchPublisherData();
 
-      allPublisherDataKey = await HomePageRepo.fetchPublisherDataKeys();
-
       userWishlist = await HomePageRepo.userWishList();
     } catch (error) {
       print('Error fetching data: $error');
       allPublisherData = null;
-      allPublisherDataKey = null;
       userWishlist = null;
     }
     isLoading = false;
@@ -114,7 +114,7 @@ class HomePageProvider extends ChangeNotifier {
       List<String> selectedContinents, List<String> selectedTags) {
     try {
       // Ensure original data exists
-      if (allPublisherData == null || allPublisherDataKey == null) {
+      if (allPublisherData == null) {
         isLoading = false;
         notifyListeners();
         print('Data is not present here');
@@ -123,58 +123,97 @@ class HomePageProvider extends ChangeNotifier {
 
       isLoading = true;
       notifyListeners();
-
       // Create temporary filtered lists
       List<PublisherModel>? tempPublisherData =
           List<PublisherModel>.from(allPublisherData!);
 
-      List<String>? tempPublisherDataKey =
-          List<String>.from(allPublisherDataKey!);
-
-      // Filter based on selected continents
+      //* Step 2: - We get all data now Filter based on selected continents
       if (selectedContinents.isNotEmpty) {
-        List<int> matchingIndexes = [];
-        tempPublisherData = tempPublisherData.where((destination) {
-          int index = allPublisherData!.indexOf(destination);
-          if (selectedContinents
-              .any((continent) => destination.continent == continent)) {
-            matchingIndexes.add(index);
-            return true;
-          }
-          return false;
-        }).toList();
+        tempPublisherData = tempPublisherData.where(
+          (destination) {
+            return selectedContinents
+                .any((continent) => destination.continent == continent);
+          },
+        ).toList();
 
-        tempPublisherDataKey = matchingIndexes
-            .map((index) => allPublisherDataKey![index])
-            .toList();
+        //* Step 3: - Filter based on selected tags
+        if (selectedTags.isNotEmpty) {
+          tempPublisherData = tempPublisherData.where((destination) {
+            return selectedTags.any(
+              (tag) => destination.tags!.contains(tag),
+            );
+          }).toList();
+
+          filteredPublisherData = tempPublisherData;
+          isLoading = false;
+          notifyListeners();
+        }
       }
+    } catch (error) {
+      print('Error in Filtering data $error');
+    }
+  }
 
-      // Filter based on selected tags
-      if (selectedTags.isNotEmpty) {
-        List<int> matchingIndexes = [];
-        tempPublisherData = tempPublisherData.where((destination) {
-          int index = allPublisherData!.indexOf(destination);
-          if (selectedTags.any((tag) => destination.tags!.contains(tag))) {
-            matchingIndexes.add(index);
-            return true;
-          }
-          return false;
-        }).toList();
-
-        tempPublisherDataKey =
-            matchingIndexes.map((i) => allPublisherDataKey![i]).toList();
-      }
-
-      // Assign filtered results to separate properties
-      filteredPublisherData = tempPublisherData;
-      filteredPublisherDataKey = tempPublisherDataKey;
-
-      isLoading = false;
+  // Fetch initial wishlist from Firestore
+  Future<void> fetchUserWishlist() async {
+    try {
+      final snapshot = await userDocRef.get();
+      // Explicitly cast `snapshot.data()` to a Map
+      final data = snapshot.data() as Map<String, dynamic>?;
+      userWishlist = data?['wishlistLocations'] as List<dynamic>? ?? [];
       notifyListeners();
     } catch (error) {
-      isLoading = false;
-      notifyListeners();
-      print('Error in filtering data: $error');
+      print('Error fetching wishlist: $error');
+    }
+  }
+
+  List<PublisherModel>? allWishListedData() {
+    if (allPublisherData == null) {
+      print('Data is not present here');
+      return null;
+    }
+
+    return allPublisherData!
+        .where(
+          (destination) =>
+              userWishlist != null && userWishlist!.contains(destination.id),
+        )
+        .toList();
+  }
+
+  // Add item to wishlist
+  Future<void> addToWishlist(String destinationId) async {
+    if (!userWishlist!.contains(destinationId)) {
+      userWishlist!.add(destinationId);
+      notifyListeners(); // Update UI immediately
+
+      try {
+        await userDocRef.update({
+          'wishlistLocations': FieldValue.arrayUnion([destinationId]),
+        });
+      } catch (error) {
+        print('Error adding to wishlist: $error');
+        userWishlist!.remove(destinationId); // Revert local state on error
+        notifyListeners();
+      }
+    }
+  }
+
+  // Remove item from wishlist
+  Future<void> removeFromWishlist(String destinationId) async {
+    if (userWishlist!.contains(destinationId)) {
+      userWishlist!.remove(destinationId);
+      notifyListeners(); // Update UI immediately
+
+      try {
+        await userDocRef.update({
+          'wishlistLocations': FieldValue.arrayRemove([destinationId]),
+        });
+      } catch (error) {
+        print('Error removing from wishlist: $error');
+        userWishlist!.add(destinationId); // Revert local state on error
+        notifyListeners();
+      }
     }
   }
 }

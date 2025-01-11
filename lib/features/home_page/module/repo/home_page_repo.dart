@@ -14,34 +14,12 @@ abstract class HomePageRepo {
     return cachedCombinedData;
   }
 
-  static Future<List<PublisherModel>?> fetchPublisherData() async {
-    try {
-      Map<String, dynamic>? combinedData = await fetchCombinedDataCached();
-
-      if (combinedData != null && combinedData.containsKey('publisherData')) {
-        List<Map<String, dynamic>> publisherData =
-            combinedData['publisherData'] as List<Map<String, dynamic>>;
-
-        List<PublisherModel> publisherDataModel =
-            publisherData.map((destination) {
-          return PublisherModel.fromJsonNameConstructor(destination);
-        }).toList();
-        return publisherDataModel;
-      } else {
-        print('publisherData key not found in combinedData');
-        return null;
-      }
-    } catch (error) {
-      print("Error fetching publisher data: $error");
-      return null;
-    }
-  }
-
   static Future<List<String>?> fetchPublisherDataKeys() async {
     try {
       Map<String, dynamic>? combinedData = await fetchCombinedDataCached();
 
       if (combinedData != null &&
+          //Does Map Contain the Key
           combinedData.containsKey('publisherDataIds')) {
         List<String> publisherDataIds =
             combinedData['publisherDataIds'] as List<String>;
@@ -51,6 +29,29 @@ abstract class HomePageRepo {
       }
     } catch (error) {
       print("Error fetching publisher data keys: $error");
+      return null;
+    }
+  }
+
+  static Future<List<PublisherModel>?> fetchPublisherData() async {
+    try {
+      Map<String, dynamic>? combinedData = await fetchCombinedDataCached();
+      if (combinedData != null && combinedData.containsKey('publisherData')) {
+        List<Map<String, dynamic>> publisherData =
+            combinedData['publisherData'] as List<Map<String, dynamic>>;
+
+        List<PublisherModel> publisherDataModel = publisherData.map(
+          (destination) {
+            return PublisherModel.fromJson(destination);
+          },
+        ).toList();
+        return publisherDataModel;
+      } else {
+        print('publisherData key not found in combinedData');
+        return null;
+      }
+    } catch (error) {
+      print("Error fetching publisher data: $error");
       return null;
     }
   }

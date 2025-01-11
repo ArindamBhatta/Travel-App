@@ -4,6 +4,7 @@ import 'package:travel_app/features/home_page/interface/widgets/data_grid.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_app_bar.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation_button.dart';
 import 'package:travel_app/features/home_page/interface/widgets/sticky_search_bar.dart';
+import 'package:travel_app/features/home_page/interface/widgets/user_wish_list.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 
@@ -52,10 +53,6 @@ class HomePageBody extends StatelessWidget {
                 homePageProvider.filteredPublisherData ??
                     homePageProvider.allPublisherData;
 
-            List<String>? displayedPublisherDataKey =
-                homePageProvider.filteredPublisherDataKey ??
-                    homePageProvider.allPublisherDataKey;
-
             List<dynamic>? userWishlist = homePageProvider.userWishlist;
 
             return TabBarView(
@@ -63,13 +60,10 @@ class HomePageBody extends StatelessWidget {
                 DataGrid(
                   isLoading: isLoading,
                   allDestination: displayPublisherData,
-                  allDestinationKey: displayedPublisherDataKey,
                   userWishlist: userWishlist,
                 ),
-                Container(
-                  child: Center(
-                    child: Text('Coming Soon!'),
-                  ),
+                UserWishList(
+                  userWishlist: userWishlist,
                 ),
                 Container(
                   child: Center(

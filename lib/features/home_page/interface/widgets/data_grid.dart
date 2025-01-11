@@ -5,13 +5,12 @@ import 'package:travel_app/features/home_page/module/model/publisher_model.dart'
 class DataGrid extends StatelessWidget {
   final bool isLoading;
   final List<PublisherModel>? allDestination;
-  final List<String>? allDestinationKey;
+
   final List<dynamic>? userWishlist;
 
   DataGrid({
     required this.isLoading,
     required this.allDestination,
-    required this.allDestinationKey,
     required this.userWishlist,
   });
 
@@ -21,8 +20,7 @@ class DataGrid extends StatelessWidget {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (allDestination == null && allDestinationKey == null ||
-        allDestination!.isEmpty && allDestinationKey!.isEmpty) {
+    } else if (allDestination == null || allDestination!.isEmpty) {
       return Center(
         child: Text('No data available'),
       );
@@ -40,10 +38,9 @@ class DataGrid extends StatelessWidget {
         itemCount: allDestination?.length,
         itemBuilder: (context, index) {
           PublisherModel publisherSingleData = allDestination![index];
-          String publisherDataKey = allDestinationKey![index];
+
           return CardToDetailsPage(
             destination: publisherSingleData,
-            destinationKey: publisherDataKey,
             userWishlist: userWishlist,
           );
         },
