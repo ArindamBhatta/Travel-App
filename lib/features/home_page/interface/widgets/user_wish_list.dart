@@ -7,7 +7,9 @@ import 'package:travel_app/features/home_page/module/model/publisher_model.dart'
 class UserWishList extends StatelessWidget {
   final List<dynamic>? userWishlist;
 
-  UserWishList({required this.userWishlist});
+  UserWishList({
+    required this.userWishlist,
+  });
   @override
   Widget build(BuildContext context) {
     return Consumer<HomePageProvider>(

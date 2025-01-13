@@ -1,5 +1,7 @@
 class PublisherModel {
   String? id;
+  int? viewCount;
+  int? wishCount;
   String? continent;
   String? country;
   String? imageUrl;
@@ -10,6 +12,8 @@ class PublisherModel {
 
   PublisherModel({
     this.id,
+    this.viewCount,
+    this.wishCount,
     this.continent,
     this.country,
     this.knownFor,
@@ -21,6 +25,8 @@ class PublisherModel {
 
   PublisherModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    viewCount = json['viewCount'];
+    wishCount = json['wishCount'];
     continent = json['continent'];
     country = json['country'];
     knownFor = json['knownFor'];

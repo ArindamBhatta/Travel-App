@@ -98,7 +98,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
                       final isSelected = controller.index == 2;
                       return tabBarButton(
                         isSelected,
-                        HomePageInnerNavigationButtonText.MostViewed.name,
+                        HomePageInnerNavigationButtonText.MostWished.name,
                       );
                     },
                   );
@@ -116,7 +116,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
                       final isSelected = controller.index == 3;
                       return tabBarButton(
                         isSelected,
-                        HomePageInnerNavigationButtonText.MostWished.name,
+                        HomePageInnerNavigationButtonText.MostViewed.name,
                       );
                     },
                   );

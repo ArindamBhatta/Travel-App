@@ -70,8 +70,8 @@ IconData? tagsIcon(String tag) {
 enum HomePageInnerNavigationButtonText {
   All('All'),
   WishListed('Wish Listed'),
-  MostViewed('Most viewed'),
-  MostWished('Most wished');
+  MostWished('Most wishful'),
+  MostViewed('Most viewed');
 
   final String name;
   const HomePageInnerNavigationButtonText(this.name);
@@ -158,7 +158,7 @@ class HomePageProvider extends ChangeNotifier {
   Future<void> fetchUserWishlist() async {
     try {
       final snapshot = await userDocRef.get();
-      // Explicitly cast `snapshot.data()` to a Map
+
       final data = snapshot.data() as Map<String, dynamic>?;
       userWishlist = data?['wishlistLocations'] as List<dynamic>? ?? [];
       notifyListeners();
