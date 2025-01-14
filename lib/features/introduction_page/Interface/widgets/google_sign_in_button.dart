@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/common/utils/google_login_provider.dart';
+import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
 import 'package:travel_app/features/route/app_navigation.dart';
 
 class GoogleSignInButton extends StatefulWidget {

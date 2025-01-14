@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/data_grid.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_app_bar.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation_button.dart';
+import 'package:travel_app/features/home_page/interface/widgets/most_visited_page.dart';
 import 'package:travel_app/features/home_page/interface/widgets/sticky_search_bar.dart';
 import 'package:travel_app/features/home_page/interface/widgets/user_wish_list.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
@@ -48,18 +49,23 @@ class HomePageBody extends StatelessWidget {
         body: Consumer<HomePageProvider>(
           builder: (context, homePageProvider, child) {
             bool isLoading = homePageProvider.isLoading;
-            // if in case filterPublisherData is null then allPublisherData is shown
-            List<PublisherModel>? displayPublisherData =
+
+            // Fetch the data from the provider
+            List<PublisherModel>? baseData =
                 homePageProvider.filteredPublisherData ??
                     homePageProvider.allPublisherData;
 
-            List<dynamic>? userWishlist = homePageProvider.userWishlist;
+            // Ensure `displayPublisherData` is not null
+            if (baseData == null) {
+              return Center(child: CircularProgressIndicator());
+            }
 
+            List<dynamic>? userWishlist = homePageProvider.userWishlist;
             return TabBarView(
               children: [
                 DataGrid(
                   isLoading: isLoading,
-                  allDestination: displayPublisherData,
+                  allDestination: baseData,
                   userWishlist: userWishlist,
                 ),
                 UserWishList(
@@ -70,11 +76,10 @@ class HomePageBody extends StatelessWidget {
                     child: Text('Coming Soon!'),
                   ),
                 ),
-                Container(
-                  child: Center(
-                    child: Text('Coming Soon!'),
-                  ),
-                ),
+                MostVisitedPage(
+                  allDestination: baseData,
+                  userWishlist: userWishlist,
+                )
               ],
             );
           },

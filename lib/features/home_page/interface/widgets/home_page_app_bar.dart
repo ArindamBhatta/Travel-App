@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/common/utils/theme/colors.dart';
 
 class HomePageAppBar extends StatelessWidget {
-  final String? headingText;
+  final String headingText;
   final VoidCallback onAvatarTap;
   final Map<String, dynamic>? userInfo;
 
@@ -22,12 +23,7 @@ class HomePageAppBar extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: 8.0,
-        bottom: 8.0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Builder(
         builder: (context) => Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +32,7 @@ class HomePageAppBar extends StatelessWidget {
             GestureDetector(
               onTap: onAvatarTap,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(
+                backgroundImage: CachedNetworkImageProvider(
                   '${userInfo?['photoUrl']}',
                 ),
               ),
@@ -47,7 +43,7 @@ class HomePageAppBar extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      headingText.toString(),
+                      headingText,
                       style:
                           Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 color: AppColors.baseColor,
@@ -65,13 +61,13 @@ class HomePageAppBar extends StatelessWidget {
                 ],
               ),
             ),
-            TextButton(
-              style: TextButton.styleFrom(
+            IconButton(
+              style: IconButton.styleFrom(
                 alignment: Alignment.topRight,
                 padding: EdgeInsets.all(0),
               ),
-              onPressed: () {},
-              child: Icon(
+              onPressed: null,
+              icon: Icon(
                 Icons.notifications_none_sharp,
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleLoginProvider extends ChangeNotifier {
   Map<String, dynamic>? userData;
+  static String? accessToken;
   String? userAccessToken;
 
   List<DocumentReference>? allWishListReference = [];
@@ -31,6 +32,7 @@ class GoogleLoginProvider extends ChangeNotifier {
   void getUserAccessToken() {
     SharedPreferences.getInstance().then((prefs) {
       userAccessToken = prefs.getString('userAccessToken');
+      accessToken = prefs.getString('userAccessToken');
       notifyListeners();
     });
   }

@@ -5,7 +5,7 @@ import 'package:travel_app/common/utils/theme/themes.dart';
 import 'package:travel_app/features/route/app_navigation.dart';
 import 'package:travel_app/features/details_page/utils/details_page_provider.dart';
 import 'package:travel_app/features/introduction_page/Interface/introduction_page.dart';
-import 'common/utils/google_login_provider.dart';
+import 'features/introduction_page/model/google_login_provider.dart';
 import 'features/home_page/module/data/home_page_provider.dart';
 
 Future<void> main() async {
@@ -16,7 +16,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => HomePageProvider()
+          create: (context) => new HomePageProvider()
             ..showPublisherData()
             ..fetchUserWishlist(),
         ),

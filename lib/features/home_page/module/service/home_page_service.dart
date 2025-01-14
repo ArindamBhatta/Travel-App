@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
 
 abstract class HomePageService {
+  static String? userAccessToken = GoogleLoginProvider.accessToken;
+
   static Map<String, dynamic>? combinedData = {};
 
   static Future<Map<String, dynamic>?> fetchAllFireStoreData() async {
@@ -29,9 +32,8 @@ abstract class HomePageService {
       combinedData!['publisherData'] = listOfPublisherData;
 
       // current user Document
-      DocumentReference currentUserPath = FirebaseFirestore.instance
-          .collection('users')
-          .doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');
+      DocumentReference currentUserPath =
+          FirebaseFirestore.instance.collection('users').doc(userAccessToken);
 
       DocumentSnapshot currentUserSnapshot = await currentUserPath.get();
 

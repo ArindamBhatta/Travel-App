@@ -38,6 +38,6 @@ class PublisherModel {
 
   @override
   String toString() {
-    return 'DestinationModel(name: ${id ?? 'null'})';
+    return 'DestinationModel(name: ${name ?? null})';
   }
 }

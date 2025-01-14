@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import '../../../../common/utils/google_login_provider.dart';
+import '../../../introduction_page/model/google_login_provider.dart';
 import '../../../introduction_page/Interface/introduction_page.dart';
 
 void googleLogout(BuildContext context) async {

@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home_page/interface/widgets/destination_card.dart';
@@ -22,6 +23,7 @@ class CardToDetailsPage extends StatefulWidget {
 
 class _CardToDetailsPageState extends State<CardToDetailsPage> {
   late bool isInWishlist;
+  bool hasIncremented = false;
 
   @override
   void initState() {
@@ -34,9 +36,9 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
     final provider = Provider.of<HomePageProvider>(context, listen: false);
 
     if (isInWishlist) {
-      await provider.removeFromWishlist('${widget.destination.id}');
+      await provider.removeFromWishlist(widget.destination.id.toString());
     } else {
-      await provider.addToWishlist('${widget.destination.id}');
+      await provider.addToWishlist(widget.destination.id.toString());
     }
 
     setState(() {
@@ -52,6 +54,25 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
         ),
       ),
     );
+  }
+
+  //Increment the view count in Firebase
+  void incrementViewCount() async {
+    if (hasIncremented) return;
+    hasIncremented = true;
+    final destinationId = widget.destination.id;
+
+    try {
+      // Access Firestore and update the count property
+      await FirebaseFirestore.instance
+          .collection('/destinations/publisher/data')
+          .doc(destinationId)
+          .update({
+        'viewCount': FieldValue.increment(1),
+      });
+    } catch (error) {
+      print('Error incrementing view count: $error');
+    }
   }
 
   @override
@@ -70,6 +91,10 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
         );
       },
       openBuilder: (context, action) {
+        // Increment the count when the details page is opened
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          incrementViewCount();
+        });
         return DestinationDetails(
           imageUri: widget.destination.imageUrl,
           name: widget.destination.name,

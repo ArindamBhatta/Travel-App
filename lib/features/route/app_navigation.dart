@@ -67,7 +67,7 @@ class _AppNavigationState extends State<AppNavigation> {
     //*functional scope
 
     List<Widget> screens = [
-      HomePage(widget.userAccessToken),
+      HomePage(),
       loadingPages.contains(1)
           ? CommunityPostPage(widget.userAccessToken)
           : Container(),
