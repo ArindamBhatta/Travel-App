@@ -11,20 +11,25 @@ class MostVisitedPage extends StatelessWidget {
     required this.userWishlist,
   });
 
-  List<PublisherModel> ShortingData() {
-    List<PublisherModel> filterBasedOnMostWatch =
-        List.from(allDestination?.toList() ?? []);
-    // Create a sorted list based on `viewCount`
+  List<PublisherModel> filterBasedOnMostWatch() {
+    List<PublisherModel> mostWatch = List.from(
+      allDestination!.where(
+        (destination) => destination.viewCount! > 5,
+      ),
+    );
 
-    filterBasedOnMostWatch
-        .sort((a, b) => (b.viewCount ?? 0).compareTo(a.viewCount ?? 0));
+    mostWatch.sort(
+      (a, b) => (b.viewCount ?? 0).compareTo(
+        a.viewCount ?? 0,
+      ),
+    );
 
-    return filterBasedOnMostWatch;
+    return mostWatch;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<PublisherModel> mostViewedData = ShortingData();
+    List<PublisherModel> mostViewedData = filterBasedOnMostWatch();
     return GridView.builder(
       padding: EdgeInsets.all(8.0),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

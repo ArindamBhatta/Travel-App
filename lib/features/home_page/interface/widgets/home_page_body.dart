@@ -4,6 +4,7 @@ import 'package:travel_app/features/home_page/interface/widgets/data_grid.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_app_bar.dart';
 import 'package:travel_app/features/home_page/interface/widgets/home_page_navigation_button.dart';
 import 'package:travel_app/features/home_page/interface/widgets/most_visited_page.dart';
+import 'package:travel_app/features/home_page/interface/widgets/most_wishlisted.dart';
 import 'package:travel_app/features/home_page/interface/widgets/sticky_search_bar.dart';
 import 'package:travel_app/features/home_page/interface/widgets/user_wish_list.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
@@ -69,12 +70,12 @@ class HomePageBody extends StatelessWidget {
                   userWishlist: userWishlist,
                 ),
                 UserWishList(
+                  allDestination: baseData,
                   userWishlist: userWishlist,
                 ),
-                Container(
-                  child: Center(
-                    child: Text('Coming Soon!'),
-                  ),
+                MostWishListed(
+                  allDestination: baseData,
+                  userWishlist: userWishlist,
                 ),
                 MostVisitedPage(
                   allDestination: baseData,

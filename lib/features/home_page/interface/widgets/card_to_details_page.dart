@@ -60,8 +60,8 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
   void incrementViewCount() async {
     if (hasIncremented) return;
     hasIncremented = true;
-    final destinationId = widget.destination.id;
 
+    final destinationId = widget.destination.id;
     try {
       // Access Firestore and update the count property
       await FirebaseFirestore.instance
@@ -77,35 +77,38 @@ class _CardToDetailsPageState extends State<CardToDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainer(
-      closedElevation: 0.0,
-      openElevation: 0.0,
-      closedBuilder: (context, action) {
-        return DestinationCard(
-          imageUri: widget.destination.imageUrl,
-          name: widget.destination.name,
-          country: widget.destination.country,
-          continent: widget.destination.continent,
-          bookmark: isInWishlist,
-          toggleInFireStore: () => toggleWishListInFireStore(context),
-        );
-      },
-      openBuilder: (context, action) {
-        // Increment the count when the details page is opened
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          incrementViewCount();
-        });
-        return DestinationDetails(
-          imageUri: widget.destination.imageUrl,
-          name: widget.destination.name,
-          country: widget.destination.country,
-          continent: widget.destination.continent,
-          knowFor: widget.destination.knownFor,
-          viewPoints: widget.destination.tags,
-          bookmark: isInWishlist,
-          toggleInFireStore: () => toggleWishListInFireStore(context),
-        );
-      },
+    return GestureDetector(
+      // behavior: HitTestBehavior.deferToChild,
+      onTap: () {},
+      child: OpenContainer(
+        closedElevation: 0.0,
+        openElevation: 0.0,
+        closedBuilder: (context, action) {
+          return DestinationCard(
+            imageUri: widget.destination.imageUrl,
+            name: widget.destination.name,
+            country: widget.destination.country,
+            continent: widget.destination.continent,
+            bookmark: isInWishlist,
+            toggleInFireStore: () => toggleWishListInFireStore(context),
+          );
+        },
+        openBuilder: (context, action) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            incrementViewCount();
+          });
+          return DestinationDetails(
+            imageUri: widget.destination.imageUrl,
+            name: widget.destination.name,
+            country: widget.destination.country,
+            continent: widget.destination.continent,
+            knowFor: widget.destination.knownFor,
+            viewPoints: widget.destination.tags,
+            bookmark: isInWishlist,
+            toggleInFireStore: () => toggleWishListInFireStore(context),
+          );
+        },
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 import 'package:travel_app/features/home_page/module/repo/home_page_repo.dart';
+import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
 
 enum Continent {
   asia('Asia'),
@@ -90,7 +91,7 @@ class HomePageProvider extends ChangeNotifier {
 
   final DocumentReference userDocRef = FirebaseFirestore.instance
       .collection('users')
-      .doc('t5nmZmf1r8e6SwCqw3SJaeFoAY93');
+      .doc(GoogleLoginProvider.accessToken);
 
   // Fetch All Publisher Data
   void showPublisherData() async {
@@ -154,10 +155,10 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
-  // Fetch initial wishlist from Firestore
+// Fetch initial wishlist from Firestore and Assign to same variable either we needs snapshots.
   Future<void> fetchUserWishlist() async {
     try {
-      final snapshot = await userDocRef.get();
+      final DocumentSnapshot snapshot = await userDocRef.get();
 
       final data = snapshot.data() as Map<String, dynamic>?;
       userWishlist = data?['wishlistLocations'] as List<dynamic>? ?? [];
@@ -167,6 +168,7 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
+// Search All WishListed Data in Whole Data
   List<PublisherModel>? allWishListedData() {
     if (allPublisherData == null) {
       print('Data is not present here');
@@ -176,7 +178,10 @@ class HomePageProvider extends ChangeNotifier {
     return allPublisherData!
         .where(
           (destination) =>
-              userWishlist != null && userWishlist!.contains(destination.id),
+              userWishlist != null &&
+              userWishlist!.contains(
+                destination.id,
+              ),
         )
         .toList();
   }
@@ -188,12 +193,20 @@ class HomePageProvider extends ChangeNotifier {
       notifyListeners(); // Update UI immediately
 
       try {
+        // update in User Data
         await userDocRef.update({
           'wishlistLocations': FieldValue.arrayUnion([destinationId]),
         });
+        // update in Specific Document wishCount
+        await FirebaseFirestore.instance
+            .collection('/destinations/publisher/data')
+            .doc(destinationId)
+            .update({
+          'wishCount': FieldValue.increment(1),
+        });
       } catch (error) {
         print('Error adding to wishlist: $error');
-        userWishlist!.remove(destinationId); // Revert local state on error
+        userWishlist!.remove(destinationId); // restore local change
         notifyListeners();
       }
     }
@@ -206,12 +219,20 @@ class HomePageProvider extends ChangeNotifier {
       notifyListeners(); // Update UI immediately
 
       try {
+        // Remove in User Data
         await userDocRef.update({
           'wishlistLocations': FieldValue.arrayRemove([destinationId]),
         });
+        // update in Specific Document wishCount
+        await FirebaseFirestore.instance
+            .collection('/destinations/publisher/data')
+            .doc(destinationId)
+            .update({
+          'wishCount': FieldValue.increment(-1),
+        });
       } catch (error) {
         print('Error removing from wishlist: $error');
-        userWishlist!.add(destinationId); // Revert local state on error
+        userWishlist!.add(destinationId); //restore the local change
         notifyListeners();
       }
     }

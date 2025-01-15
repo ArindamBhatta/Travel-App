@@ -5,9 +5,11 @@ import 'package:travel_app/features/home_page/module/data/home_page_provider.dar
 import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 
 class UserWishList extends StatelessWidget {
+  final List<PublisherModel> allDestination;
   final List<dynamic>? userWishlist;
 
   UserWishList({
+    required this.allDestination,
     required this.userWishlist,
   });
   @override
