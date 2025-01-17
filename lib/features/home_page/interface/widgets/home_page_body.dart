@@ -10,13 +10,34 @@ import 'package:travel_app/features/home_page/interface/widgets/user_wish_list.d
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 import 'package:travel_app/features/home_page/module/model/publisher_model.dart';
 
-class HomePageBody extends StatelessWidget {
+class HomePageBody extends StatefulWidget {
   final Map<String, dynamic>? userLoginData;
 
-  HomePageBody({
-    super.key,
-    required this.userLoginData,
-  });
+  HomePageBody({required this.userLoginData});
+
+  @override
+  _HomePageBodyState createState() => _HomePageBodyState();
+}
+
+class _HomePageBodyState extends State<HomePageBody> {
+  final TextEditingController searchTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to text changes
+    searchTextController.addListener(() {
+      setState(() {
+        searchTextController.text.isNotEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    searchTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +52,7 @@ class HomePageBody extends StatelessWidget {
               expandedHeight: 75.0,
               flexibleSpace: FlexibleSpaceBar(
                 background: HomePageAppBar(
-                  userInfo: userLoginData,
+                  userInfo: widget.userLoginData,
                   headingText: 'Wanderly',
                   onAvatarTap: () => Scaffold.of(context).openDrawer(),
                 ),
@@ -39,50 +60,65 @@ class HomePageBody extends StatelessWidget {
             ),
             SliverPersistentHeader(
               pinned: true,
-              delegate: StickySearchBar(),
+              delegate: StickySearchBar(
+                searchTextController: searchTextController,
+              ),
             ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: HomePageNavigationButton(),
-            ),
+            if (searchTextController.text.isEmpty)
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: HomePageNavigationButton(),
+              ),
           ];
         },
         body: Consumer<HomePageProvider>(
           builder: (context, homePageProvider, child) {
             bool isLoading = homePageProvider.isLoading;
 
-            // Fetch the data from the provider
             List<PublisherModel>? baseData =
                 homePageProvider.filteredPublisherData ??
                     homePageProvider.allPublisherData;
 
-            // Ensure `displayPublisherData` is not null
+            List<PublisherModel>? filteredData =
+                homePageProvider.searchPublisherData;
+
             if (baseData == null) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
             List<dynamic>? userWishlist = homePageProvider.userWishlist;
-            return TabBarView(
-              children: [
-                DataGrid(
-                  isLoading: isLoading,
-                  allDestination: baseData,
-                  userWishlist: userWishlist,
-                ),
-                UserWishList(
-                  allDestination: baseData,
-                  userWishlist: userWishlist,
-                ),
-                MostWishListed(
-                  allDestination: baseData,
-                  userWishlist: userWishlist,
-                ),
-                MostVisitedPage(
-                  allDestination: baseData,
-                  userWishlist: userWishlist,
-                )
-              ],
-            );
+
+            if (searchTextController.text.isNotEmpty) {
+              return DataGrid(
+                isLoading: isLoading,
+                allDestination: filteredData,
+                userWishlist: userWishlist,
+              );
+            } else {
+              return TabBarView(
+                children: [
+                  DataGrid(
+                    isLoading: isLoading,
+                    allDestination: baseData,
+                    userWishlist: userWishlist,
+                  ),
+                  UserWishList(
+                    allDestination: baseData,
+                    userWishlist: userWishlist,
+                  ),
+                  MostWishListed(
+                    allDestination: baseData,
+                    userWishlist: userWishlist,
+                  ),
+                  MostVisitedPage(
+                    allDestination: baseData,
+                    userWishlist: userWishlist,
+                  )
+                ],
+              );
+            }
           },
         ),
       ),

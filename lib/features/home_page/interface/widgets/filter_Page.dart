@@ -156,7 +156,7 @@ class _FilterPageState extends State<FilterPage> {
                                   homePageProvider.userSelectedTags =
                                       List.from(selectedTags);
 
-                                  homePageProvider.filterPublisherData(
+                                  homePageProvider.filterDataOnUserSelectedTap(
                                     homePageProvider.userSelectedContinents,
                                     homePageProvider.userSelectedTags,
                                   );
@@ -175,19 +175,3 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 }
-/* 
-void main() {
-  List<int> number = [1, 2, 3, 4, 5, 6];
-  List<int> deepCopy = List.from(number);
-  List<int> shallowCopy = number;
-
-  print('deepCopy $deepCopy');
-
-  //number = [6, 7, 8, 9, 10]; //create a new List with &address.
-  number.add(23);
-
-  print('shallowCopy $shallowCopy');
-
-  print(number);
-}
- */

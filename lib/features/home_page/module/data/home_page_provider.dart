@@ -88,6 +88,7 @@ class HomePageProvider extends ChangeNotifier {
   List<String> userSelectedTags = [];
 
   List<PublisherModel>? filteredPublisherData;
+  List<PublisherModel>? searchPublisherData;
 
   final DocumentReference userDocRef = FirebaseFirestore.instance
       .collection('users')
@@ -111,8 +112,10 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   // Filter Publisher Data Based on User Selection
-  void filterPublisherData(
-      List<String> selectedContinents, List<String> selectedTags) {
+  void filterDataOnUserSelectedTap(
+    List<String> selectedContinents,
+    List<String> selectedTags,
+  ) {
     try {
       // Ensure original data exists
       if (allPublisherData == null) {
@@ -152,6 +155,63 @@ class HomePageProvider extends ChangeNotifier {
       }
     } catch (error) {
       print('Error in Filtering data $error');
+    }
+  }
+
+  // Filter publisher data based on User Search
+
+  void filterDataWhenSearch(String searchText) {
+    try {
+      // Ensure original data exists
+      if (searchText.isEmpty) {
+        return;
+      }
+
+      if (allPublisherData == null) {
+        isLoading = false;
+        notifyListeners();
+        print('Data is not present here');
+        return;
+      }
+
+      isLoading = true;
+      notifyListeners();
+
+      // Create temporary filtered lists
+      List<PublisherModel>? clonePublisherData =
+          List<PublisherModel>.from(allPublisherData!);
+
+      String lowerCaseSearchText = searchText.toLowerCase();
+      lowerCaseSearchText = lowerCaseSearchText.trim();
+
+      clonePublisherData = clonePublisherData.where((destination) {
+        return ((destination.name
+                    ?.toLowerCase()
+                    .contains(lowerCaseSearchText) ??
+                false) ||
+            (destination.country?.toLowerCase().contains(lowerCaseSearchText) ??
+                false) ||
+            (destination.continent
+                    ?.toLowerCase()
+                    .contains(lowerCaseSearchText) ??
+                false) ||
+            (destination.knownFor
+                    ?.toLowerCase()
+                    .contains(lowerCaseSearchText) ??
+                false) ||
+            (destination.tags?.any(
+                    (tag) => tag.toLowerCase().contains(lowerCaseSearchText)) ??
+                false));
+      }).toList();
+      // Assign the filtered data
+      searchPublisherData = clonePublisherData;
+
+      isLoading = false;
+      notifyListeners();
+    } catch (error) {
+      print('Error in filtering data: $error');
+      isLoading = false;
+      notifyListeners();
     }
   }
 

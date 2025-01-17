@@ -8,8 +8,6 @@ import '../../introduction_page/model/google_login_provider.dart';
 import 'widgets/home_page_body.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage();
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
