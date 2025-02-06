@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/interface/widgets/google_log_out.dart';
 
@@ -56,7 +57,7 @@ class SideDrawer extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage: NetworkImage(
+                          backgroundImage: CachedNetworkImageProvider(
                             '${userLoginData?['photoUrl']}',
                           ),
                         ),

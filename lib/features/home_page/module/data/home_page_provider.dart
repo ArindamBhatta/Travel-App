@@ -87,8 +87,9 @@ class HomePageProvider extends ChangeNotifier {
   List<String> userSelectedContinents = [];
   List<String> userSelectedTags = [];
 
-  List<PublisherModel>? filteredPublisherData;
-  List<PublisherModel>? searchPublisherData;
+  List<PublisherModel>? filteredDataBasedOnTap;
+  List<PublisherModel>? filterDataBasedOnSearch;
+  List<String> searchHistory = ['abcd', 'Beach'];
 
   final DocumentReference userDocRef = FirebaseFirestore.instance
       .collection('users')
@@ -148,7 +149,7 @@ class HomePageProvider extends ChangeNotifier {
             );
           }).toList();
 
-          filteredPublisherData = tempPublisherData;
+          filteredDataBasedOnTap = tempPublisherData;
           isLoading = false;
           notifyListeners();
         }
@@ -159,10 +160,8 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   // Filter publisher data based on User Search
-
   void filterDataWhenSearch(String searchText) {
     try {
-      // Ensure original data exists
       if (searchText.isEmpty) {
         return;
       }
@@ -177,12 +176,11 @@ class HomePageProvider extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Create temporary filtered lists
-      List<PublisherModel>? clonePublisherData =
+      // Filter results based on user input
+      List<PublisherModel> clonePublisherData =
           List<PublisherModel>.from(allPublisherData!);
 
-      String lowerCaseSearchText = searchText.toLowerCase();
-      lowerCaseSearchText = lowerCaseSearchText.trim();
+      String lowerCaseSearchText = searchText.toLowerCase().trim();
 
       clonePublisherData = clonePublisherData.where((destination) {
         return ((destination.name
@@ -203,9 +201,10 @@ class HomePageProvider extends ChangeNotifier {
                     (tag) => tag.toLowerCase().contains(lowerCaseSearchText)) ??
                 false));
       }).toList();
-      // Assign the filtered data
-      searchPublisherData = clonePublisherData;
 
+      // Assign the filtered data
+      filterDataBasedOnSearch = clonePublisherData;
+      notifyListeners();
       isLoading = false;
       notifyListeners();
     } catch (error) {

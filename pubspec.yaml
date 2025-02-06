@@ -55,6 +55,8 @@ flutter:
     - assets/images/onboarding_img_4.jpg
     - assets/images/onboarding_img_5.jpg
     - 'assets/images/google_logo.png'
+    - 'assets/images/loading_image.jpg'
+
   
 
   

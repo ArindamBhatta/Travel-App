@@ -20,22 +20,24 @@ class HomePageBody extends StatefulWidget {
 }
 
 class _HomePageBodyState extends State<HomePageBody> {
-  final TextEditingController searchTextController = TextEditingController();
+  SearchController searchController = SearchController();
+  TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
     // Listen to text changes
-    searchTextController.addListener(() {
+    searchController.addListener(() {
       setState(() {
-        searchTextController.text.isNotEmpty;
+        searchController.text.isNotEmpty;
       });
     });
   }
 
   @override
   void dispose() {
-    searchTextController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -55,16 +57,18 @@ class _HomePageBodyState extends State<HomePageBody> {
                   userInfo: widget.userLoginData,
                   headingText: 'Wanderly',
                   onAvatarTap: () => Scaffold.of(context).openDrawer(),
+                  onNotificationTap: () {},
                 ),
               ),
             ),
             SliverPersistentHeader(
               pinned: true,
               delegate: StickySearchBar(
-                searchTextController: searchTextController,
+                searchController: searchController,
+                textController: textController,
               ),
             ),
-            if (searchTextController.text.isEmpty)
+            if (searchController.text.isEmpty)
               SliverPersistentHeader(
                 pinned: true,
                 delegate: HomePageNavigationButton(),
@@ -76,11 +80,11 @@ class _HomePageBodyState extends State<HomePageBody> {
             bool isLoading = homePageProvider.isLoading;
 
             List<PublisherModel>? baseData =
-                homePageProvider.filteredPublisherData ??
+                homePageProvider.filteredDataBasedOnTap ??
                     homePageProvider.allPublisherData;
 
             List<PublisherModel>? filteredData =
-                homePageProvider.searchPublisherData;
+                homePageProvider.filterDataBasedOnSearch;
 
             if (baseData == null) {
               return Center(
@@ -88,9 +92,11 @@ class _HomePageBodyState extends State<HomePageBody> {
               );
             }
 
+            ///
+
             List<dynamic>? userWishlist = homePageProvider.userWishlist;
 
-            if (searchTextController.text.isNotEmpty) {
+            if (searchController.text.isNotEmpty) {
               return DataGrid(
                 isLoading: isLoading,
                 allDestination: filteredData,
