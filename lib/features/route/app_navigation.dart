@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
 import 'package:travel_app/features/all_contributor_page/community_post_page.dart';
+import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
 import 'package:travel_app/features/trip_booking_page/book_trip_page.dart';
 import 'package:travel_app/features/user_contribution_page/user_contribution_page.dart';
+
+const Color bottomNavBgColor = Color.fromARGB(255, 240, 240, 240);
 
 class AppNavigation extends StatefulWidget {
   final String? userAccessToken;
@@ -14,7 +17,6 @@ class AppNavigation extends StatefulWidget {
 class _AppNavigationState extends State<AppNavigation> {
   //* global scope - property
   static int currentPageIndex = 0;
-  static List<int> loadingPages = [0];
 
   //* all icon in default state
   final List<IconData> defaultIcons = [
@@ -23,88 +25,66 @@ class _AppNavigationState extends State<AppNavigation> {
     Icons.person_2_sharp,
     Icons.add_location_alt_outlined,
   ];
-  //* all icon in active state
-  final List<IconData> activeIcons = [
-    Icons.home,
-    Icons.add_to_photos,
-    Icons.person_2,
-    Icons.add_location_alt,
+
+  List<Widget> screens = [
+    HomePage(),
+    CommunityPostPage(GoogleLoginProvider.accessToken),
+    UserContributionPage(),
+    BookTripPage(),
   ];
-
-  //* when user press the icon.
-  void showCurrentPage(int currentIndex) {
-    if (!loadingPages.contains(currentIndex)) {
-      loadingPages.add(currentIndex);
-    }
-    setState(
-      () {
-        currentPageIndex = currentIndex;
-      },
-    );
-  }
-
-  //* custom widget pass the value showCurrentPage
-  Widget buildNavigationItem(
-    int currentIndex,
-    //double width,
-  ) {
-    return IconButton(
-      padding: EdgeInsets.zero,
-      onPressed: () {
-        showCurrentPage(currentIndex);
-      },
-      icon: Icon(
-        currentPageIndex == currentIndex
-            ? activeIcons[currentIndex]
-            : defaultIcons[currentIndex],
-        color: currentPageIndex == currentIndex ? Colors.teal : null,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    //*functional scope
-
-    List<Widget> screens = [
-      HomePage(),
-      loadingPages.contains(1)
-          ? CommunityPostPage(widget.userAccessToken)
-          : Container(),
-      loadingPages.contains(2) ? UserContributionPage() : Container(),
-      loadingPages.contains(3) ? BookTripPage() : Container(),
-    ];
-
     return Scaffold(
-      body: IndexedStack(
-        index: currentPageIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 4,
-        ),
-        child: FloatingActionButton(
-          heroTag: 'unique_fab_id_2',
-          elevation: 1.5,
-          onPressed: null,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buildNavigationItem(
-                0,
-              ),
-              buildNavigationItem(
-                1,
-              ),
-              buildNavigationItem(
-                2,
-              ),
-              buildNavigationItem(
-                3,
-              ),
+      body: screens[currentPageIndex],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: 56,
+          padding: EdgeInsets.all(12),
+          margin: EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: bottomNavBgColor,
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(255, 128, 123, 123),
+                offset: Offset(0, 20),
+                blurRadius: 10,
+              )
             ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
+            children: List.generate(
+              defaultIcons.length,
+              (index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    currentPageIndex = index; // Update selected tab
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 600),
+                  height: 46,
+                  width: 46,
+                  decoration: BoxDecoration(
+                    color: currentPageIndex == index
+                        ? const Color.fromARGB(255, 159, 157, 157)
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      defaultIcons[index],
+                      color: currentPageIndex == index
+                          ? Colors.blue
+                          : Colors.grey.shade400,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

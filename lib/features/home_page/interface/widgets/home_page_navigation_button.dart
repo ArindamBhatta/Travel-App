@@ -14,6 +14,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
 
   Widget tabBarButton(bool isSelected, String buttonText) {
     return Container(
+      height: maxExtent,
       margin: EdgeInsets.zero,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),

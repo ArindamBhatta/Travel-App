@@ -89,7 +89,6 @@ class HomePageProvider extends ChangeNotifier {
 
   List<PublisherModel>? filteredDataBasedOnTap;
   List<PublisherModel>? filterDataBasedOnSearch;
-  List<String> searchHistory = ['abcd', 'Beach'];
 
   final DocumentReference userDocRef = FirebaseFirestore.instance
       .collection('users')
