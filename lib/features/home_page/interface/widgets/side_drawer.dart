@@ -37,81 +37,122 @@ class SideDrawer extends StatelessWidget {
       shape: Border.symmetric(
         horizontal: BorderSide.none,
       ),
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          SizedBox(
-            height: 250,
-            child: Center(
-              child: DrawerHeader(
-                margin: EdgeInsets.all(0),
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).drawerTheme.backgroundColor,
+      child: SizedBox(
+        height: 400,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                '${userLoginData?['name']}',
+              ),
+              accountEmail: Text(
+                '${userLoginData?['email']}',
+              ),
+              currentAccountPicture: CircleAvatar(
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: '${userLoginData?['photoUrl']}',
+                    width: 90,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: CachedNetworkImageProvider(
-                            '${userLoginData?['photoUrl']}',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '${userLoginData?['name']}',
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        top: 8,
-                      ),
-                      child: Text(
-                        softWrap: false,
-                        overflow: TextOverflow.fade,
-                        '${userLoginData?['email']}',
-                      ),
-                    )
-                  ],
+              ),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(
+                    'https://cdn.pixabay.com/photo/2017/03/27/15/19/chairlift-2179345_1280.jpg',
+                  ),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-          ),
-          NavigationButton(
-            Icons.home,
-            'Home',
-            () {
-              Navigator.of(context).pop();
-            },
-          ),
-          NavigationButton(
-            Icons.settings,
-            'Settings',
-            () {
-              Navigator.of(context).pop();
-            },
-          ),
-          NavigationButton(
-            Icons.logout_outlined,
-            'logout',
-            () {
-              Navigator.of(context).pop();
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return LogOutDialog();
-                },
-              );
-            },
-          )
-        ],
+            NavigationButton(
+              Icons.favorite,
+              'Favorites',
+              () {
+                Navigator.of(context).pop();
+              },
+            ),
+            NavigationButton(
+              Icons.people,
+              'Friends',
+              () {
+                Navigator.of(context).pop();
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return LogOutDialog();
+                  },
+                );
+              },
+            ),
+            NavigationButton(
+              Icons.share_rounded,
+              'Shear',
+              () {
+                Navigator.of(context).pop();
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return LogOutDialog();
+                  },
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.notifications),
+              title: Text('Request'),
+              onTap: null,
+              trailing: ClipOval(
+                child: Container(
+                  color: Colors.red,
+                  height: 20,
+                  width: 20,
+                  child: Center(
+                    child: Text(
+                      '8',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Divider(),
+            NavigationButton(
+              Icons.settings,
+              'Settings',
+              () {
+                Navigator.of(context).pop();
+              },
+            ),
+            NavigationButton(
+              Icons.policy,
+              'Policies',
+              () {
+                Navigator.of(context).pop();
+              },
+            ),
+            Divider(),
+            NavigationButton(
+              Icons.logout_outlined,
+              'Exit',
+              () {
+                Navigator.of(context).pop();
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return LogOutDialog();
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

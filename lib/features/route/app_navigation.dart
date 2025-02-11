@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 import 'package:travel_app/features/home_page/interface/home_page.dart';
 import 'package:travel_app/features/all_contributor_page/community_post_page.dart';
 import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
@@ -8,8 +9,6 @@ import 'package:travel_app/features/user_contribution_page/user_contribution_pag
 const Color bottomNavBgColor = Color.fromARGB(255, 240, 240, 240);
 
 class AppNavigation extends StatefulWidget {
-  final String? userAccessToken;
-  AppNavigation(this.userAccessToken);
   @override
   State<AppNavigation> createState() => _AppNavigationState();
 }
@@ -36,12 +35,28 @@ class _AppNavigationState extends State<AppNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[currentPageIndex],
+      body: PageTransitionSwitcher(
+        duration: Duration(milliseconds: 900),
+        transitionBuilder: (
+          Widget child,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          return FadeThroughTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          );
+        },
+        child: screens[currentPageIndex],
+      ),
+
+      //screens[currentPageIndex],
       bottomNavigationBar: SafeArea(
         child: Container(
           height: 56,
           padding: EdgeInsets.all(12),
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: bottomNavBgColor,
             borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -79,7 +94,7 @@ class _AppNavigationState extends State<AppNavigation> {
                       color: currentPageIndex == index
                           ? Colors.blue
                           : Colors.grey.shade400,
-                      size: 24,
+                      size: 26,
                     ),
                   ),
                 ),

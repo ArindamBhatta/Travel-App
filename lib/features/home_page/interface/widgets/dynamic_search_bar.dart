@@ -34,7 +34,7 @@ class _DynamicSearchBarState extends State<DynamicSearchBar> {
   void initState() {
     super.initState();
     // Change hint text every 2 seconds
-    _timer = Timer.periodic(Duration(seconds: 4), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
       setState(() {
         _hintIndex = (_hintIndex + 1) % hintTexts.length;
       });
@@ -100,6 +100,8 @@ class _DynamicSearchBarState extends State<DynamicSearchBar> {
       },
       builder: (context, searchTextController) {
         return SearchBar(
+          keyboardType: TextInputType.none,
+
           controller: widget.textController,
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -118,19 +120,31 @@ class _DynamicSearchBarState extends State<DynamicSearchBar> {
                   });
                 },
               )
-            else
+            else if (provider.userSelectedContinents.isEmpty ||
+                provider.userSelectedTags.isEmpty)
               IconButton(
                 icon: Icon(Icons.tune_outlined),
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   showModalBottomSheet(
                     context: context,
-                    isScrollControlled: true,
+                    isScrollControlled: false,
                     builder: (BuildContext context) {
                       return FilterPage();
                     },
                   );
                 },
-              ),
+              )
+            else
+              IconButton(
+                onPressed: () {
+                  provider.removeFilterOnTap();
+                },
+                icon: Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.red,
+                ),
+              )
           ],
           hintText: hintTexts[_hintIndex], // Dynamic hint text
           hintStyle: WidgetStatePropertyAll(
@@ -223,6 +237,28 @@ class _DynamicSearchBarState extends State<DynamicSearchBar> {
                             size: 24,
                           ),
                         ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                          child: Icon(
+                            Icons.landscape_outlined,
+                            size: 24,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                          child: Icon(
+                            Icons.landscape_outlined,
+                            size: 24,
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -244,22 +280,25 @@ class _DynamicSearchBarState extends State<DynamicSearchBar> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: List.generate(prevSearchData.length, (index) {
-                  String item = prevSearchData[index];
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0),
-                    child: ListTile(
-                      leading: Icon(Icons.history),
-                      title: Text(item),
-                      selected: item == searchTextController.text,
-                      onTap: () {
-                        searchTextController.closeView(item);
-                        widget.textController.text = item;
-                        provider.filterDataWhenSearch(item);
-                      },
-                    ),
-                  );
-                }),
+                children: List.generate(
+                  prevSearchData.length,
+                  (index) {
+                    String item = prevSearchData[index];
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.0),
+                      child: ListTile(
+                        leading: Icon(Icons.history),
+                        title: Text(item),
+                        selected: item == searchTextController.text,
+                        onTap: () {
+                          searchTextController.closeView(item);
+                          widget.textController.text = item;
+                          provider.filterDataWhenSearch(item);
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),

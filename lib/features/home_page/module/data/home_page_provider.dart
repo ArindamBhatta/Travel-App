@@ -158,6 +158,15 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
+  //remove filter and get original data
+
+  void removeFilterOnTap() {
+    userSelectedContinents.clear();
+    userSelectedTags.clear();
+    filteredDataBasedOnTap = allPublisherData;
+    notifyListeners();
+  }
+
   // Filter publisher data based on User Search
   void filterDataWhenSearch(String searchText) {
     try {

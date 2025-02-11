@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
+import 'package:animations/animations.dart';
 import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
 import 'package:travel_app/features/user_contribution_page/specific_user_read_contribution.dart';
 import 'contribution_from.dart';
@@ -12,6 +12,7 @@ class UserContributionPage extends StatefulWidget {
 
 class _UserContributionPageState extends State<UserContributionPage> {
   //* properties
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? location;
   String? state;
@@ -22,6 +23,9 @@ class _UserContributionPageState extends State<UserContributionPage> {
   DocumentReference? referenceOfDestination_Contributor;
   DocumentReference? createReferenceOfaParticularUserPost;
   DocumentReference? referenceOfaParticularUser;
+
+  final ContainerTransitionType _transitionType = ContainerTransitionType.fade;
+  final double fabDimension = 56.0;
 
   //* Loading UI
   void _showLoadingDialog() {
@@ -118,45 +122,9 @@ class _UserContributionPageState extends State<UserContributionPage> {
     }
   }
 
-  void bottomSheetForPostDetails() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true, //* Allows the modal to take more space
-      builder: (modalBottomSheetContext) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.60,
-          maxChildSize: 0.60,
-          minChildSize: 0.60,
-          builder: (context, scrollController) {
-            //* User Post method is trigger from hear
-            return ContributionForm(
-              globalKey: formKey,
-              onTapToSaveFormData: (
-                String? location,
-                String? state,
-                String? country,
-                String? imageUrl,
-                String? description,
-              ) {
-                this.location = location;
-                this.state = state;
-                this.country = country;
-                this.imageUrl = imageUrl;
-                this.description = this.description;
-                submitFormAndUploadDataInFireStore();
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     userUid = GoogleLoginProvider.accessToken;
-    print('user Id ------------  is $userUid');
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -221,20 +189,50 @@ class _UserContributionPageState extends State<UserContributionPage> {
               }),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue[800],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        elevation: 20.0,
-        onPressed: () {
-          bottomSheetForPostDetails();
+      floatingActionButton: OpenContainer(
+        transitionDuration: Duration(milliseconds: 800),
+        transitionType: _transitionType,
+        openBuilder: (BuildContext context, VoidCallback _) {
+          return ContributionForm(
+            globalKey: formKey,
+            onTapToSaveFormData: (
+              String? location,
+              String? state,
+              String? country,
+              String? imageUrl,
+              String? description,
+            ) {
+              this.location = location;
+              this.state = state;
+              this.country = country;
+              this.imageUrl = imageUrl;
+              this.description = this.description;
+              submitFormAndUploadDataInFireStore();
+            },
+          );
         },
-        child: Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-          size: 30,
+        closedElevation: 6.0,
+        //closedColor: const Color.fromARGB(255, 190, 223, 252),
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(fabDimension / 2),
+          ),
         ),
+        closedBuilder: (BuildContext context, VoidCallback openContainer) {
+          return Container(
+            height: fabDimension,
+            width: fabDimension,
+            decoration: BoxDecoration(
+              color: Colors.teal,
+            ),
+            child: Center(
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

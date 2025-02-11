@@ -10,19 +10,6 @@ class PublisherModel {
   String? ref;
   List<String>? tags;
 
-  PublisherModel({
-    this.id,
-    this.viewCount,
-    this.wishCount,
-    this.continent,
-    this.country,
-    this.knownFor,
-    this.imageUrl,
-    this.name,
-    this.ref,
-    this.tags,
-  });
-
   PublisherModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     viewCount = json['viewCount'];

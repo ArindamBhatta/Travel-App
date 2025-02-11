@@ -104,7 +104,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       // Navigate to the next screen
       Navigator.pushReplacement(
         buildContext,
-        MaterialPageRoute(builder: (context) => AppNavigation(user!.uid)),
+        MaterialPageRoute(builder: (context) => AppNavigation()),
       );
     } catch (error) {
       print('Error during sign-in: $error');

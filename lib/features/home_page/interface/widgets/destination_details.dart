@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
+import 'dart:async';
 
 class DestinationDetails extends StatefulWidget {
   final String? imageUri;
@@ -32,17 +33,29 @@ class _DestinationDetailsState extends State<DestinationDetails> {
   bool bookmark = false;
   final GlobalKey<State<StatefulWidget>> columnHeightContainerKey = GlobalKey();
 
-  double maxChildSize = 1.0; // Initial maxChildSize value
+  double maxChildSize = 1.0; // Maximum size of sheet
+  double initialChildSize = 0.4; // Start at 40% height
 
   @override
   void initState() {
     super.initState();
     bookmark = widget.bookmark;
-
     // Measure content height after 1st rendering using addPostFrameCallback
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         updateMaxChildSize();
+      },
+    );
+
+//  after UI rendering DraggableScrollableSheet bottom sheet move down slowly
+    Future.delayed(
+      Duration(seconds: 1),
+      () {
+        if (mounted) {
+          setState(() {
+            initialChildSize = 0.04; // end at 4% height.
+          });
+        }
       },
     );
   }
@@ -70,33 +83,22 @@ class _DestinationDetailsState extends State<DestinationDetails> {
 
   @override
   Widget build(BuildContext context) {
-    const zoomFactor = 1.0;
-    final xTranslate = MediaQuery.of(context).size.width / 2;
-    final yTranslate = MediaQuery.of(context).size.height / 4;
-
-    var transformationController = TransformationController();
-    transformationController.value.setEntry(0, 0, zoomFactor);
-    transformationController.value.setEntry(1, 1, zoomFactor);
-    transformationController.value.setEntry(2, 2, zoomFactor);
-    transformationController.value.setEntry(0, 3, -xTranslate);
-    transformationController.value.setEntry(1, 3, -yTranslate);
-
+    print('--------------------------- || ------------------');
     return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
+            //enable pan and zoom in child
             child: InteractiveViewer(
-              //transformationController: transformationController,
               constrained: false,
               alignment: Alignment.center,
               child: ConstrainedBox(
+                //give desire height to child
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height,
                 ),
                 child: CachedNetworkImage(
                   imageUrl: '${widget.imageUri}',
-
-                  //
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -131,76 +133,84 @@ class _DestinationDetailsState extends State<DestinationDetails> {
             ),
           ),
           // Draggable Scrollable Sheet
-          DraggableScrollableSheet(
-            initialChildSize: 0.4,
-            minChildSize: 23 / MediaQuery.of(context).size.height,
-            maxChildSize: maxChildSize,
-            builder: (context, scrollController) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                ),
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Column(
-                    key: columnHeightContainerKey,
-                    crossAxisAlignment: CrossAxisAlignment
-                        .start, // Key to measure content height
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 8),
-                        child: Center(
-                          child: Container(
-                            height: 7,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              color: Colors.grey[300],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        '${widget.name}',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${widget.country}, ${widget.continent}',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                      const SizedBox(height: 16),
-                      Text('${widget.knowFor}'),
-                      const SizedBox(height: 16),
-                      Wrap(
-                        spacing: 8,
-                        children: widget.viewPoints!
-                            .map(
-                              (tag) => Chip(
-                                label: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(tagsIcon(tag)),
-                                    SizedBox(width: 4),
-                                    Text(tag),
-                                  ],
+          TweenAnimationBuilder(
+            duration: Duration(seconds: 10),
+            curve: Curves.easeOut,
+            tween: Tween(begin: 0.4, end: initialChildSize),
+            builder: (context, animatedChildSize, child) {
+              return DraggableScrollableSheet(
+                initialChildSize: animatedChildSize,
+                minChildSize: 23 / MediaQuery.of(context).size.height,
+                maxChildSize: maxChildSize,
+                builder: (context, scrollController) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        key: columnHeightContainerKey,
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // Key to measure content height
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 8),
+                            child: Center(
+                              child: Container(
+                                height: 7,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  color: Colors.grey[300],
                                 ),
                               ),
-                            )
-                            .toList(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            '${widget.name}',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '${widget.country}, ${widget.continent}',
+                            style: TextStyle(color: Colors.grey[700]),
+                          ),
+                          const SizedBox(height: 16),
+                          Text('${widget.knowFor}'),
+                          const SizedBox(height: 16),
+                          Wrap(
+                            spacing: 8,
+                            children: widget.viewPoints!
+                                .map(
+                                  (tag) => Chip(
+                                    label: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(tagsIcon(tag)),
+                                        SizedBox(width: 4),
+                                        Text(tag),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
             },
           ),
