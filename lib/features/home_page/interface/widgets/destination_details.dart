@@ -40,6 +40,7 @@ class _DestinationDetailsState extends State<DestinationDetails> {
   void initState() {
     super.initState();
     bookmark = widget.bookmark;
+
     // Measure content height after 1st rendering using addPostFrameCallback
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
@@ -47,7 +48,12 @@ class _DestinationDetailsState extends State<DestinationDetails> {
       },
     );
 
+    check();
+
 //  after UI rendering DraggableScrollableSheet bottom sheet move down slowly
+  }
+
+  void check() {
     Future.delayed(
       Duration(seconds: 1),
       () {

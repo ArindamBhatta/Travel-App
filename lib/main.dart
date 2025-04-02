@@ -16,6 +16,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          //Doing this staff with cascade operator
           create: (context) => new HomePageProvider()
             ..showPublisherData()
             ..fetchUserWishlist(),
