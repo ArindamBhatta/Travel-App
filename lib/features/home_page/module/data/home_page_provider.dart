@@ -68,14 +68,14 @@ IconData? tagsIcon(String tag) {
   };
 }
 
-enum HomePageInnerNavigationButtonText {
+enum MainMenuOptions {
   All('All'),
   WishListed('Wish Listed'),
   MostWished('Most wishful'),
   MostViewed('Most viewed');
 
   final String name;
-  const HomePageInnerNavigationButtonText(this.name);
+  const MainMenuOptions(this.name);
 }
 
 class HomePageProvider extends ChangeNotifier {

@@ -1,0 +1,2 @@
+D:/study/travel_app/android/app/.cxx/Debug/555b7364/x86/CMakeFiles/edit_cache.dir
+D:/study/travel_app/android/app/.cxx/Debug/555b7364/x86/CMakeFiles/rebuild_cache.dir

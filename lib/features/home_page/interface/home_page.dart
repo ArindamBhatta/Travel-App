@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         .watch<GoogleLoginProvider>()
         .userData; // watch user login details
     return DefaultTabController(
-      length: HomePageInnerNavigationButtonText.values.length,
+      length: MainMenuOptions.values.length,
       child: Scaffold(
         drawer: SideDrawer(userLoginData),
         resizeToAvoidBottomInset: false,

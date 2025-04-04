@@ -50,6 +50,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
     _actualListLength = list.length;
     _pageController = PageController();
 
+//Listening Event of  scrolling
     _pageController.addListener(
       () {
         setState(() {

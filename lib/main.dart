@@ -16,6 +16,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          //Doing this staff with cascade operator
           create: (context) => new HomePageProvider()
             ..showPublisherData()
             ..fetchUserWishlist(),
@@ -45,7 +46,6 @@ class TravelApp extends StatelessWidget {
       title: 'Travel App',
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
-      //darkTheme: AppTheme.darkTheme,
       home: Builder(
         builder: (context) {
           String? userAccessToken =

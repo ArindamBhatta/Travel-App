@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:travel_app/features/home_page/module/data/home_page_provider.dart';
 
 class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
+  final List<MainMenuOptions> menuOptions;
+  final TabController? tabController;
+  final Function? onTap;
+
+  HomePageNavigationButton({
+    required this.menuOptions,
+    required this.tabController,
+    this.onTap,
+  });
   @override
-  double get maxExtent => 50;
+  double get maxExtent => 40;
   @override
-  double get minExtent => 50;
+  double get minExtent => 30;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
@@ -62,7 +72,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
                       final isSelected = controller.index == 0;
                       return tabBarButton(
                         isSelected,
-                        HomePageInnerNavigationButtonText.All.name,
+                        MainMenuOptions.All.name,
                       );
                     },
                   );
@@ -81,7 +91,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
                       final isSelected = controller.index == 1;
                       return tabBarButton(
                         isSelected,
-                        HomePageInnerNavigationButtonText.WishListed.name,
+                        MainMenuOptions.WishListed.name,
                       );
                     },
                   );
@@ -99,7 +109,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
                       final isSelected = controller.index == 2;
                       return tabBarButton(
                         isSelected,
-                        HomePageInnerNavigationButtonText.MostWished.name,
+                        MainMenuOptions.MostWished.name,
                       );
                     },
                   );
@@ -117,7 +127,7 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
                       final isSelected = controller.index == 3;
                       return tabBarButton(
                         isSelected,
-                        HomePageInnerNavigationButtonText.MostViewed.name,
+                        MainMenuOptions.MostViewed.name,
                       );
                     },
                   );
