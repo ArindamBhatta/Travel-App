@@ -56,10 +56,16 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
       child: SizedBox(
         height: 26,
         child: TabBar(
+          controller: tabController,
+          onTap: (int index) {
+            if (onTap != null) {
+              onTap!(index);
+            }
+          },
           isScrollable: true,
           labelPadding: EdgeInsets.symmetric(horizontal: 2),
           dividerColor: Theme.of(context).scaffoldBackgroundColor,
-          indicator: BoxDecoration(),
+          indicator: RectangularIndicator(),
           tabs: [
             Tab(
               child: Builder(
