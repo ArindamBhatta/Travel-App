@@ -19,9 +19,13 @@ class HomePageBody extends StatefulWidget {
   _HomePageBodyState createState() => _HomePageBodyState();
 }
 
-class _HomePageBodyState extends State<HomePageBody> {
+class _HomePageBodyState extends State<HomePageBody>
+    with SingleTickerProviderStateMixin {
   SearchController searchController = SearchController();
   TextEditingController textController = TextEditingController();
+
+  late TabController tabController = TabController(
+      initialIndex: 0, length: MainMenuOptions.values.length, vsync: this);
 
   @override
   void initState() {
@@ -44,7 +48,7 @@ class _HomePageBodyState extends State<HomePageBody> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: HomePageInnerNavigationButtonText.values.length,
+      length: MainMenuOptions.values.length,
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
@@ -61,6 +65,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                 ),
               ),
             ),
+            //
             SliverPersistentHeader(
               pinned: true,
               delegate: StickySearchBar(
@@ -68,10 +73,15 @@ class _HomePageBodyState extends State<HomePageBody> {
                 textController: textController,
               ),
             ),
+
+            //
             if (searchController.text.isEmpty)
               SliverPersistentHeader(
                 pinned: true,
-                delegate: HomePageNavigationButton(),
+                delegate: HomePageNavigationButton(
+                  menuOptions: MainMenuOptions.values,
+                  tabController: tabController,
+                ),
               ),
           ];
         },

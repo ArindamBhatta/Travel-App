@@ -46,7 +46,6 @@ class TravelApp extends StatelessWidget {
       title: 'Travel App',
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
-      //darkTheme: AppTheme.darkTheme,
       home: Builder(
         builder: (context) {
           String? userAccessToken =

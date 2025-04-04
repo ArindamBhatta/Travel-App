@@ -89,7 +89,6 @@ class _DestinationDetailsState extends State<DestinationDetails> {
 
   @override
   Widget build(BuildContext context) {
-    print('--------------------------- || ------------------');
     return Scaffold(
       body: Stack(
         children: [
@@ -140,9 +139,12 @@ class _DestinationDetailsState extends State<DestinationDetails> {
           ),
           // Draggable Scrollable Sheet
           TweenAnimationBuilder(
-            duration: Duration(seconds: 10),
+            duration: Duration(seconds: 4),
             curve: Curves.easeOut,
-            tween: Tween(begin: 0.4, end: initialChildSize),
+            tween: Tween(
+              begin: 0.4,
+              end: initialChildSize,
+            ),
             builder: (context, animatedChildSize, child) {
               return DraggableScrollableSheet(
                 initialChildSize: animatedChildSize,
