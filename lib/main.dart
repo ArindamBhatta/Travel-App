@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/common/utils/theme/themes.dart';
 import 'package:travel_app/features/route/app_navigation.dart';
@@ -45,7 +46,14 @@ class TravelApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Travel App',
       themeMode: ThemeMode.system,
-      theme: AppTheme.lightTheme,
+      theme: ThemeData.light().copyWith(
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+        ),
+      ),
       home: Builder(
         builder: (context) {
           String? userAccessToken =
