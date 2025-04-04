@@ -53,15 +53,12 @@ class _HomePageState extends State<HomePage> {
     userLoginData = context
         .watch<GoogleLoginProvider>()
         .userData; // watch user login details
-    return DefaultTabController(
-      length: MainMenuOptions.values.length,
-      child: Scaffold(
-        drawer: SideDrawer(userLoginData),
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: HomePageBody(
-            userLoginData: userLoginData,
-          ),
+    return Scaffold(
+      drawer: SideDrawer(userLoginData),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: HomePageBody(
+          userLoginData: userLoginData,
         ),
       ),
     );

@@ -12,38 +12,16 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
     required this.tabController,
     this.onTap,
   });
+
   @override
-  double get maxExtent => 40;
+  double get maxExtent => 45;
+
   @override
-  double get minExtent => 30;
+  double get minExtent => 35;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
-  }
-
-  Widget tabBarButton(bool isSelected, String buttonText) {
-    return Container(
-      height: maxExtent,
-      margin: EdgeInsets.zero,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: (isSelected ? Colors.teal[500] : Colors.white),
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            buttonText,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14.0,
-              color: (isSelected ? Colors.white : Colors.black),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   @override
@@ -54,93 +32,41 @@ class HomePageNavigationButton extends SliverPersistentHeaderDelegate {
       color: Colors.white,
       margin: EdgeInsets.zero,
       child: SizedBox(
-        height: 26,
+        height: 40,
         child: TabBar(
           controller: tabController,
           onTap: (int index) {
-            if (onTap != null) {
-              onTap!(index);
-            }
+            if (onTap == null) return;
+            onTap!(index);
           },
-          isScrollable: true,
-          labelPadding: EdgeInsets.symmetric(horizontal: 2),
+          isScrollable: false,
+          labelPadding: EdgeInsets.symmetric(horizontal: 8), // Adds spacing
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.black,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14.0,
+          ),
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorPadding: EdgeInsets.zero,
+          indicatorWeight: 0,
           dividerColor: Theme.of(context).scaffoldBackgroundColor,
-          indicator: RectangularIndicator(),
-          tabs: [
-            Tab(
-              child: Builder(
-                builder: (context) {
-                  final TabController controller =
-                      DefaultTabController.of(context);
-                  return AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, AboutDialog) {
-                      final isSelected = controller.index == 0;
-                      return tabBarButton(
-                        isSelected,
-                        MainMenuOptions.All.name,
-                      );
-                    },
-                  );
-                },
+          indicator: RectangularIndicator(
+            color: Colors.teal,
+            bottomLeftRadius: 8,
+            bottomRightRadius: 8,
+            topLeftRadius: 8,
+            topRightRadius: 8,
+          ),
+          tabs: menuOptions.map((option) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: SizedBox(
+                width: 90,
+                child: Tab(text: option.name),
               ),
-            ),
-            Tab(
-              iconMargin: null,
-              child: Builder(
-                builder: (context) {
-                  final TabController controller =
-                      DefaultTabController.of(context);
-                  return AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, _) {
-                      final isSelected = controller.index == 1;
-                      return tabBarButton(
-                        isSelected,
-                        MainMenuOptions.WishListed.name,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            Tab(
-              child: Builder(
-                builder: (context) {
-                  final TabController controller =
-                      DefaultTabController.of(context);
-                  return AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, _) {
-                      final isSelected = controller.index == 2;
-                      return tabBarButton(
-                        isSelected,
-                        MainMenuOptions.MostWished.name,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            Tab(
-              child: Builder(
-                builder: (context) {
-                  final TabController controller =
-                      DefaultTabController.of(context);
-                  return AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, _) {
-                      final isSelected = controller.index == 3;
-                      return tabBarButton(
-                        isSelected,
-                        MainMenuOptions.MostViewed.name,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+            );
+          }).toList(),
         ),
       ),
     );

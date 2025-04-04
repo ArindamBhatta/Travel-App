@@ -47,8 +47,10 @@ class _HomePageBodyState extends State<HomePageBody>
 
   @override
   Widget build(BuildContext context) {
+    //use Default tab controller to control the tabs
     return DefaultTabController(
       length: MainMenuOptions.values.length,
+      initialIndex: 0,
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
@@ -114,6 +116,7 @@ class _HomePageBodyState extends State<HomePageBody>
               );
             } else {
               return TabBarView(
+                controller: tabController,
                 children: [
                   DataGrid(
                     isLoading: isLoading,
