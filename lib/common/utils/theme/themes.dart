@@ -45,5 +45,7 @@ abstract final class AppTheme {
     dialogTheme: DialogTheme(
       iconColor: Colors.red,
     ),
+    bottomNavigationBarTheme:
+        BottomNavigationBarThemeData(selectedItemColor: Colors.red),
   );
 }

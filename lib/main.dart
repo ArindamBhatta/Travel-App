@@ -6,7 +6,7 @@ import 'package:travel_app/features/route/app_navigation.dart';
 import 'package:travel_app/features/details_page/utils/details_page_provider.dart';
 import 'package:travel_app/features/introduction_page/Interface/introduction_page.dart';
 import 'features/introduction_page/model/google_login_provider.dart';
-import 'features/home_page/module/data/home_page_provider.dart';
+import 'features/home/module/data/home_page_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(
           //Doing this staff with cascade operator
-          create: (context) => new HomePageProvider()
+          create: (context) => HomePageProvider()
             ..showPublisherData()
             ..fetchUserWishlist(),
         ),

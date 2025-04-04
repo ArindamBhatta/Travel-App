@@ -1,8 +1,8 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
-import 'package:travel_app/features/home_page/interface/home_page.dart';
-import 'package:travel_app/features/all_contributor_page/community_post_page.dart';
-import 'package:travel_app/features/introduction_page/model/google_login_provider.dart';
+
+import 'package:travel_app/features/home/interface/home_page.dart';
+import 'package:travel_app/features/contributor/community_post_page.dart';
 import 'package:travel_app/features/trip_booking_page/book_trip_page.dart';
 import 'package:travel_app/features/user_contribution_page/user_contribution_page.dart';
 
@@ -14,93 +14,63 @@ class AppNavigation extends StatefulWidget {
 }
 
 class _AppNavigationState extends State<AppNavigation> {
-  //* global scope - property
   static int currentPageIndex = 0;
+  bool _isNavBarVisible = true;
 
-  //* all icon in default state
-  final List<IconData> defaultIcons = [
-    Icons.home_outlined,
-    Icons.add_to_photos_outlined,
-    Icons.person_2_sharp,
-    Icons.add_location_alt_outlined,
+  final List<String> pathOfIcons = [
+    'assets/icons/home.png',
+    'assets/icons/contributor.png',
+    'assets/icons/my_contribution.png',
+    'assets/icons/chat.png',
   ];
 
   List<Widget> screens = [
     HomePage(),
-    CommunityPostPage(GoogleLoginProvider.accessToken),
+    CommunityPostPage(),
     UserContributionPage(),
     BookTripPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageTransitionSwitcher(
-        duration: Duration(milliseconds: 900),
-        transitionBuilder: (
-          Widget child,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-        ) {
-          return FadeThroughTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            child: child,
-          );
-        },
-        child: screens[currentPageIndex],
-      ),
-
-      //screens[currentPageIndex],
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          height: 56,
-          padding: EdgeInsets.all(12),
-          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: bottomNavBgColor,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(255, 128, 123, 123),
-                offset: Offset(0, 20),
-                blurRadius: 10,
-              )
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
-            children: List.generate(
-              defaultIcons.length,
-              (index) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    currentPageIndex = index; // Update selected tab
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 600),
-                  height: 46,
-                  width: 46,
-                  decoration: BoxDecoration(
-                    color: currentPageIndex == index
-                        ? const Color.fromARGB(255, 159, 157, 157)
-                        : Colors.transparent,
-                    shape: BoxShape.circle,
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        extendBody: false,
+        body: screens[currentPageIndex],
+        bottomNavigationBar: AnimatedSize(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          child: _isNavBarVisible
+              ? Theme(
+                  data: Theme.of(context).copyWith(
+                    iconTheme: IconThemeData(color: Colors.white),
                   ),
-                  child: Center(
-                    child: Icon(
-                      defaultIcons[index],
-                      color: currentPageIndex == index
-                          ? Colors.blue
-                          : Colors.grey.shade400,
-                      size: 26,
-                    ),
+                  child: CurvedNavigationBar(
+                    backgroundColor: Colors.transparent,
+                    color: Colors.tealAccent,
+                    buttonBackgroundColor: Colors.teal,
+                    height: 60,
+                    index: currentPageIndex,
+                    items: pathOfIcons.map((iconPath) {
+                      return Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Image.asset(
+                          iconPath,
+                          width: 20,
+                          height: 20,
+                          color: Colors.white,
+                        ),
+                      );
+                    }).toList(),
+                    onTap: (int index) {
+                      setState(() {
+                        currentPageIndex = index;
+                      });
+                    },
                   ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : SizedBox.shrink(), //removes the nav bar from layout
         ),
       ),
     );
