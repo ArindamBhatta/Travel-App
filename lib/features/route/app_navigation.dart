@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:travel_app/features/home/interface/home_page.dart';
 import 'package:travel_app/features/contributor/community_post_page.dart';
@@ -24,12 +25,31 @@ class _AppNavigationState extends State<AppNavigation> {
     'assets/icons/chat.png',
   ];
 
-  List<Widget> screens = [
-    HomePage(),
-    CommunityPostPage(),
-    UserContributionPage(),
-    BookTripPage(),
+  // Wrap each screen with a scroll listener
+  late final List<Widget> screens = [
+    _wrapWithScrollListener(HomePage()),
+    _wrapWithScrollListener(CommunityPostPage()),
+    _wrapWithScrollListener(UserContributionPage()),
+    _wrapWithScrollListener(BookTripPage()),
   ];
+
+  Widget _wrapWithScrollListener(Widget child) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is UserScrollNotification) {
+          final direction = notification.direction;
+          if (direction == ScrollDirection.reverse && _isNavBarVisible) {
+            setState(() => _isNavBarVisible = false);
+          } else if (direction == ScrollDirection.forward &&
+              !_isNavBarVisible) {
+            setState(() => _isNavBarVisible = true);
+          }
+        }
+        return false;
+      },
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +58,8 @@ class _AppNavigationState extends State<AppNavigation> {
       child: Scaffold(
         extendBody: false,
         body: screens[currentPageIndex],
+
+        // Bottom Navigation Bar
         bottomNavigationBar: AnimatedSize(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -63,6 +85,7 @@ class _AppNavigationState extends State<AppNavigation> {
                         ),
                       );
                     }).toList(),
+                    //
                     onTap: (int index) {
                       setState(() {
                         currentPageIndex = index;
@@ -70,7 +93,7 @@ class _AppNavigationState extends State<AppNavigation> {
                     },
                   ),
                 )
-              : SizedBox.shrink(), //removes the nav bar from layout
+              : SizedBox.shrink(),
         ),
       ),
     );

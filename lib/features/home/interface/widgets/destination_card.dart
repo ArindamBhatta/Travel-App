@@ -26,41 +26,45 @@ class DestinationCard extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                CachedNetworkImage(
-                  imageUrl: '$imageUri',
-                  fit: BoxFit.cover,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          8.0,
+                Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(3.1416),
+                  child: CachedNetworkImage(
+                    imageUrl: '$imageUri',
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            8.0,
+                          ),
+                          topRight: Radius.circular(
+                            8.0,
+                          ),
                         ),
-                        topRight: Radius.circular(
-                          8.0,
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          colorFilter: const ColorFilter.mode(
+                            Color.fromARGB(255, 254, 189, 184),
+                            BlendMode.colorBurn,
+                          ),
                         ),
                       ),
-                      color: Colors.transparent,
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                        colorFilter: const ColorFilter.mode(
-                          Color.fromARGB(255, 254, 189, 184),
-                          BlendMode.colorBurn,
+                    ),
+                    placeholder: (context, url) => Center(
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        color: Colors.black,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.green,
                         ),
                       ),
                     ),
-                  ),
-                  placeholder: (context, url) => Center(
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      color: Colors.black,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.green,
-                      ),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error,
                     ),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.error,
                   ),
                 ),
 

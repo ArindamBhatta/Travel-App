@@ -23,7 +23,6 @@ class SliverPinnedText extends SliverPersistentHeaderDelegate {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
                 ),
               ),
               SizedBox(width: 8), // 👈 instead of spacing: 8

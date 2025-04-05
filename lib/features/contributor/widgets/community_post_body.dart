@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/features/contributor/widgets/card_view_to_details_page.dart';
 
 import 'package:travel_app/features/contributor/widgets/community_post_app_bar.dart';
 import 'package:travel_app/features/contributor/widgets/sliver_pinned_text.dart';
+import 'package:travel_app/features/contributor/widgets/travel_with_guide.dart';
+import 'package:travel_app/features/home/interface/widgets/home_page_app_bar.dart';
 
 class CommunityPostBody extends StatefulWidget {
   @override
@@ -16,9 +20,46 @@ class _CommunityPostBodyState extends State<CommunityPostBody> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
+        Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.rotationX(3.1416),
+          child: CachedNetworkImage(
+            imageUrl: '$imageUrl',
+            fit: BoxFit.cover,
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(
+                    8.0,
+                  ),
+                  topRight: Radius.circular(
+                    8.0,
+                  ),
+                ),
+                color: Colors.transparent,
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                  colorFilter: const ColorFilter.mode(
+                    Color.fromARGB(255, 254, 189, 184),
+                    BlendMode.colorBurn,
+                  ),
+                ),
+              ),
+            ),
+            placeholder: (context, url) => Center(
+              child: const CircularProgressIndicator(
+                strokeWidth: 2.0,
+                color: Colors.black,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.green,
+                ),
+              ),
+            ),
+            errorWidget: (context, url, error) => const Icon(
+              Icons.error,
+            ),
+          ),
         ),
         Align(
           alignment: Alignment.topCenter,
@@ -42,7 +83,7 @@ class _CommunityPostBodyState extends State<CommunityPostBody> {
             SliverAppBar(
               expandedHeight: 280,
               pinned: true,
-              backgroundColor: Colors.black87,
+              backgroundColor: Colors.white,
               flexibleSpace: LayoutBuilder(
                 builder: (
                   BuildContext context,
@@ -53,12 +94,12 @@ class _CommunityPostBodyState extends State<CommunityPostBody> {
                   return FlexibleSpaceBar(
                     centerTitle: true,
                     title: currentHeight <= 100
-                        ? const Text(
-                            "Wanders of Asia",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
+                        ? SafeArea(
+                            child: HomePageAppBar(
+                              calling: false,
+                              userInfo: {},
+                              headingText: 'Wanderly',
+                              onNotificationTap: () {},
                             ),
                           )
                         : null,
@@ -78,13 +119,66 @@ class _CommunityPostBodyState extends State<CommunityPostBody> {
               pinned: true,
               delegate: SliverPinnedText(),
             ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 20),
+                child: Text(
+                  "Travel with Guide",
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+
+            //Create Dummy cards
             SliverToBoxAdapter(
               child: Container(
-                height: 1000,
+                height: 300,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: TravelWithGuide(),
+                    );
+                  },
+                ),
               ),
-            )
+            ),
+
+            //User contributed picture
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 20),
+                child: Text(
+                  "Community Driven location",
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+
+            //
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.85,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return CommunityPostCard();
+                },
+                childCount: 10,
+              ),
+            ),
           ],
         ),
+
         // Page 2 — Most liked Africa
         CustomScrollView(
           slivers: [

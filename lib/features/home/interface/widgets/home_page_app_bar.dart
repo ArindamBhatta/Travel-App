@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/common/utils/theme/colors.dart';
 
 class HomePageAppBar extends StatelessWidget {
+  final bool calling;
   final String headingText;
-  final VoidCallback onAvatarTap;
+  final VoidCallback? onAvatarTap;
   final VoidCallback onNotificationTap;
   final Map<String, dynamic>? userInfo;
 
   HomePageAppBar({
     super.key,
+    required this.calling,
     required this.userInfo,
     required this.headingText,
-    required this.onAvatarTap,
+    this.onAvatarTap,
     required this.onNotificationTap,
   });
 
@@ -52,13 +54,17 @@ class HomePageAppBar extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                         color: AppColors.baseColor,
                         fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 18,
                       ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  'Your Dream Destinations',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                calling == true ? const SizedBox(height: 2) : SizedBox.shrink(),
+                calling == true
+                    ? Text(
+                        'Your Dream Destinations',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
           ),

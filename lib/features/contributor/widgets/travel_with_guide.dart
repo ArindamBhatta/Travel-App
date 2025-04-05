@@ -1,8 +1,9 @@
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class CommunityPostCard extends StatelessWidget {
-  CommunityPostCard();
+class TravelWithGuide extends StatelessWidget {
+  TravelWithGuide();
 
   @override
   Widget build(BuildContext context) {
@@ -84,16 +85,30 @@ class CommunityPostCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 22, top: 2, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'Niladri Reservoir',
-                      softWrap: false,
-                      overflow: TextOverflow.fade,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 16,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Niladri Reservoir',
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Spacer(),
+                        Row(
+                          children: [
+                            Icon(Icons.star, color: Colors.amber, size: 20),
+                            SizedBox(width: 4),
+                            Text('4.7'),
+                          ],
+                        )
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Row(

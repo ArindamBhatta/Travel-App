@@ -60,6 +60,7 @@ class _HomePageBodyState extends State<HomePageBody>
               expandedHeight: 75.0,
               flexibleSpace: FlexibleSpaceBar(
                 background: HomePageAppBar(
+                  calling: true,
                   userInfo: widget.userLoginData,
                   headingText: 'Wanderly',
                   onAvatarTap: () => Scaffold.of(context).openDrawer(),
