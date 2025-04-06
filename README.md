@@ -1,51 +1,18 @@
-### Initial State
+# Travel App
 
-BEGIN
+The **Travel App** is a sample Flutter application that helps users build and book trip itineraries. It’s a robust example with many features, routes, and screens. The app communicates with an HTTP server, supports both development and production environments, includes brand-specific styling, and has high test coverage. In these ways, it simulates a real-world, feature-rich Flutter application.
 
-> Fetch Data from Remote Sources
-FUNCTION fetchData() RETURNS Map
-    publisherData = Firestore.getCollection("PublisherData")
-    userData = Firestore.getDocument("currentUser")
-    
-    combinedData = {
-        "publisherData": publisherData,
-        "userData": userData,
-        "publisherKey": publisherData.id
-    }
-    
-    RETURN combinedData
-END FUNCTION
+This project uses both **Bloc** and **Provider** for state management.
 
-> Process Data into Models and Extract Wishlist
-wishlistedData, publisherData, publisherKeys, publishersList = []
+<br>
 
-FUNCTION processData(combinedData) RETURNS Map
-    wishlistedData = combinedData["userData"]["wishlistedData"]
-    publisherData = combinedData["publisherData"]
-    publisherKeys = combinedData["publisherKey"]
+![Home Screen](./assets/docs/home_screen.jpeg) 
+![Contributor Screen](./assets/docs/community_screen.jpeg)
 
-    FOR EACH publisher IN publisherData 
-        publisherModel = CREATE PublisherModel(publisher)
-        ADD publisherModel TO publishersList
-    END FOR
-   
-END FUNCTION
 
-> Process Data to Identify Wishlisted Items
-FUNCTION findWishlistedData(data) RETURNS List
-  
 
-        FOR EACH destination publisherList
-            userWishlistData:  wishlistData,
-            publisherKeys: publisherKeys[i]
 
-        IF wishlistedData.CONTAINS(publisherKey) THEN
-            SET publisher.isWishlisted = TRUE
-        ELSE
-            SET publisher.isWishlisted = FALSE
-        END IF
+## 🚀 Running the App
 
-        ADD publisher TO processedData
-    END FOR
-
-END FUNCTION
+```bash
+flutter run

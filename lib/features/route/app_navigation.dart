@@ -21,7 +21,7 @@ class _AppNavigationState extends State<AppNavigation> {
   final List<String> pathOfIcons = [
     'assets/icons/home.png',
     'assets/icons/contributor.png',
-    'assets/icons/my_contribution.png',
+    'assets/icons/search.png',
     'assets/icons/chat.png',
   ];
 
@@ -29,7 +29,7 @@ class _AppNavigationState extends State<AppNavigation> {
   late final List<Widget> screens = [
     _wrapWithScrollListener(HomePage()),
     _wrapWithScrollListener(CommunityPostPage()),
-    _wrapWithScrollListener(UserContributionPage()),
+    _wrapWithScrollListener(BookTripPage()),
     _wrapWithScrollListener(BookTripPage()),
   ];
 

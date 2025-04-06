@@ -63,6 +63,8 @@ flutter:
     - 'assets/icons/contributor.png'
     - 'assets/icons/my_contribution.png'
     - 'assets/icons/chat.png'
+    - 'assets/icons/search.png'
+   
 
   
 
